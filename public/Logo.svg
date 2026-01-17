@@ -1,0 +1,10 @@
+<svg width="64" height="64" viewBox="0 0 64 64" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <mask id="rounded-mask" maskUnits="userSpaceOnUse" x="0" y="0" width="64" height="64">
+    <rect x="0" y="0" width="64" height="64" rx="6" fill="white"/>
+  </mask>
+  <g mask="url(#rounded-mask)">
+    <path d="M5.08521 8.40404L16.3983 0V26.8283L5.08521 34.9091V8.40404Z" fill="black"/>
+    <path d="M5.08521 53.9164V39.4344L19.9539 28.5713V10.0202L31.9135 1.29297V35.5556L5.08521 53.9164Z" fill="black"/>
+    <path d="M35.4691 17.7778L58.7418 1.29297L58.915 15.8384L44.1964 25.8586V27.6364H58.7418V44.2829L30.2974 64L30.2974 49.7778L47.8117 38.5121V35.5556H35.4691V17.7778Z" fill="black"/>
+  </g>
+</svg>

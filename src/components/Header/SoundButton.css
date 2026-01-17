@@ -1,0 +1,65 @@
+.lusion-sound-wrapper {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.lusion-btn-main {
+  position: relative;
+  width: 52px;
+  height: 52px;
+  border-radius: 50%;
+  border: none;
+  background: transparent;
+  cursor: pointer;
+  outline: none;
+  overflow: hidden; /* 核心：裁剪背景，确保出界的圆圈看不见 */
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0;
+  -webkit-tap-highlight-color: transparent;
+}
+
+.bg-static-gray {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: #E4E6EF;
+  z-index: 0;
+}
+
+.bg-dynamic-blue {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: #0047ff;
+  border-radius: 50%;
+  z-index: 1;
+  pointer-events: none;
+  /* 增加基础混合模式（可选，增加质感） */
+  will-change: transform, opacity;
+}
+
+.icon-viewport {
+  position: relative;
+  width: 22px; 
+  height: 24px;
+  z-index: 2;
+  overflow: hidden;
+  pointer-events: none;
+}
+
+.icon-viewport svg {
+  width: 100%;
+  height: 100%;
+  overflow: visible;
+}
+
+.lusion-btn-main:focus {
+  outline: none;
+}

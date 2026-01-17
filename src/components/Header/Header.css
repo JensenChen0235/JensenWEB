@@ -1,0 +1,173 @@
+/* --- 基础布局修改 --- */
+.header {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  padding: 30px 50px;
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start; 
+  /* 关键修改 1：移除这里的 z-index，让子元素独立参与层级竞争 */
+  box-sizing: border-box;
+  flex-wrap: wrap; 
+  /* 关键修改 2：让 header 容器本身不阻挡点击，确保能点到后面的 3D 场景 */
+  pointer-events: none; 
+  z-index: 100;
+  transform: translateY(0);
+  transition: transform 0.45s ease;
+  will-change: transform;
+}
+.header.is-hidden { transform: translateY(-120%); }
+
+.header-logo {
+  flex: 1;
+  order: 1; 
+  /* 关键修改 3：Logo 设为高层级，并恢复点击 */
+  position: relative;
+  z-index: 2000;
+  pointer-events: auto;
+}
+
+
+
+.header-right {
+  flex: 1;
+  display: flex;
+  gap: 15px;
+  align-items: center;
+  justify-content: flex-end;
+  order: 3; 
+  /* 关键修改 5：按钮组设为最高层级，确保在菜单卡片上方，并恢复点击 */
+  position: relative;
+  z-index: 2000;
+  pointer-events: auto;
+}
+
+
+
+/* --- 原有逻辑保持不变 --- */
+
+.header-logo-link {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 12px;
+  text-decoration: none;
+  transition: opacity 0.3s ease;
+  font-family: var(--font-primary);
+  font-size: 32px;
+  font-weight: 500;
+  letter-spacing: 0.05em;
+  color: var(--header-logo-color, #000000);
+}
+.header-brand-mark {
+  width: 1em;
+  height: 1em;
+  flex: 0 0 auto;
+  background-color: currentColor;
+  mask: url("/Logo.svg") center / contain no-repeat;
+  -webkit-mask: url("/Logo.svg") center / contain no-repeat;
+}
+.header-brand-word { line-height: 1; }
+
+.menu-btn {
+  width: 130px;
+  height: 52px;
+  border-radius: 100px;
+  position: relative;
+  overflow: hidden;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  border: none;
+  background: transparent;
+  cursor: pointer;
+  padding: 0;
+  /* 确保按钮在按钮组内部也是最高级 */
+  z-index: 2001; 
+}
+
+.menu-btn-bg {
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+}
+
+.menu-text-mask {
+  height: 20px;
+  overflow: hidden;
+  position: relative;
+  z-index: 1;
+}
+
+.menu-text-slider {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+}
+
+.text-line {
+  height: 20px;
+  line-height: 20px;
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+  font-size: 16px;
+  font-weight: 600;
+  letter-spacing: 0.05em;
+  color: #000;
+  display: block;
+  text-align: center;
+}
+
+.btn-dots {
+  position: relative;
+  z-index: 1;
+  font-size: 18px;
+  font-weight: bold;
+  display: inline-block;
+  line-height: 1;
+  color: #000;
+}
+
+.menu-btn:focus {
+  outline: none;
+}
+
+@media (max-width: 1024px) {
+  .header {
+    padding: 20px;
+  }
+
+  .header-logo {
+    flex: 0 0 auto;
+    order: 1;
+  }
+
+  .header-right {
+    flex: 1;
+    order: 2;
+  }
+
+  .header-center {
+    flex: 0 0 100%; 
+    order: 3; 
+    justify-content: flex-start;
+    margin-top: 20px;
+    /* 手机端依然保持低层级 */
+    z-index: 1; 
+  }
+
+  .header-tagline {
+    max-width: 900px; 
+    font-size: 52px; 
+    text-align: left;
+    line-height: 1.2;
+  }
+}
+
+@media (max-width: 768px) {
+  .header-logo-link { font-size: 32px; }
+  .header-tagline { font-size: 52px; }
+  .talk-btn { display: none; }
+}

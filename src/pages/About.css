@@ -1,0 +1,313 @@
+/* 容器设置 */
+.atlas-container {
+  background-color: #000;
+  color: #fff;
+  min-height: 100vh;
+  position: relative;
+}
+
+.about-entry-overlay {
+  position: fixed;
+  inset: 0;
+  background: #000;
+  z-index: 50;
+  pointer-events: none;
+}
+
+.about-entry-reveal {
+  will-change: transform, clip-path, opacity;
+}
+
+/* 背景装饰线 (Atlas 特色) */
+.atlas-grid-lines {
+  position: fixed;
+  inset: 0;
+  display: flex;
+  justify-content: space-between;
+  padding: 0 5%;
+  pointer-events: none;
+  z-index: 1;
+}
+.atlas-grid-lines .line {
+  width: 1px;
+  height: 100%;
+  background: rgba(255, 255, 255, 0.05);
+}
+
+.atlas-content-wrapper {
+  display: flex;
+  width: 100%;
+  padding-top: 100px; /* 为 Header 留出空间 */
+  height: calc(100vh - 100px);
+}
+
+
+/* --- 左侧固定栏 --- */
+.atlas-left-col {
+  width: 35%;
+  height: calc(100vh - 100px);
+  position: sticky;
+  top: 100px;
+  padding: 0 5%;
+  z-index: 10;
+  background: #000;
+}
+
+
+.sticky-inner {
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  padding-bottom: 40px;
+}
+
+.atlas-main-title {
+  display: inline-flex;
+  align-items: center;
+  gap: 12px;
+  font-size: clamp(44px, 6vw, 86px);
+  font-weight: 500;
+  margin: 0;
+  letter-spacing: -0.02em;
+}
+.atlas-brand-mark {
+  width: 1em;
+  height: 1em;
+  flex: 0 0 auto;
+  background-color: currentColor;
+  mask: url("/Logo.svg") center / contain no-repeat;
+  -webkit-mask: url("/Logo.svg") center / contain no-repeat;
+}
+.atlas-brand-word { line-height: 1; }
+
+.atlas-metadata {
+  margin-top: 40px;
+  display: grid;
+  gap: 18px;
+}
+
+.meta-row {
+  display: grid;
+  grid-template-columns: 110px 1fr;
+  gap: 16px;
+  align-items: start;
+  margin-bottom: 0;
+}
+
+.meta-row .label {
+  font-family: var(--font-primary);
+  font-size: 11px;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: rgba(255, 255, 255, 0.4);
+  margin-bottom: 0;
+}
+
+.meta-row .value {
+  font-size: 12px;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+}
+
+.atlas-description {
+  font-size: 18px;
+  line-height: 1.3;
+  font-weight: 400;
+  max-width: 92%;
+  margin-top: 8px;
+}
+
+/* --- 右侧滚动栏 --- */
+.atlas-right-col {
+  width: 65%;
+  padding-right: 5%;
+  padding-bottom: 0;
+  z-index: 5;
+  border-left: 1px solid rgba(255, 255, 255, 0.08);
+  padding-left: 5%;
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  overflow: hidden;
+}
+
+.atlas-tabs {
+  position: sticky;
+  top: 0;
+  z-index: 6;
+  display: flex;
+  gap: 18px;
+  padding: 12px 0 0;
+  margin-bottom: 24px;
+  background: #000;
+  backdrop-filter: blur(4px);
+}
+
+.atlas-tab {
+  border: 0;
+  background: transparent;
+  color: rgba(255, 255, 255, 0.45);
+  font-size: 14px;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  cursor: pointer;
+  padding: 6px 0;
+  position: relative;
+  transition: color 0.35s ease;
+}
+
+.atlas-tab::after {
+  content: "";
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: -6px;
+  height: 2px;
+  background: var(--about-accent, #00ffaa);
+  transform: scaleX(0);
+  transform-origin: left;
+  transition: transform 0.35s ease;
+}
+
+.atlas-tab.is-active {
+  color: #ffffff;
+}
+
+.atlas-tab.is-active::after {
+  transform: scaleX(1);
+}
+
+.tab-panel {
+  flex: 1;
+  overflow: auto;
+  padding-top: 0;
+  animation: apple-fade 0.5s ease;
+}
+
+@keyframes apple-fade {
+  0% { opacity: 0; transform: translateY(12px); }
+  100% { opacity: 1; transform: translateY(0); }
+}
+
+.atlas-hero-media {
+  width: 100%;
+  margin-bottom: 60px;
+}
+
+.media-placeholder {
+  width: 100%;
+  aspect-ratio: 16 / 9;
+  background: #111;
+  overflow: hidden;
+  border-radius: 12px;
+}
+
+.media-placeholder img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+/* 经历卡片样式 */
+.atlas-section {
+  padding-top: 0;
+  margin-bottom: 60px;
+}
+
+.section-label {
+  font-family: var(--font-primary);
+  font-size: 14px;
+  text-transform: uppercase;
+  color: rgba(255,255,255,0.4);
+  margin-bottom: 24px;
+}
+
+.atlas-exp-card {
+  border-top: 0;
+  padding: 28px 0;
+}
+
+.sr-only {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  border: 0;
+}
+
+.card-header {
+  display: flex;
+  justify-content: space-between;
+  font-family: var(--font-primary);
+  font-size: 13px;
+  color: var(--about-accent, #00ffaa);
+  margin-bottom: 15px;
+}
+
+.card-title {
+  font-size: 39px;
+  font-weight: 500;
+  margin: 0;
+}
+
+.card-company {
+  font-size: 19px;
+  color: rgba(255,255,255,0.6);
+  margin-top: 5px;
+}
+
+.card-points {
+  margin-top: 25px;
+  list-style: none;
+  padding: 0;
+}
+
+.card-points li {
+  font-size: 18px;
+  line-height: 1.6;
+  color: rgba(255,255,255,0.5);
+  margin-bottom: 10px;
+  max-width: 80%;
+}
+
+/* 右侧长段落字号调小一点 */
+.card-points {
+  font-size: 12px;
+}
+
+.card-points li::before {
+  content: "—";
+  margin-right: 15px;
+}
+
+/* Footer */
+.atlas-footer {
+  padding-top: 100px;
+  border-top: 1px solid rgba(255,255,255,0.1);
+}
+
+.next-project-hint {
+  font-family: monospace;
+  font-size: 12px;
+  color: rgba(255,255,255,0.3);
+}
+
+.next-title {
+  font-size: 6vw;
+  font-weight: 500;
+  margin: 10px 0;
+}
+
+/* 响应式 */
+@media (max-width: 1000px) {
+  .atlas-content-wrapper { flex-direction: column; height: auto; }
+  .atlas-left-col { width: 100%; position: relative; height: auto; top: 0; }
+  .atlas-right-col { width: 100%; padding-left: 5%; height: auto; overflow: visible; }
+  .tab-panel { max-height: none; overflow: visible; padding-bottom: 0; }
+  .atlas-description { margin-top: 24px; }
+  .atlas-tabs { position: static; top: auto; background: transparent; backdrop-filter: none; }
+}

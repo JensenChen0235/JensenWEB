@@ -1,0 +1,1479 @@
+import React, { useLayoutEffect, useEffect, useRef, useState } from "react";
+import { useParams, useNavigate } from "react-router-dom";
+import { motion, AnimatePresence } from "framer-motion";
+import { gsap } from "gsap";
+import Lottie from "lottie-react";
+import { useLenis } from "../hooks/useLenis";
+import { projectsData, projectsList } from "../data/project";
+import Menu from "../components/Header/Menu";
+import SoundButton from "../components/Header/SoundButton";
+import TalkButton from "../components/Header/TalkButton";
+import Arrow from "../components/ui/Arrow";
+import "./ProjectDetail.css";
+
+const ProjectDetail = () => {
+  useLenis();
+  const { id } = useParams();
+  const navigate = useNavigate();
+  const [isMenuOpen, setIsMenuOpen] = useState(false);
+  const [isReady, setIsReady] = useState(false); // 控制页面显示
+  const [insightSelected, setInsightSelected] = useState(0);
+  const [accordionSelected, setAccordionSelected] = useState(0);
+  const [showcaseSelected, setShowcaseSelected] = useState(0);
+  const [colorSelected, setColorSelected] = useState(null);
+  const [uiOverlay, setUiOverlay] = useState(null);
+  const [copiedId, setCopiedId] = useState(null);
+  const [videoPlaying, setVideoPlaying] = useState({});
+  const [isHeaderHidden, setIsHeaderHidden] = useState(false);
+  const nextSectionRef = useRef(null);
+  const transitionTimerRef = useRef(null);
+  const videoRefs = useRef({});
+
+  const currentIndex = projectsList.findIndex((p) => p.id === id);
+  const project = projectsData[id] || projectsList[0];
+  const nextProject = projectsList[(currentIndex + 1) % projectsList.length];
+  const getContrastColor = (color) => {
+    if (!color) return "#000000";
+    if (color.startsWith("#")) {
+      const hex = color.replace("#", "");
+      const full = hex.length === 3
+        ? hex.split("").map((c) => c + c).join("")
+        : hex;
+      const r = parseInt(full.slice(0, 2), 16);
+      const g = parseInt(full.slice(2, 4), 16);
+      const b = parseInt(full.slice(4, 6), 16);
+      const luminance = (0.2126 * r + 0.7152 * g + 0.0722 * b) / 255;
+      return luminance > 0.6 ? "#000000" : "#E5E6EF";
+    }
+    const match = color.match(/rgba?\((\d+),\s*(\d+),\s*(\d+)/);
+    if (!match) return "#000000";
+    const r = parseInt(match[1], 10);
+    const g = parseInt(match[2], 10);
+    const b = parseInt(match[3], 10);
+    const luminance = (0.2126 * r + 0.7152 * g + 0.0722 * b) / 255;
+    return luminance > 0.6 ? "#000000" : "#E5E6EF";
+  };
+  const logoColor = getContrastColor(project.color);
+
+  const galleryImages = project.gallery || [
+    `https://picsum.photos/seed/${id}1/1600/1000`,
+    `https://picsum.photos/seed/${id}2/1600/1000`,
+    `https://picsum.photos/seed/${id}3/1600/1000`,
+  ];
+  const galleryCopy = [
+    {
+      title: "A Clear System, Built for Focus",
+      description: "A calm visual hierarchy that keeps attention on what matters most. Every layer is intentional, every interaction is quiet by design.",
+    },
+    {
+      title: "Precision You Can Feel",
+      description: "Micro-motion and tactile cues create a sense of weight and control. The interface responds like a physical object, not a webpage.",
+    },
+    {
+      title: "Designed to Stay Out of the Way",
+      description: "Content leads, interface supports. The layout breathes, the typography holds the tone, and the experience stays effortless.",
+    },
+  ];
+  const getGalleryCopy = (index) =>
+    galleryCopy[index] || {
+      title: `Module ${index + 1}`,
+      description: "A purposeful module designed to showcase interaction, clarity, and restraint. Placeholder copy for future content.",
+    };
+
+  const sections = project.sections?.length
+    ? project.sections
+    : galleryImages.map((img, idx) => ({
+        type: "web",
+        image: img,
+        ...getGalleryCopy(idx),
+      }));
+  const isDribbbleLayout = project.layout === "dribbble";
+  const isTeraboxLayout = project.layout === "terabox";
+  const setVideoState = (key, isPlaying) => {
+    setVideoPlaying((prev) => ({ ...prev, [key]: isPlaying }));
+  };
+  const toggleVideo = (key) => {
+    const video = videoRefs.current[key];
+    if (!video) return;
+    if (video.paused) {
+      video.play();
+      setVideoState(key, true);
+    } else {
+      video.pause();
+      setVideoState(key, false);
+    }
+  };
+
+  // --- 1. 物理层重置：在所有渲染前执行 ---
+  useLayoutEffect(() => {
+    setIsReady(false);
+    setInsightSelected(0);
+    setAccordionSelected(0);
+    setShowcaseSelected(0);
+    setColorSelected(null);
+    setUiOverlay(null);
+    // 强行关闭浏览器的自动滚动恢复
+    if ("scrollRestoration" in window.history) {
+      window.history.scrollRestoration = "manual";
+    }
+
+    // 立即重置滚动位置
+    window.scrollTo(0, 0);
+
+    if (window.lenis) {
+      window.lenis.stop(); // 立即停止之前的动量
+      window.lenis.scrollTo(0, { immediate: true });
+    }
+
+    // 给浏览器 100ms 时间处理滚动条复位，再显示内容
+    const timer = setTimeout(() => {
+      setIsReady(true);
+      if (window.lenis) window.lenis.start();
+    }, 100);
+
+    return () => {
+      clearTimeout(timer);
+      if (transitionTimerRef.current) clearTimeout(transitionTimerRef.current);
+    };
+  }, [id]);
+
+  useEffect(() => {
+    document.body.style.overflow = uiOverlay ? "hidden" : "";
+    if (window.lenis) {
+      if (uiOverlay) {
+        window.lenis.stop();
+      } else {
+        window.lenis.start();
+      }
+    }
+    return () => {
+      document.body.style.overflow = "";
+      if (window.lenis) window.lenis.start();
+    };
+  }, [uiOverlay]);
+
+  useEffect(() => {
+    let lastScrollY = window.scrollY;
+    let ticking = false;
+    const threshold = 4;
+
+    const updateHeader = () => {
+      const currentScrollY = window.scrollY;
+      const delta = currentScrollY - lastScrollY;
+
+      if (currentScrollY <= 8) {
+        setIsHeaderHidden(false);
+      } else if (delta > threshold) {
+        setIsHeaderHidden(true);
+      } else if (delta < -threshold) {
+        setIsHeaderHidden(false);
+      }
+
+      lastScrollY = currentScrollY;
+      ticking = false;
+    };
+
+    const onScroll = () => {
+      if (!ticking) {
+        window.requestAnimationFrame(updateHeader);
+        ticking = true;
+      }
+    };
+
+    window.addEventListener("scroll", onScroll, { passive: true });
+    return () => window.removeEventListener("scroll", onScroll);
+  }, []);
+
+
+  const goNextProject = () => {
+    if (window.lenis) window.lenis.stop();
+    navigate(`/projects/${nextProject.id}`);
+  };
+
+  const lusionEase = [0.16, 1, 0.3, 1];
+  const appleEase = [0.19, 1, 0.22, 1];
+  const transition = { duration: 0.5, ease: [0.22, 1, 0.36, 1] };
+  const backContentColorVariants = { rest: { color: "#000" }, hover: { color: "#fff" } };
+  const backSlidingVariants = { rest: { x: -4 }, hover: { x: -24 } };
+  const hoverFill = project.hoverGradient || project.hoverColor || "#0047ff";
+
+  const RollingNumber = ({ value }) => {
+    const containerRef = useRef(null);
+    const [isActive, setIsActive] = useState(false);
+
+    useEffect(() => {
+      if (!containerRef.current) return undefined;
+      const observer = new IntersectionObserver(
+        (entries) => {
+          entries.forEach((entry) => {
+            setIsActive(entry.isIntersecting);
+          });
+        },
+        { threshold: 0.5 }
+      );
+      observer.observe(containerRef.current);
+      return () => observer.disconnect();
+    }, []);
+
+    const chars = String(value).split("");
+    let digitIndex = 0;
+
+    return (
+      <span ref={containerRef} className={`tb-roll-value ${isActive ? "is-animate" : ""}`}>
+        {chars.map((ch, idx) => {
+          if (/\d/.test(ch)) {
+            const digit = Number(ch);
+            const end = digit + 3;
+            const delay = digitIndex * 0.12;
+            digitIndex += 1;
+            return (
+              <span
+                key={`${idx}-${ch}`}
+                className={`tb-roll-digit ${isActive ? "is-animate" : ""}`}
+                style={{ "--start": digit, "--end": end, "--delay": `${delay}s` }}
+              >
+                <span className="tb-roll-track">
+                  {Array.from({ length: 30 }).map((_, rollIndex) => (
+                    <span key={rollIndex} className="tb-roll-num">
+                      {rollIndex % 10}
+                    </span>
+                  ))}
+                </span>
+              </span>
+            );
+          }
+          return (
+            <span key={`${idx}-${ch}`} className="tb-roll-char">
+              {ch}
+            </span>
+          );
+        })}
+      </span>
+    );
+  };
+
+  const BellGsap = () => {
+    const bellRef = useRef(null);
+    const clapperRef = useRef(null);
+    const dotRef = useRef(null);
+    const mouthUpRef = useRef(null);
+    const mouthDownRef = useRef(null);
+
+    useLayoutEffect(() => {
+      if (!bellRef.current || !clapperRef.current || !dotRef.current || !mouthUpRef.current || !mouthDownRef.current) return undefined;
+      const ctx = gsap.context(() => {
+        gsap.set([bellRef.current, clapperRef.current], {
+          transformOrigin: "50% 10%",
+        });
+        const mouthFlat = "M-120,108 Q0,108 120,108";
+        const mouthUp = "M-120,108 Q0,76 120,108";
+        const mouthDown = "M-120,108 Q0,140 120,108";
+        gsap.set([mouthUpRef.current, mouthDownRef.current], { attr: { d: mouthFlat } });
+        gsap.set(dotRef.current, { transformOrigin: "50% 50%", scale: 0, opacity: 0 });
+        const tl = gsap.timeline({ repeat: -1, repeatDelay: 0.6 });
+        tl.to(bellRef.current, {
+          rotation: -12,
+          duration: 0.12,
+          ease: "power2.inOut",
+        })
+          .to(bellRef.current, {
+            rotation: 12,
+            duration: 0.24,
+            ease: "power2.inOut",
+          })
+          .to(bellRef.current, {
+            rotation: -8,
+            duration: 0.18,
+            ease: "power2.inOut",
+          })
+          .to(bellRef.current, {
+            rotation: 8,
+            duration: 0.18,
+            ease: "power2.inOut",
+          })
+          .to(bellRef.current, {
+            rotation: 0,
+            duration: 0.2,
+            ease: "power2.out",
+          });
+
+        tl.to(
+          mouthUpRef.current,
+          { attr: { d: mouthUp }, duration: 0.12, ease: "power2.inOut" },
+          0.18
+        )
+          .to(
+            mouthDownRef.current,
+            { attr: { d: mouthDown }, duration: 0.12, ease: "power2.inOut" },
+            0.18
+          )
+          .to(
+            mouthUpRef.current,
+            { attr: { d: mouthFlat }, duration: 0.16, ease: "power2.out" },
+            0.38
+          )
+          .to(
+            mouthDownRef.current,
+            { attr: { d: mouthFlat }, duration: 0.16, ease: "power2.out" },
+            0.38
+          );
+
+        tl.to(
+          dotRef.current,
+          {
+            scale: 1,
+            opacity: 1,
+            duration: 0.35,
+            ease: "back.out(2)",
+          },
+          0.28
+        );
+
+        gsap.to(clapperRef.current, {
+          rotation: 18,
+          duration: 0.18,
+          ease: "power2.inOut",
+          yoyo: true,
+          repeat: -1,
+        });
+      });
+
+      return () => ctx.revert();
+    }, []);
+
+    return (
+      <div className="ui-demo ui-demo-bell">
+        <svg viewBox="0 0 1500 1500" aria-hidden="true">
+          <g transform="matrix(1.7999999523,0,0,1.7999999523,72.3004,348.6004)">
+            <g ref={clapperRef} transform="matrix(1,0,0,1,378.7771,329.981)">
+              <path
+                fill="#ffffff"
+                d="M65.078,0C65.078,-35.942 35.941,-65.078 0,-65.078C-35.942,-65.078 -65.078,-35.942 -65.078,0C-65.078,35.942 -35.942,65.078 0,65.078C35.941,65.078 65.078,35.942 65.078,0Z"
+              />
+              <path
+                fill="none"
+                stroke="#352006"
+                strokeWidth="20"
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                d="M65.078,0C65.078,-35.942 35.941,-65.078 0,-65.078C-35.942,-65.078 -65.078,-35.942 -65.078,0C-65.078,35.942 -35.942,65.078 0,65.078C35.941,65.078 65.078,35.942 65.078,0Z"
+              />
+            </g>
+            <g ref={bellRef} transform="matrix(1,0,0,1,376.847,190.155)">
+              <path
+                fill="#ffffff"
+                d="M132.1849,9.618C132.4279,5.785 132.5072,1.9088 132.4689,-2.003C131.7582,-77.4429 71.3109,-140.4362 0.5459,-140.7383C-72.8731,-141.0502 -132.8324,-78.1531 -132.482,0.156C-132.4699,3.1347 -132.395,6.092 -132.221,9.024C-130.656,35.373 -134.8887,60.6927 -143.9276,85.3047L-148.3087,97.2318C-155.7097,117.3848 -142.1678,138.3041 -121.211,139.3135C-113.4673,142.5172 118.8995,140.4878 121.1846,139.2608C141.9238,138.0675 155.4491,117.3559 148.3886,97.4445L143.4639,84.1766C134.6519,60.1826 130.5569,35.299 132.1849,9.618Z"
+              />
+              <path
+                fill="none"
+                stroke="#352006"
+                strokeWidth="20"
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                d="M132.1849,9.618C132.4279,5.785 132.5072,1.9088 132.4689,-2.003C131.7582,-77.4429 71.3109,-140.4362 0.5459,-140.7383C-72.8731,-141.0502 -132.8324,-78.1531 -132.482,0.156C-132.4699,3.1347 -132.395,6.092 -132.221,9.024C-130.656,35.373 -134.8887,60.6927 -143.9276,85.3047L-148.3087,97.2318C-155.7097,117.3848 -142.1678,138.3041 -121.211,139.3135C-113.4673,142.5172 118.8995,140.4878 121.1846,139.2608C141.9238,138.0675 155.4491,117.3559 148.3886,97.4445L143.4639,84.1766C134.6519,60.1826 130.5569,35.299 132.1849,9.618Z"
+              />
+              <path
+                ref={mouthUpRef}
+                d="M-120,108 Q0,108 120,108"
+                fill="none"
+                stroke="#352006"
+                strokeWidth="18"
+                strokeLinecap="round"
+              />
+              <path
+                ref={mouthDownRef}
+                d="M-120,108 Q0,108 120,108"
+                fill="none"
+                stroke="#352006"
+                strokeWidth="18"
+                strokeLinecap="round"
+              />
+            </g>
+            <g transform="matrix(1.0994308,0,0,1.0994308,478.154,77.895)">
+              <path
+                ref={dotRef}
+                fill="#FFA733"
+                d="M73.647,0C73.647,-40.674 40.674,-73.647 0,-73.647C-40.674,-73.647 -73.647,-40.674 -73.647,0C-73.647,40.674 -40.674,73.647 0,73.647C40.674,73.647 73.647,40.674 73.647,0Z"
+              />
+            </g>
+          </g>
+        </svg>
+      </div>
+    );
+  };
+
+  const renderUiMotion = (variant = "pulse", lottieData = null, emoji = null) => {
+    switch (variant) {
+      case "gsap-bell":
+        return <BellGsap />;
+      case "emoji":
+        return (
+          <div className="ui-demo ui-demo-emoji" aria-hidden="true">
+            <span>{emoji || "🙂"}</span>
+          </div>
+        );
+      case "three-d":
+        return (
+          <div className="ui-demo ui-demo-3d" aria-hidden="true">
+            <div className="demo-3d-scene">
+              <div className="demo-3d-card is-back">
+                <span className="card-value">7</span>
+                <span className="card-suit">♣</span>
+              </div>
+              <div className="demo-3d-card is-mid">
+                <span className="card-value">J</span>
+                <span className="card-suit">♠</span>
+              </div>
+              <div className="demo-3d-card is-front">
+                <span className="card-value">10</span>
+                <span className="card-suit">♥</span>
+              </div>
+            </div>
+          </div>
+        );
+      case "lottie":
+        return (
+          <div className="ui-demo ui-demo-lottie">
+            <Lottie
+              animationData={lottieData}
+              loop
+              autoplay
+              style={{ width: "100%", height: "100%" }}
+              rendererSettings={{ preserveAspectRatio: "xMidYMid meet" }}
+            />
+          </div>
+        );
+      case "orbit":
+        return (
+          <div className="ui-demo ui-demo-orbit">
+            <div className="orbit-track">
+              <span className="orbit-dot is-1" />
+              <span className="orbit-dot is-2" />
+              <span className="orbit-dot is-3" />
+            </div>
+            <span className="orbit-core" />
+          </div>
+        );
+      case "wave":
+        return (
+          <div className="ui-demo ui-demo-wave">
+            {Array.from({ length: 7 }).map((_, index) => (
+              <span key={index} className="wave-bar" />
+            ))}
+          </div>
+        );
+      case "stack":
+        return (
+          <div className="ui-demo ui-demo-stack">
+            <span className="stack-card is-1" />
+            <span className="stack-card is-2" />
+            <span className="stack-card is-3" />
+          </div>
+        );
+      case "scan":
+        return (
+          <div className="ui-demo ui-demo-scan">
+            <div className="scan-list">
+              {Array.from({ length: 4 }).map((_, index) => (
+                <div key={index} className="scan-row" />
+              ))}
+            </div>
+            <span className="scan-line" />
+          </div>
+        );
+      case "ticker":
+        return (
+          <div className="ui-demo ui-demo-ticker">
+            <div className="ticker-track">
+              {["Tokens", "Swap", "Bid", "Vault", "Mint"].map((label, index) => (
+                <span key={index} className="ticker-pill">{label}</span>
+              ))}
+            </div>
+          </div>
+        );
+      case "grid":
+        return (
+          <div className="ui-demo ui-demo-grid">
+            {Array.from({ length: 9 }).map((_, index) => (
+              <span key={index} className="grid-cell" />
+            ))}
+            <span className="grid-highlight" />
+          </div>
+        );
+      case "progress":
+        return (
+          <div className="ui-demo ui-demo-progress">
+            <div className="progress-ring">
+              <span className="progress-ring-core" />
+            </div>
+            <div className="progress-value">78%</div>
+            <div className="progress-bar">
+              <span className="progress-fill" />
+            </div>
+          </div>
+        );
+      case "pulse":
+      default:
+        return (
+          <div className="ui-demo ui-demo-pulse">
+            <span className="pulse-core" />
+            <span className="pulse-ring is-1" />
+            <span className="pulse-ring is-2" />
+          </div>
+        );
+    }
+  };
+
+  const defaultLongText =
+    "Motion Lab is built as a repeatable system for testing interaction physics and visual rhythm. Each component is intentionally minimal, so the motion itself carries the narrative: what it highlights, how it orients the user, and how it sets the pace for the interface. Orbit patterns hint at focus without shouting, while waveform and scan modules hold a steady cadence that suggests continuity. These studies loop by design, allowing designers to evaluate fatigue, clarity, and timing over longer sessions. The goal is to make motion feel inevitable, not ornamental. We prefer scaled transforms over layout shifts to keep the layout calm, and we tune elevations instead of heavy shadows to keep every interaction tactile yet restrained. The palette is neutral on purpose, so color becomes a deliberate signal rather than constant decoration.\n\nFrom a system perspective, the library is organized around intent rather than visual style. Each card answers a behavioral need: signal a state, invite exploration, or guide attention toward a primary action. Patterns are built to drop into product surfaces as self-contained modules, with local variables controlling color, tempo, amplitude, and emphasis. That means the same interaction can live across multiple themes without re-authoring the animation. The loops are short enough to feel responsive yet long enough to avoid distraction, and keyframes are engineered to ease in and out with physical softness. The spacing grid respects typographic rhythm, and every transition is tuned to preserve legibility. If a component competes with content, the motion is softened, slowed, or simplified.\n\nThis is a lab, not a finished product. The studies are meant to be remixed, stretched, and replaced as you prototype different experiences. The copy system gives a consistent vocabulary for describing each behavior, while the code blocks provide a baseline implementation you can extend. Use these patterns to explore how motion shapes meaning, how it reduces cognitive load, and how it communicates progress without relying on extra text. We emphasize legibility first, rhythm second, and polish last, so motion never overwhelms the content it supports. If you extend a study, keep the core intent intact, adjust timing conservatively, and test with real interface density before shipping. The best motion is invisible until it needs to speak.\n\nFor production use, focus on performance and accessibility. Keep motion tied to transform and opacity, respect reduced-motion preferences, and ensure that timing does not obscure readability. Pair motion with clear states, so every transition has a purpose and a predictable end. Use the code blocks as a baseline, then replace the demo loops with real event-driven triggers in your product. The lab favors small, composable pieces that can be audited, tuned, and reused across teams without losing intent.";
+
+  const handleCopy = async (text, id) => {
+    try {
+      if (navigator?.clipboard?.writeText) {
+        await navigator.clipboard.writeText(text);
+      } else {
+        const textarea = document.createElement("textarea");
+        textarea.value = text;
+        textarea.style.position = "fixed";
+        textarea.style.left = "-9999px";
+        document.body.appendChild(textarea);
+        textarea.select();
+        document.execCommand("copy");
+        document.body.removeChild(textarea);
+      }
+      setCopiedId(id);
+      setTimeout(() => setCopiedId(null), 1600);
+    } catch (error) {
+      setCopiedId(null);
+    }
+  };
+
+  return (
+    <div className="project-detail-outer" style={{ backgroundColor: project.color }}>
+      {/* 苹果风格入场：在 Ready 前显示一个背景色底，Ready 后内容浮现 */}
+      <AnimatePresence mode="wait">
+        {!isReady ? (
+          <motion.div
+            key="loader"
+            exit={{ opacity: 0 }}
+            className="detail-page-loader"
+            style={{ backgroundColor: project.color }}
+          />
+        ) : (
+          <motion.div
+            key="content"
+            className="project-detail-page"
+            style={{
+              "--project-theme": project.color,
+              "--project-text": project.textColor || "#ffffff",
+              "--project-text-muted": project.textMuted || "rgba(255, 255, 255, 0.72)",
+              "--project-text-subtle": project.textSubtle || "rgba(255, 255, 255, 0.4)",
+              "--project-panel": project.panelColor || "rgba(255, 255, 255, 0.08)",
+              "--project-panel-border": project.panelBorder || "rgba(255, 255, 255, 0.18)",
+              "--project-surface": project.surfaceColor || "rgba(255, 255, 255, 0.95)",
+              "--project-button-bg": project.buttonBg || "#ffffff",
+              "--project-button-text": project.buttonText || "#000000",
+              "--project-accent": project.accentColor || project.hoverColor || "#2F6DFF",
+              "--project-accent-alt": project.accentAlt || "#4B63FF",
+              "--project-hover": project.hoverColor || "#1D2C5C",
+              "--project-shadow-button": project.noShadow ? "none" : "0 8px 24px rgba(0,0,0,0.12)",
+              "--project-shadow-hero": project.noShadow ? "none" : "0 60px 120px rgba(0, 0, 0, 0.25)",
+              "--project-shadow-surface": project.noShadow ? "none" : "0 40px 120px rgba(0, 0, 0, 0.25)",
+              "--project-shadow-card": project.noShadow ? "none" : "0 25px 60px rgba(15, 20, 37, 0.12)",
+              "--project-shadow-frame": project.noShadow ? "none" : "0 40px 100px rgba(0, 0, 0, 0.24)",
+              "--project-shadow-footer": project.noShadow ? "none" : "0 24px 70px rgba(0, 0, 0, 0.08)",
+              "--project-shadow-footer-hover": project.noShadow ? "none" : "0 40px 100px rgba(0, 0, 0, 0.14)",
+              "--project-shadow-progress": project.noShadow ? "none" : "0 0 12px rgba(0, 0, 0, 0.3)",
+              "--project-next-bg": project.nextBg || "#ffffff",
+              "--project-next-text": project.nextText || "#111111",
+              "--project-next-subtle": project.nextSubtle || "#999999"
+            }}
+            initial={{ opacity: 0, y: 10 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.8, ease: lusionEase }}
+          >
+            <div className="detail-fixed-leaf" />
+
+            <header className={`detail-header ${isHeaderHidden ? "is-hidden" : ""}`}>
+              <div className="detail-logo-container">
+                <a
+                  href="/"
+                  className="detail-brand-logo"
+                  aria-label="JENSEN"
+                  style={{ "--detail-logo-color": logoColor }}
+                >
+                  <span className="detail-brand-mark" aria-hidden="true" />
+                  <span className="detail-brand-word">JENSEN</span>
+                </a>
+              </div>
+
+              <div className="detail-header-back-slot">
+                <motion.button className="back-action-pill" onClick={() => navigate({ pathname: "/", hash: "#featured-work" })} initial="rest" whileHover="hover" animate="rest">
+                  <motion.div className="back-btn-bg-layer" variants={{ rest: { background: "#e4e6ef" }, hover: { background: hoverFill } }} transition={transition} />
+                  <div className="back-btn-mask">
+                    <motion.div className="back-btn-sliding-content" variants={backSlidingVariants} transition={transition}>
+                      <motion.span className="back-arrow-item" variants={backContentColorVariants} transition={transition}><Arrow direction="left" strokeWidth={3.5} /></motion.span>
+                      <motion.span className="back-text-item" variants={backContentColorVariants} transition={transition}>BACK</motion.span>
+                      <motion.span className="back-arrow-item" variants={backContentColorVariants} transition={transition}><Arrow direction="left" strokeWidth={3.5} /></motion.span>
+                    </motion.div>
+                  </div>
+                </motion.button>
+              </div>
+
+              <div className="detail-header-right-actions">
+                <SoundButton activeColor={hoverFill} isMenuOpen={isMenuOpen} />
+                <TalkButton activeColor={hoverFill} />
+                <motion.button className="detail-menu-trigger-btn" onClick={() => setIsMenuOpen(!isMenuOpen)} initial="rest" whileHover="hover" animate={isMenuOpen ? "open" : "rest"}>
+                  <motion.div className="detail-menu-trigger-bg" variants={{ rest: { backgroundColor: "#e4e6ef" }, hover: { backgroundColor: "rgba(255,255,255,1)" }, open: { backgroundColor: "rgba(255,255,255,1)" } }} transition={transition} />
+                  <div className="detail-menu-trigger-text-mask">
+                    <motion.div className="detail-menu-trigger-slider" animate={{ y: isMenuOpen ? "-100%" : "0%" }} transition={transition}>
+                      <motion.span className="detail-menu-label" style={{ color: "#000" }}>MENU</motion.span>
+                      <motion.span className="detail-menu-label" style={{ color: "#000" }}>CLOSE</motion.span>
+                    </motion.div>
+                  </div>
+                  <motion.span className="detail-menu-dots-icon" style={{ color: "#000" }} variants={{ rest: { rotate: 0 }, hover: { rotate: 90 }, open: { rotate: 90 } }} transition={{ type: "spring", stiffness: 300, damping: 20 }}>••</motion.span>
+                </motion.button>
+              </div>
+            </header>
+
+            <Menu isOpen={isMenuOpen} onClose={() => setIsMenuOpen(false)} />
+
+            <section className="detail-hero-fold">
+              <div className="detail-hero-layout">
+                <div className="detail-hero-info">
+                  <motion.h1 className="detail-hero-big-title" initial={{ y: 40, opacity: 0 }} animate={{ y: 0, opacity: 1 }} transition={{ duration: 1, ease: lusionEase, delay: 0.2 }}>{project.title}</motion.h1>
+                  <div className="detail-hero-meta-row">
+                    <div className="detail-hero-desc-col">
+                      <p className="detail-hero-paragraph">{project.description}</p>
+                    </div>
+                    <div className="detail-hero-services-col">
+                      <span className="services-title-label">SERVICES</span>
+                      <ul className="services-data-list">{project.services.map((s, i) => <li key={i}>{s}</li>)}</ul>
+                    </div>
+                  </div>
+                </div>
+                <div className="detail-hero-visual">
+                  <motion.div className="detail-hero-media-box" initial={{ scale: 0.9, opacity: 0 }} animate={{ scale: 1, opacity: 1 }} transition={{ duration: 1.2, ease: lusionEase, delay: 0.4 }}>
+                    <img src={project.image} alt={project.title} className="detail-hero-cover-img" />
+                    <div className="detail-hero-play-button"><div className="play-triangle-svg">▶</div></div>
+                  </motion.div>
+                </div>
+              </div>
+            </section>
+
+            <section className={`detail-gallery-vertical ${isDribbbleLayout ? "is-dribbble" : ""} ${isTeraboxLayout ? "is-terabox" : ""}`}>
+              {sections.map((section, idx) => {
+                const isTbSection = section.type?.startsWith("tb-");
+                return (
+                  <React.Fragment key={idx}>
+                    <motion.div
+                      className={`detail-feature-row ${isTbSection ? "is-terabox" : ""} ${section.type === "prototype" ? "is-prototype" : ""} ${section.type === "dribbble" ? "is-dribbble" : ""} ${section.type === "accordion" ? "is-accordion" : ""} ${section.type === "showcase" ? "is-showcase" : ""} ${section.type === "ui-waterfall" ? "is-ui-waterfall" : ""} ${section.type === "dribbble" && idx % 2 === 1 ? "is-dribbble-alt" : ""}`}
+                      initial={isTbSection ? false : { y: 50, opacity: 0 }}
+                      whileInView={isTbSection ? undefined : { y: 0, opacity: 1 }}
+                      viewport={isTbSection ? undefined : { once: true, margin: "-100px" }}
+                      transition={isTbSection ? undefined : { duration: 1, ease: lusionEase }}
+                    >
+                    {section.type === "tb-media" ? (
+                      <div
+                        className={`tb-section tb-${section.tone || "light"} ${section.splitBackground ? "tb-split" : ""}`}
+                        style={section.splitPoint ? { "--tb-split": section.splitPoint } : undefined}
+                      >
+                        <div className="tb-container" style={section.mediaSpacing ? { gap: `${section.mediaSpacing}px` } : undefined}>
+                          <div className="tb-header">
+                            <div
+                              className={`tb-title-group ${section.centerText ? "is-centered" : ""}`}
+                              style={section.textWidth ? { maxWidth: section.textWidth } : undefined}
+                            >
+                              <h3 className="tb-title" style={section.titleNoWrap ? { whiteSpace: "nowrap" } : undefined}>{section.title}</h3>
+                              <p className="tb-subtitle">{section.description}</p>
+                              {section.showLaunch && project.launchUrl ? (
+                                <div className="talk-button-wrapper tb-launch-wrapper">
+                                  <motion.button
+                                    className="talk-btn tb-launch-btn"
+                                    onClick={() => window.open(project.launchUrl, "_blank", "noopener,noreferrer")}
+                                    initial="rest"
+                                    whileHover="hover"
+                                    animate="rest"
+                                  >
+                                    <motion.div
+                                      className="talk-btn-bg"
+                                      variants={{
+                                        rest: { background: "#1c1c1e", transition: { duration: 0.4, ease: lusionEase } },
+                                        hover: { background: hoverFill, transition: { duration: 0.4, ease: lusionEase } },
+                                      }}
+                                    />
+                                    <div className="talk-btn-content">
+                                      <motion.span
+                                        className="btn-arrow"
+                                        variants={{ rest: { x: -25, opacity: 0 }, hover: { x: 0, opacity: 1 } }}
+                                        transition={{ duration: 0.4, ease: lusionEase }}
+                                      >
+                                        <Arrow direction="right" />
+                                      </motion.span>
+                                      <motion.span
+                                        className="btn-text"
+                                        variants={{ rest: { x: -8 }, hover: { x: 5 } }}
+                                        transition={{ duration: 0.4, ease: lusionEase }}
+                                      >
+                                        LIVE SITE
+                                      </motion.span>
+                                      <motion.span
+                                        className="btn-dot"
+                                        variants={{ rest: { x: 0, opacity: 1, scale: 1 }, hover: { x: 0, opacity: 0, scale: 0 } }}
+                                        transition={{ duration: 0.4, ease: lusionEase }}
+                                      />
+                                    </div>
+                                  </motion.button>
+                                  <p className="tb-launch-note">Feel free to Sign in, the Webmaster Center will be available after login.</p>
+                                </div>
+                              ) : null}
+                            </div>
+                          </div>
+                          <div
+                            className={`tb-media-block ${section.video?.src ? "tb-media-video-only" : ""}`}
+                            style={section.video
+                              ? {
+                                  ...(section.video.offset && typeof section.video.offset === "object"
+                                    ? {
+                                        "--tb-video-top": `${section.video.offset.top}%`,
+                                        "--tb-video-left": `${section.video.offset.left}%`,
+                                      }
+                                    : null),
+                                  ...(section.video.size && typeof section.video.size === "object"
+                                    ? {
+                                        "--tb-video-width": `${section.video.size.width}%`,
+                                        "--tb-video-height": `${section.video.size.height}%`,
+                                      }
+                                    : null),
+                                  ...(section.video.inset && typeof section.video.inset === "object"
+                                    ? {
+                                        "--tb-video-top": `${section.video.inset.top}%`,
+                                        "--tb-video-right": `${section.video.inset.right}%`,
+                                        "--tb-video-bottom": `${section.video.inset.bottom}%`,
+                                        "--tb-video-left": `${section.video.inset.left}%`,
+                                      }
+                                    : null),
+                                  ...(section.video.inset && typeof section.video.inset !== "object"
+                                    ? {
+                                        "--tb-video-top": `${section.video.inset}%`,
+                                        "--tb-video-right": `${section.video.inset}%`,
+                                        "--tb-video-bottom": `${section.video.inset}%`,
+                                        "--tb-video-left": `${section.video.inset}%`,
+                                      }
+                                    : null),
+                                }
+                              : undefined}
+                          >
+                            {!section.video?.src && <img src={section.image} alt={section.title} />}
+                            {section.video?.src && (
+                              <>
+                                <video
+                                  ref={(node) => {
+                                    if (node) videoRefs.current[`tb-media-${idx}`] = node;
+                                  }}
+                                  className="tb-media-video"
+                                  src={section.video.src}
+                                  poster={section.video.poster || section.image}
+                                  preload="metadata"
+                                  playsInline
+                                  autoPlay
+                                  muted
+                                  onPlay={() => setVideoState(`tb-media-${idx}`, true)}
+                                  onPause={() => setVideoState(`tb-media-${idx}`, false)}
+                                  onEnded={() => setVideoState(`tb-media-${idx}`, false)}
+                                />
+                                <button
+                                  type="button"
+                                  className="tb-media-control"
+                                  onClick={() => toggleVideo(`tb-media-${idx}`)}
+                                  aria-label={videoPlaying[`tb-media-${idx}`] ? "Pause video" : "Play video"}
+                                >
+                                  {videoPlaying[`tb-media-${idx}`] ? (
+                                    <svg className="tb-media-icon" viewBox="0 0 24 24" aria-hidden="true">
+                                      <rect x="6" y="5" width="4" height="14" rx="1.2" />
+                                      <rect x="14" y="5" width="4" height="14" rx="1.2" />
+                                    </svg>
+                                  ) : (
+                                    <svg className="tb-media-icon" viewBox="0 0 24 24" aria-hidden="true">
+                                      <path d="M7 5.5L19 12L7 18.5V5.5Z" />
+                                    </svg>
+                                  )}
+                                </button>
+                              </>
+                            )}
+                          </div>
+                        </div>
+                      </div>
+                    ) : section.type === "tb-before-after" ? (
+                      <div className={`tb-section tb-${section.tone || "light"}`}>
+                        <div className="tb-container">
+                          <div className="tb-before-after-block">
+                            <div className="tb-ba-item">
+                              <div className="tb-ba-header">
+                                {section.before?.headline && <h2 className="tb-ba-headline">{section.before.headline}</h2>}
+                                <span className="tb-rule-label">{section.ruleLabel || "Description"}</span>
+                              </div>
+                              <div className="tb-rule" aria-hidden="true" />
+                              {section.before?.badge && (
+                                <span className="tb-ba-badge tb-ba-badge--before">{section.before.badge}</span>
+                              )}
+                              {section.before?.title && <h3 className="tb-title">{section.before.title}</h3>}
+                              {section.before?.description && (
+                                <p
+                                  className="tb-subtitle"
+                                  style={section.before?.descriptionWidth ? { maxWidth: section.before.descriptionWidth } : undefined}
+                                >
+                                  {section.before.description}
+                                </p>
+                              )}
+                              {section.beforeTiles?.length ? (
+                                <div className="tb-before-tiles">
+                                  {section.beforeTiles.map((tile, tileIndex) => (
+                                    <div key={tileIndex} className="tb-before-tile">
+                                      <div className="tb-before-image">
+                                        <img src={tile.image} alt={tile.title} />
+                                      </div>
+                                      <h4 className="tb-title tb-before-title">{tile.title}</h4>
+                                      <p className="tb-subtitle tb-before-text">{tile.text}</p>
+                                    </div>
+                                  ))}
+                                </div>
+                              ) : null}
+                              {section.before?.image ? (
+                                <div className={`tb-media-block tb-media-wide ${section.before?.mediaTall ? "is-tall" : ""}`}>
+                                  <img src={section.before.image} alt={section.before?.title || "Before"} />
+                                </div>
+                              ) : null}
+                            </div>
+                            {section.after && (
+                              <div className="tb-ba-item">
+                                {section.after?.badge && (
+                                  <span className="tb-ba-badge tb-ba-badge--after">{section.after.badge}</span>
+                                )}
+                                {section.after?.title && <h3 className="tb-title">{section.after.title}</h3>}
+                                {section.after?.description && <p className="tb-subtitle">{section.after.description}</p>}
+                                {section.after?.image ? (
+                                  <div className="tb-media-block tb-media-wide">
+                                    <img src={section.after.image} alt={section.after?.title || "After"} />
+                                  </div>
+                                ) : null}
+                              </div>
+                            )}
+                          </div>
+                        <div className="tb-stats-grid">
+                          {(section.stats || []).map((stat, statIndex) => (
+                            <div key={statIndex} className="tb-stat-card">
+                              <div className="tb-stat-value">
+                                <RollingNumber value={stat.value} />
+                                <span className="tb-stat-arrow" aria-hidden="true">↑</span>
+                              </div>
+                              <div className="tb-stat-label">{stat.label}</div>
+                            </div>
+                          ))}
+                        </div>
+                        {section.statsFooter && (
+                          <div className="tb-stats-footer">{section.statsFooter}</div>
+                        )}
+                      </div>
+                    </div>
+                  ) : section.type === "tb-stats" ? (
+                      <div className={`tb-section tb-${section.tone || "light"}`}>
+                        <div className="tb-container">
+                        <div className="tb-stats-grid">
+                          {(section.stats || []).map((stat, statIndex) => (
+                            <div key={statIndex} className="tb-stat-card">
+                              <div className="tb-stat-value">
+                                <RollingNumber value={stat.value} />
+                                <span className="tb-stat-arrow" aria-hidden="true">↑</span>
+                              </div>
+                              <div className="tb-stat-label">{stat.label}</div>
+                            </div>
+                          ))}
+                        </div>
+                        {section.statsFooter && (
+                          <div className="tb-stats-footer">{section.statsFooter}</div>
+                        )}
+                      </div>
+                    </div>
+                  ) : section.type === "tb-paragraph" ? (
+                      <div className={`tb-section tb-${section.tone || "light"}`}>
+                        <div className="tb-container">
+                          <div className="tb-header">
+                            <div className="tb-title-group">
+                              <h3 className="tb-title">{section.title}</h3>
+                              <p className="tb-body">{section.body}</p>
+                            </div>
+                          </div>
+                          <div className="tb-media-block">
+                            <img src={section.image} alt={section.title} />
+                          </div>
+                        </div>
+                      </div>
+                    ) : section.type === "tb-split" ? (
+                      <div
+                        className={`tb-section tb-${section.tone || "dark"} ${section.nightLayout ? "tb-night" : ""}`}
+                        style={
+                          section.nightLayout && section.nightBackgroundImage
+                            ? {
+                                "--tb-night-bg": `url(${section.nightBackgroundImage})`,
+                                "--tb-night-bg-opacity": section.nightBackgroundOpacity || 0.2,
+                              }
+                            : undefined
+                        }
+                      >
+                        <div className="tb-container">
+                          {section.nightLayout ? (
+                            <div className={`tb-night-grid ${section.hideNightMedia ? "is-single" : ""}`}>
+                              <div className="tb-night-copy">
+                                {section.topLeftLabel && <span className="tb-night-topline">{section.topLeftLabel}</span>}
+                                {(section.titleLines || [section.title]).map((line, lineIndex) => (
+                                  <h3
+                                    key={lineIndex}
+                                    className={`tb-night-title ${lineIndex === 1 ? "is-gradient" : ""}`}
+                                  >
+                                    {line}
+                                  </h3>
+                                ))}
+                                <div className="tb-night-chip-row">
+                                  <span className="tb-night-chip-icon">{section.chipIcon || "C"}</span>
+                                  <span className="tb-night-chip">{section.chipLabel || "Operation Guide"}</span>
+                                </div>
+                              </div>
+                              {!section.hideNightMedia && (
+                                <div className="tb-night-media">
+                                  {section.topRightLabel && <span className="tb-night-topline">{section.topRightLabel}</span>}
+                                  <div className="tb-night-frame">
+                                    <img src={section.image} alt={section.title} />
+                                  </div>
+                                </div>
+                              )}
+                            </div>
+                          ) : (
+                            <div className="tb-split-grid">
+                              <div className="tb-split-copy">
+                                <h3 className="tb-title">{section.title}</h3>
+                                <p className="tb-subtitle">{section.description}</p>
+                              </div>
+                              <div className="tb-split-media">
+                                <img src={section.image} alt={section.title} />
+                              </div>
+                            </div>
+                          )}
+                        </div>
+                      </div>
+                    ) : section.type === "tb-grid" ? (
+                      <div className={`tb-section tb-${section.tone || "dark"}`}>
+                        <div className="tb-container">
+                          <div className="tb-grid-header">
+                            <div>
+                              <h3 className="tb-title">{section.title}</h3>
+                              <p className="tb-subtitle">{section.subtitle}</p>
+                            </div>
+                          </div>
+                          <div className="tb-grid" style={{ gridTemplateColumns: `repeat(${section.columns || 3}, minmax(0, 1fr))` }}>
+                            {(section.images || []).map((image, imageIndex) => (
+                              <div key={imageIndex} className="tb-grid-card">
+                                <img src={image} alt={`${section.title}-${imageIndex + 1}`} />
+                              </div>
+                            ))}
+                          </div>
+                        </div>
+                      </div>
+                    ) : section.type === "ui-waterfall" ? (
+                      <div className="ui-waterfall">
+                        <div className="ui-waterfall-header">
+                          {!section.hideIndex && (
+                            <span className="detail-feature-index">
+                              {String(idx + 1).padStart(2, "0")} / {String(sections.length).padStart(2, "0")}
+                            </span>
+                          )}
+                          <h3 className="detail-feature-title">{section.title}</h3>
+                          <p className="detail-feature-desc">{section.description}</p>
+                        </div>
+                        <div className="ui-waterfall-grid">
+                          {(section.items || []).map((item, itemIndex) => (
+                            <button
+                              key={item.id || itemIndex}
+                              type="button"
+                              className={`ui-waterfall-card ${uiOverlay?.id === item.id ? "is-active" : ""}`}
+                              onClick={() => setUiOverlay(item)}
+                              style={{
+                                "--ui-accent": item.accent || "#4F6AFF",
+                                "--ui-accent-soft": item.accentSoft || "rgba(79, 106, 255, 0.2)",
+                                "--ui-demo-height": item.demoHeight,
+                              }}
+                            >
+                              <span className="ui-waterfall-index">
+                                {String(itemIndex + 1).padStart(2, "0")}
+                              </span>
+                              <div className="ui-waterfall-card-head">
+                                <span className="ui-waterfall-card-label">{item.label}</span>
+                                <h4 className="ui-waterfall-card-title">{item.title}</h4>
+                                <p className="ui-waterfall-card-desc">{item.description}</p>
+                              </div>
+                              {renderUiMotion(item.variant, item.lottieData, item.emoji)}
+                            </button>
+                          ))}
+                        </div>
+                      </div>
+                    ) : section.type === "showcase" ? (
+                      <div className="detail-showcase">
+                        <div className="detail-showcase-title-row">
+                          <h3 className="detail-showcase-title">{section.title}</h3>
+                        </div>
+                        <div className="detail-showcase-surface">
+                          <div className="detail-showcase-left">
+                            <motion.div
+                              className="detail-showcase-controls"
+                              role="tablist"
+                              initial="hidden"
+                              animate="show"
+                              variants={{ hidden: {}, show: { transition: { staggerChildren: 0.06 } } }}
+                            >
+                              {(section.items || []).map((item, itemIndex) => (
+                                <motion.button
+                                  key={itemIndex}
+                                  type="button"
+                                  role="tab"
+                                  aria-selected={itemIndex === showcaseSelected}
+                                  className={`detail-showcase-pill ${itemIndex === showcaseSelected ? "is-active" : ""}`}
+                                  onClick={() => setShowcaseSelected(itemIndex)}
+                                  variants={{ hidden: { opacity: 0, y: 8 }, show: { opacity: 1, y: 0, transition: { duration: 0.45, ease: appleEase } } }}
+                                >
+                                  <span className="detail-showcase-pill-row">
+                                    <span className={`detail-showcase-pill-icon ${itemIndex === showcaseSelected ? "is-active" : ""}`}>+</span>
+                                    <span className="detail-showcase-pill-text">{item.title}</span>
+                                  </span>
+                                  <span className="detail-showcase-pill-desc">{item.description}</span>
+                                </motion.button>
+                              ))}
+                            </motion.div>
+                          </div>
+                          <div className="detail-showcase-media">
+                            <div className="detail-showcase-media-frame">
+                              <AnimatePresence mode="wait">
+                                {section.items?.[showcaseSelected] && (
+                                  <motion.div
+                                    key={`${showcaseSelected}-${section.items?.[showcaseSelected]?.title}`}
+                                    className="detail-showcase-media-item is-active"
+                                    initial={{ opacity: 0, y: 14, scale: 0.96 }}
+                                    animate={{ opacity: 1, y: 0, scale: 1 }}
+                                    exit={{ opacity: 0, y: -10, scale: 0.98 }}
+                                    transition={{ duration: 0.6, ease: appleEase }}
+                                  >
+                                    {section.items?.[showcaseSelected]?.mediaType === "video" &&
+                                    section.items?.[showcaseSelected]?.mediaSrc?.match(/\.(mp4|webm)$/i) ? (
+                                      <video src={section.items?.[showcaseSelected]?.mediaSrc} autoPlay muted loop playsInline />
+                                    ) : (
+                                      <img src={section.items?.[showcaseSelected]?.mediaSrc} alt={section.items?.[showcaseSelected]?.title} />
+                                    )}
+                                    <span className="detail-showcase-media-badge">
+                                      {section.items?.[showcaseSelected]?.mediaType?.toUpperCase()}
+                                    </span>
+                                  </motion.div>
+                                )}
+                              </AnimatePresence>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                    ) : section.type === "accordion" ? (
+                      <div className="detail-accordion">
+                        <div className="detail-accordion-surface">
+                          <div className="detail-accordion-header">
+                            <h3 className="detail-accordion-title">{section.title}</h3>
+                            <a className="detail-accordion-link" href={section.linkUrl || "#"}>
+                              {section.linkText || "Learn how our devices work better together"}
+                              <span className="detail-accordion-link-arrow">›</span>
+                            </a>
+                          </div>
+                          <div className="detail-accordion-body">
+                            <div className="detail-accordion-list" role="tablist">
+                              {(section.items || []).map((item, itemIndex) => (
+                                <button
+                                  key={itemIndex}
+                                  type="button"
+                                  role="tab"
+                                  aria-selected={itemIndex === accordionSelected}
+                                  className={`detail-accordion-item ${itemIndex === accordionSelected ? "is-active" : ""}`}
+                                  onClick={() => setAccordionSelected(itemIndex)}
+                                >
+                                  <div className="detail-accordion-item-row">
+                                    <span className="detail-accordion-item-title">{item.title}</span>
+                                    <span className="detail-accordion-item-icon" aria-hidden="true" />
+                                  </div>
+                                  <p className="detail-accordion-item-desc">{item.description}</p>
+                                </button>
+                              ))}
+                            </div>
+                            <div className="detail-accordion-media">
+                              <div className="detail-accordion-media-frame">
+                                <img
+                                  src={section.items?.[accordionSelected]?.image || section.image}
+                                  alt={section.items?.[accordionSelected]?.title || section.title}
+                                />
+                              </div>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                    ) : section.type === "insight" ? (
+                      <div className="detail-insight">
+                        <div className="detail-insight-surface">
+                          <div className="detail-insight-header">
+                            <h3 className="detail-insight-title">{section.title}</h3>
+                            <p className="detail-insight-subtitle">{section.description}</p>
+                          </div>
+                          {section.heroImage && (
+                            <div className="detail-insight-hero">
+                              <img src={section.heroImage} alt={section.title} />
+                            </div>
+                          )}
+                          <div className="detail-insight-stats">
+                            {(section.stats || []).map((stat, statIndex) => (
+                              <button
+                                key={statIndex}
+                                type="button"
+                                className={`detail-insight-card ${statIndex === insightSelected ? "is-selected" : ""}`}
+                                aria-pressed={statIndex === insightSelected}
+                                onClick={() => setInsightSelected(statIndex)}
+                              >
+                                <div className="detail-insight-icon" aria-hidden="true">
+                                  {stat.icon === "bot" && (
+                                    <svg viewBox="0 0 24 24">
+                                      <rect x="5" y="6" width="14" height="10" rx="4" />
+                                      <circle cx="9" cy="11" r="1.5" />
+                                      <circle cx="15" cy="11" r="1.5" />
+                                      <path d="M8 18h8" />
+                                    </svg>
+                                  )}
+                                  {stat.icon === "coin" && (
+                                    <svg viewBox="0 0 24 24">
+                                      <circle cx="12" cy="12" r="8" />
+                                      <path d="M12 7v10M9.5 9.5h5M9.5 14.5h5" />
+                                    </svg>
+                                  )}
+                                  {stat.icon === "crown" && (
+                                    <svg viewBox="0 0 24 24">
+                                      <path d="M4 16l2-7 6 4 6-4 2 7" />
+                                      <path d="M6 16h12" />
+                                    </svg>
+                                  )}
+                                </div>
+                                <p className="detail-insight-text">{stat.text}</p>
+                              </button>
+                            ))}
+                          </div>
+
+                        </div>
+                      </div>
+                    ) : section.type === "dribbble" ? (
+                      <div className="detail-dribbble-grid">
+                        <div className="detail-dribbble-header">
+                          {!section.hideIndex && (
+                            <span className="detail-feature-index">
+                              {String(idx + 1).padStart(2, "0")} / {String(sections.length).padStart(2, "0")}
+                            </span>
+                          )}
+                          <h3 className="detail-feature-title">{section.title}</h3>
+                          <p className="detail-feature-desc">{section.description}</p>
+                        </div>
+
+                        <div className="detail-dribbble-board" style={section.spacingTop ? { marginTop: `${section.spacingTop}px` } : undefined}>
+                          
+
+                      <div className="detail-dribbble-media">
+                            <div
+                              className={`detail-feature-frame ${section.type === "app" ? "is-app" : "is-web"} ${section.fullBleed ? "is-full-bleed" : ""} ${section.mediaStyle ? `is-${section.mediaStyle}` : ""}`}
+                              style={
+                                section.mediaScale || section.mediaOffsetY || section.mediaWide
+                                  ? {
+                                      width: section.mediaWide ? "min(1400px, calc(100vw - 200px))" : undefined,
+                                      maxWidth: section.mediaWide ? "none" : undefined,
+                                      transform: `translateY(${section.mediaOffsetY || 0}px) scale(${section.mediaScale || 1})`,
+                                      transformOrigin: section.fullBleed ? "top center" : "center",
+                                    }
+                                  : undefined
+                              }
+                            >
+                              {section.colorControls ? (
+                                <>
+                                  <div className="detail-color-panel">
+                                    <img
+                                      src={
+                                        colorSelected === null
+                                          ? section.colorDefaultImage || section.image
+                                          : section.colorOptions?.[colorSelected]?.image || section.image
+                                      }
+                                      alt={
+                                        colorSelected === null
+                                          ? "Default"
+                                          : section.colorOptions?.[colorSelected]?.label || "Color"
+                                      }
+                                    />
+                                    <motion.button
+                                      type="button"
+                                      className="detail-color-close"
+                                      aria-label="Reset selection"
+                                      onClick={() => setColorSelected(null)}
+                                      initial={false}
+                                      animate={
+                                        colorSelected === null
+                                          ? { opacity: 0, y: 100,scale: 0, pointerEvents: "none" }
+                                          : { opacity: 1, y: 0, scale: 1,pointerEvents: "auto" }
+                                      }
+                                      transition={{
+                                        duration: 0.05,
+                                        ease: [0.77, 0, 0.175, 1],
+                                        opacity: {
+                                          duration: 0.02,
+                                          delay: colorSelected === null ? 0.12 : 0,
+                                          ease: [0.77, 0, 0.175, 1],
+                                        },
+                                      }}
+                                    >
+                                      ×
+                                    </motion.button>
+                                  </div>
+                                  {/* --- 替换原本的 detail-color-controls 部分 --- */}
+{/* 找到 section.colorControls 部分替换如下 */}
+{/* --- 修正后的 Apple 交互组件 --- */}
+<div className="detail-color-controls">
+  {/* 父容器必须标记 layout，以便平滑处理兄弟元素的位移 */}
+  <motion.div layout className="apple-stack-container">
+    {(section.colorOptions || []).map((option, optionIndex) => {
+      const isActive = optionIndex === colorSelected;
+      
+      return (
+        <motion.div
+          layout
+          key={option.label}
+          // 使用 Apple 官方风格的弹簧参数
+          transition={{
+            layout: { type: "spring", stiffness: 220, damping: 38, mass: 1 },
+            opacity: { duration: 0.2 }
+          }}
+          // 移除所有会导致冲突的 inline style 动画，统一交给 className
+          className={`apple-pill-card ${isActive ? "is-expanded" : "is-collapsed"}`}
+        >
+          <button
+            type="button"
+            className="apple-pill-trigger"
+            onClick={() => setColorSelected(isActive ? null : optionIndex)}
+          >
+            <motion.div 
+              layout
+              className="apple-plus-circle"
+              animate={{ rotate: isActive ? 45 : 0 }}
+            >
+              <span className="apple-plus-icon">+</span>
+            </motion.div>
+            <motion.span layout className="apple-pill-label">
+              {option.label}
+            </motion.span>
+          </button>
+
+          {/* 
+              注意：为了防止“先弹出一部分”的错觉，我们不再使用 AnimatePresence 挂载，
+              而是直接渲染并根据 isActive 控制高度，这样 layout 引擎能完美预判尺寸。
+          */}
+          <motion.div
+            layout
+            initial={false}
+            animate={{ 
+              height: isActive ? "auto" : 0,
+              opacity: isActive ? 1 : 0 
+            }}
+            transition={{
+              height: { type: "spring", stiffness: 220, damping: 28 },
+              opacity: { duration: 0.25, delay: isActive ? 0.1 : 0 }
+            }}
+            style={{ overflow: "hidden" }}
+          >
+            <div className="apple-expanded-content">
+              <div className="apple-content-inner">
+                <p className="apple-color-desc">
+                  <strong>{option.title}</strong> {option.description}
+                </p>
+                {option.label === "Colors" && (
+                  <div className="apple-swatch-row">
+                    <div className="swatch-dot" style={{ backgroundColor: "#1c1c1e" }} />
+                    <div className="swatch-dot" style={{ backgroundColor: "#e3e4e5" }} />
+                  </div>
+                )}
+              </div>
+            </div>
+          </motion.div>
+        </motion.div>
+      );
+    })}
+  </motion.div>
+</div>
+                                </>
+                              ) : (
+                                <>
+                                  <img src={section.image} alt={`${section.type}-${idx}`} />
+                                  <div className="detail-feature-overlay">INTERACTIVE PLACEHOLDER</div>
+                                </>
+                              )}
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                    ) : section.type === "prototype" ? (
+                      <div className="detail-prototype-grid">
+                        <div className="detail-prototype-note detail-prototype-note--left">
+                          <span className="detail-feature-index">
+                            {String(idx + 1).padStart(2, "0")} / {String(sections.length).padStart(2, "0")}
+                          </span>
+                          <h3 className="detail-feature-title">{section.title}</h3>
+                          <p className="detail-feature-desc">{section.description}</p>
+                        </div>
+
+                        <div className="detail-prototype-media">
+                          <div className={`detail-feature-frame ${section.type === "app" ? "is-app" : "is-web"}`}>
+                            <img src={section.image} alt={`${section.type}-${idx}`} />
+                            <div className="detail-feature-overlay">INTERACTIVE PLACEHOLDER</div>
+                          </div>
+                          <div className="detail-prototype-arrow detail-prototype-arrow--left" />
+                          <div className="detail-prototype-arrow detail-prototype-arrow--right" />
+                        </div>
+
+                        <div className="detail-prototype-note detail-prototype-note--right">
+                          <span className="detail-feature-tag">{section.type === "app" ? "APP DESIGN" : "WEB DESIGN"}</span>
+                          <p className="detail-feature-desc">{section.noteRight || "Interaction notes and UI behavior live here, describing intent and user flow in concise terms."}</p>
+                        </div>
+                      </div>
+                    ) : (
+                      <>
+                        <div className="detail-feature-copy">
+                          <span className="detail-feature-index">
+                            {String(idx + 1).padStart(2, "0")} / {String(sections.length).padStart(2, "0")}
+                          </span>
+                          <h3 className="detail-feature-title">{section.title}</h3>
+                          <p className="detail-feature-desc">{section.description}</p>
+                          <span className="detail-feature-tag">{section.type === "app" ? "APP DESIGN" : "WEB DESIGN"}</span>
+                        </div>
+                        <div className="detail-feature-media">
+                          <div className={`detail-feature-frame ${section.type === "app" ? "is-app" : "is-web"}`}>
+                            <img src={section.image} alt={`${section.type}-${idx}`} />
+                            <div className="detail-feature-overlay">INTERACTIVE PLACEHOLDER</div>
+                          </div>
+                        </div>
+                      </>
+                    )}
+                  </motion.div>
+                </React.Fragment>
+              );
+            })}
+            </section>
+
+            <AnimatePresence>
+              {uiOverlay && (
+                <motion.div
+                  className="ui-overlay-backdrop"
+                  initial={{ opacity: 0 }}
+                  animate={{ opacity: 1 }}
+                  exit={{ opacity: 0 }}
+                  onClick={() => setUiOverlay(null)}
+                >
+                  <motion.div
+                    className="ui-overlay-sheet"
+                    initial={{ opacity: 0, y: 20, scale: 0.96 }}
+                    animate={{ opacity: 1, y: 0, scale: 1 }}
+                    exit={{ opacity: 0, y: 16, scale: 0.97 }}
+                    transition={{ duration: 0.35, ease: appleEase }}
+                    onClick={(event) => event.stopPropagation()}
+                    style={{
+                      "--ui-accent": uiOverlay.accent || "#4F6AFF",
+                      "--ui-accent-soft": uiOverlay.accentSoft || "rgba(79, 106, 255, 0.2)",
+                    }}
+                  >
+                    <button type="button" className="ui-overlay-close" onClick={() => setUiOverlay(null)}>
+                      ×
+                    </button>
+                    <div
+                      className="ui-overlay-scroll"
+                      onWheel={(event) => event.stopPropagation()}
+                      onTouchMove={(event) => event.stopPropagation()}
+                    >
+                      <div className="ui-overlay-media-shell">
+                        <div className="ui-overlay-media">
+                          {renderUiMotion(uiOverlay.variant, uiOverlay.lottieData, uiOverlay.emoji)}
+                        </div>
+                      </div>
+                      <div className="ui-overlay-body">
+                        <span className="ui-overlay-label">{uiOverlay.label || "MOTION"}</span>
+                        <h3 className="ui-overlay-title">{uiOverlay.title}</h3>
+                        <p className="ui-overlay-desc">{uiOverlay.longDescription || uiOverlay.description}</p>
+                        <div className="ui-overlay-meta">
+                          <div className="ui-overlay-meta-item">
+                            <span className="ui-overlay-meta-label">Type</span>
+                            <span className="ui-overlay-meta-value">{uiOverlay.meta?.type || "Interaction"}</span>
+                          </div>
+                          <div className="ui-overlay-meta-item">
+                            <span className="ui-overlay-meta-label">System</span>
+                            <span className="ui-overlay-meta-value">{uiOverlay.meta?.system || "Motion Lab"}</span>
+                          </div>
+                          <div className="ui-overlay-meta-item">
+                            <span className="ui-overlay-meta-label">Spec</span>
+                            <span className="ui-overlay-meta-value">{uiOverlay.meta?.spec || "1200ms loop"}</span>
+                          </div>
+                        </div>
+                      </div>
+                      {(() => {
+                        const codeSample =
+                          uiOverlay.code ||
+                          `// Motion Lab: ${uiOverlay.title}\nconst container = document.querySelector(".ui-demo");\nconst dots = Array.from({ length: 3 }).map(() => {\n  const dot = document.createElement("span");\n  dot.className = "orbit-dot";\n  container.appendChild(dot);\n  return dot;\n});\n\nrequestAnimationFrame(() => {\n  dots.forEach((dot, index) => {\n    dot.style.animationDelay = \`\${index * 0.12}s\`;\n  });\n});`;
+                        return (
+                          <div className="ui-overlay-code">
+                        <div className="ui-overlay-code-head">
+                          <span className="ui-overlay-code-label">Code</span>
+                        </div>
+                        <div className="ui-overlay-code-block">
+                          <button
+                            type="button"
+                            className="ui-overlay-copy"
+                            onClick={() => handleCopy(codeSample, uiOverlay.id)}
+                          >
+                            {copiedId === uiOverlay.id ? "Copied" : "Copy"}
+                          </button>
+                          <pre>
+                            <code>{codeSample}</code>
+                          </pre>
+                        </div>
+                      </div>
+                        );
+                      })()}
+                      <div className="ui-overlay-longtext">
+                        {(uiOverlay.longText || defaultLongText).split("\n\n").map((paragraph, index) => (
+                          <p key={index}>{paragraph}</p>
+                        ))}
+                      </div>
+                    </div>
+                  </motion.div>
+                </motion.div>
+              )}
+            </AnimatePresence>
+
+            <section ref={nextSectionRef} className="next-project-footer" onClick={goNextProject} role="button" tabIndex={0} onKeyDown={(e) => e.key === "Enter" && goNextProject()}>
+              <div className="next-footer-container">
+                <span className="next-hint">NEXT PROJECT</span>
+                <div className="next-main-row">
+                  <h2 className="next-title-display">{nextProject.title}</h2>
+                  <div className="next-progress-group">
+                    <span className="next-tag">NEXT PAGE</span>
+                    <div className="next-bar-base"><div className="next-bar-fill" /></div>
+                    <div className="next-arrow">→</div>
+                  </div>
+                </div>
+              </div>
+            </section>
+          </motion.div>
+        )}
+      </AnimatePresence>
+    </div>
+  );
+};
+
+export default ProjectDetail;

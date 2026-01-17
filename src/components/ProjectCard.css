@@ -1,0 +1,135 @@
+/* ProjectCard.css */
+
+.project-card {
+  width: 100%;
+  cursor: pointer;
+  -webkit-tap-highlight-color: transparent;
+}
+
+/* 图片容器：固定 16:11 比例 */
+.project-image-container {
+  width: 100%;
+  aspect-ratio: 16 / 11;
+  border-radius: 16px;
+  overflow: hidden;
+  background-color: #000000;
+  margin-bottom: 24px;
+  position: relative;
+}
+
+.project-image {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  will-change: transform, filter;
+}
+
+.project-image-overlay {
+  position: absolute;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.02);
+  pointer-events: none;
+}
+
+.project-info {
+  text-align: left;
+}
+
+.project-tags {
+  margin-bottom: 12px;
+}
+
+.project-tag {
+  font-size: 11px;
+  font-weight: 700;
+  color: #1a1a1a;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  opacity: 0.6;
+}
+
+/* --- 核心布局：标题与箭头的完美对齐 --- */
+.project-title-wrapper {
+  display: flex;
+  align-items: center; /* 垂直居中对齐 */
+  position: relative;
+  /* 关键：防止文字在右移时超出容器被裁切，除非你想要 Mask 效果 */
+  overflow: visible; 
+}
+
+.project-card-arrow-box {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  /* 关键：使用 1em 确保高度与当前 font-size 完全一致 */
+  height: 1em; 
+  width: auto;
+  min-width: 0.8em; 
+  margin-right: 12px;
+  flex-shrink: 0;
+}
+/* ProjectCard.css */
+
+.project-card-arrow-icon {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  /* ----------------------------------------------------------- */
+  /* 1. 改变尺寸的核心：高度建议设为 1em 到 1.2em 之间 */
+  /* 1em 代表和文字高度完全一样，1.2em 会显得更有视觉张力 */
+  height: 2em; 
+  width: 2em; 
+  /* ----------------------------------------------------------- */
+
+  flex-shrink: 0;
+  /* 箭头与文字的间距 */
+  margin-right: 0.5em; 
+}
+
+.project-card-arrow-icon svg {
+  /* 确保 SVG 撑满容器 */
+  height: 100%;
+  width: 100%;
+  
+  /* 2. 改变箭头的粗细（如果 Arrow 组件内部没写死的话） */
+  /* 建议设置为 2.5px 到 4px 之间，大尺寸箭头配粗线条更好看 */
+  stroke-width: 2px; 
+  color: #000;
+}
+
+.project-card-title-text {
+  /* 确保行高为 1，方便箭头在垂直方向居中对齐 */
+  line-height: 1;
+  font-size: clamp(32px, 4vw, 52px);
+  /* ... 其他保持不变 ... */
+}
+
+.project-card-arrow-box svg {
+  /* SVG 填充整个 1em 容器 */
+  height: 90%; 
+  width: auto;
+  stroke-width: 2.5px;
+}
+
+.project-title {
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+  /* 字号保持 clamp 响应式 */
+  font-size: clamp(32px, 3.8vw, 48px);
+  font-weight: 500;
+  color: #1a1a1a;
+  margin: 0;
+  letter-spacing: -0.02em;
+  white-space: nowrap;
+  line-height: 1; /* 锁定行高为 1 方便对齐图标 */
+}
+
+/* 响应式微调 */
+@media (max-width: 1024px) {
+  .project-image-container {
+    border-radius: 20px;
+  }
+  .project-title {
+    font-size: clamp(28px, 5vw, 36px);
+  }
+}

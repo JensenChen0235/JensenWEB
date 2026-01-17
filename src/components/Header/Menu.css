@@ -1,0 +1,110 @@
+/* Menu.css */
+
+/* --- Menu 按钮样式 (Header部分已由Header.css处理，此处保持空或基础定义) --- */
+
+.menu-overlay {
+  position: fixed;
+  inset: 0;
+  background: linear-gradient(0deg, rgba(11, 11, 18, 0.08), rgba(11,11,18,0));
+  z-index: 1500;
+  display: flex;
+  justify-content: flex-end;
+  padding: 110px 50px 0 0;
+  pointer-events: auto;
+}
+
+.menu-inner {
+  width: 300px;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  pointer-events: auto;
+}
+
+.menu-card {
+  background: white;
+  border-radius: .625em;
+  padding: 24px;
+  /* box-shadow: 0 15px 45px rgba(0,0,0,0.06); */
+}
+
+/* --- 菜单项基础样式 --- */
+.menu-item {
+  position: relative;
+  height: 52px;
+  display: flex;
+  align-items: center;
+  padding: 1em .3125em;
+  cursor: pointer;
+  /* 移除所有之前的 background-color: rgba(0,0,0,0.05) */
+}
+
+/* 彻底删除 .menu-item::after 和 .menu-item:hover 相关伪类，防止双箭头 */
+
+.item-hover-bg {
+  position: absolute;
+  inset: 0;
+  background: #e9e5ff; /* 浅紫色 */
+  border-radius: 14px;
+  z-index: 0;
+}
+
+.item-content {
+  position: relative;
+  z-index: 1;
+  width: 100%;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.item-text-mask {
+  height: 24px;
+  overflow: hidden;
+  position: relative;
+}
+
+.item-text-main, .item-text-sub {
+  font-size: 26px;
+  font-weight: 400;
+  display: block;
+  line-height: 24px;
+  color: #000;
+}
+
+.item-text-sub { position: absolute; top: 0; left: 0; }
+
+.dot-active { font-size: 8px; color: #000; margin-right: 5px; }
+.arrow-hover { font-size: 20px; font-weight: bold; }
+
+/* --- Newsletter --- */
+.newsletter-card { background: #ffffff; }
+.newsletter-card h3 { font-size: 2em;  font-weight: 400; color: #000; }
+.email-bar {
+  display: flex;
+  background: #e9e5ff;
+  border-radius: 12px;
+  margin-top: 16px;
+  padding: 8px 8px 8px 16px;
+  align-items: center;
+}
+.email-bar input { border: none; outline: none; flex: 1; font-size: 14px; background: transparent; }
+.email-btn {
+  margin: 8px; color: #000; font-size: 24px;
+  border-radius: 50%; border: none; cursor: pointer; display: flex; align-items: center; justify-content: center;
+}
+
+/* --- LABS --- */
+.labs-card { background: #000000; color: #fff; cursor: pointer; }
+.labs-wrapper { display: flex; align-items: center; gap: 12px; }
+.labs-icon { font-size: 24px; }
+.labs-text-mask { height: 24px; overflow: hidden; position: relative; flex: 1; }
+.labs-text-mask span { font-size: 18px; font-weight: 600; display: block; line-height: 24px; color: #fff; }
+.abs-top { position: absolute; top: 0; left: 0; }
+.labs-arrow { font-size: 24px; }
+
+@media (max-width: 1024px) {
+  .menu-overlay {
+    padding: 110px 20px 0 0;
+  }
+}

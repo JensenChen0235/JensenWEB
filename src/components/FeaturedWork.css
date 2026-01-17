@@ -1,0 +1,69 @@
+/* FeaturedWork.css */
+
+.featured-work {
+  padding: 100px 50px;
+  background-color: #F0F1EA;
+  width: 100%;
+  box-sizing: border-box;
+}
+
+.featured-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-end; 
+  margin-bottom: 80px;
+  width: 100%;
+}
+
+.featured-title-mask {
+  overflow: hidden; /* 核心：实现向上推出效果 */
+  flex: 1;
+}
+
+.featured-line-inner {
+  display: flex;
+  align-items: baseline;
+  will-change: transform;
+}
+
+.featured-text-unit {
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+  font-size: clamp(3.5rem, 8vw, 9rem); 
+  font-weight: 500;
+  color: #1a1a1a;
+  letter-spacing: -0.03em;
+  margin-right: 0.3em;
+  white-space: nowrap;
+}
+
+.section-subtitle {
+  font-size: 13px;
+  line-height: 1.5;
+  font-weight: 600;
+  color: #1a1a1a;
+  max-width: 300px;
+  letter-spacing: 0.02em;
+  text-align: left;
+  margin-bottom: 20px; 
+}
+
+.projects-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  column-gap: 40px;
+  row-gap: 60px;
+}
+
+@media (max-width: 1024px) {
+  .featured-header {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+  .section-subtitle {
+    margin-top: 20px;
+    max-width: 100%;
+  }
+  .projects-grid {
+    grid-template-columns: 1fr;
+  }
+}
