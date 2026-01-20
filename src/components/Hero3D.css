@@ -3,7 +3,10 @@
 .hero-text-container {
   width: 100%;
   /* 桌面端：预留足够的左右边距避开 Logo 和按钮 */
-  padding: 30px 450px 40px 160px; 
+  padding: clamp(24px, 2.6vw, 30px)
+    clamp(180px, 28vw, 450px)
+    clamp(24px, 3.2vw, 40px)
+    clamp(80px, 12vw, 160px);
   display: flex;
   justify-content: center; 
   box-sizing: border-box;
@@ -14,13 +17,13 @@
 
 .header-tagline {
   font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
-  font-size: clamp(1.2rem, 2.2vw, 2.5rem); 
+  font-size: clamp(1.3rem, 2.6vw, 2.8rem); 
   font-weight: 500;
   line-height: 1.1;
   text-align: left;
   color: #000;
   margin: 0;
-  max-width: 500px; 
+  max-width: clamp(440px, 34vw, 620px); 
   letter-spacing: -0.02em;
   pointer-events: auto;
 }
@@ -60,13 +63,6 @@
 
 /* --- 响应式断点 --- */
 
-@media (max-width: 1300px) {
-  .hero-text-container {
-    padding-right: 420px;
-    padding-left: 140px;
-  }
-}
-
 @media (max-width: 1024px) {
   .hero-text-container {
     /* 彻底折行到下一行 */
@@ -97,7 +93,7 @@
     font-size: 28px;
   }
   .hero-3d-box {
-    height: clamp(300px, 52vh, 460px);
+    height: clamp(260px, 48vh, 420px);
     border-radius: 16px;
   }
 }

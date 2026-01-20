@@ -78,7 +78,7 @@ const AboutSection = ({ colorIndex, activeColor = "#0047ff" }) => {
         <div className="about-footer-grid">
           <div className="about-photo-stack">
             <img
-              src="/Jensen01.jpeg"
+              src="/Jensen01.png"
               alt="Jensen portrait"
               className="about-portrait-image"
             />

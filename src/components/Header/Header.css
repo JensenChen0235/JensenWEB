@@ -175,9 +175,11 @@
   .header-logo-link { 
     font-size: 28px; 
   }
-  .talk-btn,
-  .lusion-sound-wrapper {
-     display: none; 
+  .header-brand-word {
+    display: none;
+  }
+  .talk-btn {
+    display: none;
   }
   .menu-btn {
     width: 110px;

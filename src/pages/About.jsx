@@ -139,10 +139,9 @@ const About = () => {
         {/* --- 左侧固定栏 (Fixed) --- */}
         <aside className="atlas-left-col">
           <div className="sticky-inner">
-            <h1 className="atlas-main-title about-entry-reveal">
-              <span className="atlas-brand-mark" aria-hidden="true" />
-              <span className="atlas-brand-word">JENSEN</span>
-            </h1>
+            <div className="atlas-photo-frame about-entry-reveal">
+              <img src="/Jensen01.png" alt="Jensen portrait" />
+            </div>
             
             <div className="atlas-metadata">
               <div className="meta-row about-entry-reveal">
