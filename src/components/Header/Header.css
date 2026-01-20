@@ -7,7 +7,7 @@
   padding: 30px 50px;
   display: flex;
   justify-content: space-between;
-  align-items: flex-start; 
+  align-items: center; 
   /* 关键修改 1：移除这里的 z-index，让子元素独立参与层级竞争 */
   box-sizing: border-box;
   flex-wrap: wrap; 
@@ -27,6 +27,8 @@
   position: relative;
   z-index: 2000;
   pointer-events: auto;
+  display: flex;
+  align-items: center;
 }
 
 

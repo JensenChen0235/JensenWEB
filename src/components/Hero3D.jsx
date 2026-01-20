@@ -205,7 +205,6 @@ const LusionObject = ({
   isColored,
   materialType,
   onRegistered,
-  scaleFactor = 1,
   ...props
 }) => {
   // 刚体引用：用于 applyImpulse 等
@@ -308,7 +307,7 @@ const LusionObject = ({
       {...props} // position/rotation 等来自 objects 数组
     >
       {/* group 只是视觉缩放，不影响物理体（物理体由 collider 决定） */}
-      <group scale={scaleFactor}>
+      <group scale={1.15}>
         {/* Z 方向圆柱 */}
         <mesh geometry={cylinderGeo}>
           <meshPhysicalMaterial color={currentColor} {...materialProps} />
@@ -331,7 +330,7 @@ const LusionObject = ({
       </group>
 
       {/* 碰撞体：用一个球近似，避免复杂网格碰撞造成性能问题 */}
-      <BallCollider args={[2 * (scaleFactor / 1.15)]} />
+      <BallCollider args={[2]} />
     </RigidBody>
   );
 };
@@ -661,107 +660,6 @@ const Hero3D = () => {
     });
   };
 
-  const SceneContent = () => {
-    const { size } = useThree();
-    const objectScale = useMemo(() => {
-      if (size.width <= 640) return 0.85;
-      if (size.width <= 1024) return 0.95;
-      return 1.15;
-    }, [size.width]);
-
-    return (
-      <>
-        {/* 纯色背景底（深色基底）。光晕会叠加在上面 */}
-        <color attach="background" args={[BG_CYCLE[colorIndex]]} />
-
-        {/* 自适应相机：根据屏幕宽度自动推拉 */}
-        <AdaptiveCamera />
-
-        {/* 背景光晕：中间一个带主题色的圆形渐变 */}
-        <BackgroundHalo colorIndex={colorIndex} />
-
-        {/* 环境光：苹果风格更克制 */}
-        <ambientLight intensity={0.65} />
-
-        {/* 环境反射与布光：Lightformer 类似摄影棚软箱 */}
-        <Environment resolution={256}>
-          {/* 顶部主软箱：提供高光条 */}
-          <Lightformer
-            form="rect"
-            intensity={14}
-            position={[0, 15, 7]}
-            scale={[22, 2.5, 1]}
-            onUpdate={(s) => s.lookAt(0, 0, 0)}
-          />
-
-          {/* 侧面补光：让轮廓更立体 */}
-          <Lightformer
-            form="rect"
-            intensity={5}
-            position={[-14, 5, 10]}
-            scale={[10, 10, 1]}
-            onUpdate={(s) => s.lookAt(0, 0, 0)}
-          />
-
-          {/* 带色倾向的圆形光：用 ACCENT_CYCLE 轻微染色 */}
-          <Lightformer
-            form="circle"
-            intensity={7}
-            position={[14, 3, -10]}
-            scale={[15, 15, 1]}
-            color={ACCENT_CYCLE[colorIndex]}
-          />
-          <Lightformer
-            form="rect"
-            intensity={3.5}
-            position={[0, -12, 5]}
-            scale={[16, 5, 1]}
-            onUpdate={(s) => s.lookAt(0, 0, 0)}
-          />
-        </Environment>
-
-        {/* Suspense：未来如果你加载模型/贴图会用到；现在 fallback=null */}
-        <Suspense fallback={null}>
-          {/* Physics：Rapier 物理世界。重力=0 => 漂浮感 */}
-          <Physics gravity={[0, 0, 0]}>
-            {/* 批量生成物体 */}
-            {objects.map((obj) => (
-              <LusionObject
-                key={obj.id}
-                {...obj}
-                colorIndex={colorIndex}
-                onRegistered={registerRb}
-                scaleFactor={objectScale}
-              />
-            ))}
-
-            {/* 鼠标碰撞体：推动物体 + 给点击冲击波提供鼠标世界坐标 */}
-            <MouseCollider onUpdatePos={(v) => (mousePosRef.current = v)} />
-          </Physics>
-        </Suspense>
-
-        {/* 后期处理：AO + ToneMapping（让画面更“电影感”） */}
-        <EffectComposer disableNormalPass>
-          {/* N8AO：屏幕空间环境遮蔽，让缝隙更有深度 */}
-          {/* <N8AO intensity={4.0} radius={1.2} distanceFalloff={0.5} /> */}
-
-          {/* ToneMapping：色调映射。AgX 更像影视/摄影风格 */}
-          <ToneMapping mode={THREE.AgXToneMapping} />
-        </EffectComposer>
-
-        {/* 接触阴影：物体与“地面”接触的软阴影，增强空间感 */}
-        <ContactShadows
-          position={[0, -10, 0]}
-          opacity={0.45}
-          scale={50}
-          blur={2.2}
-          far={12}
-          color="#000000"
-        />
-      </>
-    );
-  };
-
   return (
     <section className="hero-3d-section">
       <div className="hero-3d-box">
@@ -771,7 +669,92 @@ const Hero3D = () => {
           gl={{ antialias: false, powerPreference: "high-performance" }}
           onPointerDown={handleInteraction}
         >
-          <SceneContent />
+          {/* 纯色背景底（深色基底）。光晕会叠加在上面 */}
+          <color attach="background" args={[BG_CYCLE[colorIndex]]} />
+
+          {/* 自适应相机：根据屏幕宽度自动推拉 */}
+          <AdaptiveCamera />
+
+          {/* 背景光晕：中间一个带主题色的圆形渐变 */}
+          <BackgroundHalo colorIndex={colorIndex} />
+
+          {/* 环境光：苹果风格更克制 */}
+          <ambientLight intensity={0.65} />
+
+          {/* 环境反射与布光：Lightformer 类似摄影棚软箱 */}
+          <Environment resolution={256}>
+            {/* 顶部主软箱：提供高光条 */}
+            <Lightformer
+              form="rect"
+              intensity={14}
+              position={[0, 15, 7]}
+              scale={[22, 2.5, 1]}
+              onUpdate={(s) => s.lookAt(0, 0, 0)}
+            />
+
+            {/* 侧面补光：让轮廓更立体 */}
+            <Lightformer
+              form="rect"
+              intensity={5}
+              position={[-14, 5, 10]}
+              scale={[10, 10, 1]}
+              onUpdate={(s) => s.lookAt(0, 0, 0)}
+            />
+
+            {/* 带色倾向的圆形光：用 ACCENT_CYCLE 轻微染色 */}
+            <Lightformer
+              form="circle"
+              intensity={7}
+              position={[14, 3, -10]}
+              scale={[15, 15, 1]}
+              color={ACCENT_CYCLE[colorIndex]}
+            />
+            <Lightformer
+              form="rect"
+              intensity={3.5}
+              position={[0, -12, 5]}
+              scale={[16, 5, 1]}
+              onUpdate={(s) => s.lookAt(0, 0, 0)}
+            />
+          </Environment>
+
+          {/* Suspense：未来如果你加载模型/贴图会用到；现在 fallback=null */}
+          <Suspense fallback={null}>
+            {/* Physics：Rapier 物理世界。重力=0 => 漂浮感 */}
+            <Physics gravity={[0, 0, 0]}>
+              {/* 批量生成物体 */}
+              {objects.map((obj) => (
+                <LusionObject
+                  key={obj.id}
+                  {...obj}
+                  colorIndex={colorIndex}
+                  onRegistered={registerRb}
+                />
+              ))}
+
+              {/* 鼠标碰撞体：推动物体 + 给点击冲击波提供鼠标世界坐标 */}
+              <MouseCollider onUpdatePos={(v) => (mousePosRef.current = v)} />
+            </Physics>
+          </Suspense>
+
+          {/* 后期处理：AO + ToneMapping（让画面更“电影感”） */}
+          <EffectComposer disableNormalPass>
+            {/* N8AO：屏幕空间环境遮蔽，让缝隙更有深度 */}
+            {/* <N8AO intensity={4.0} radius={1.2} distanceFalloff={0.5} /> */}
+
+            {/* ToneMapping：色调映射。AgX 更像影视/摄影风格 */}
+            <ToneMapping mode={THREE.AgXToneMapping} />
+          </EffectComposer>
+
+          {/* 接触阴影：物体与“地面”接触的软阴影，增强空间感 */}
+          <ContactShadows
+            position={[0, -10, 0]}
+            opacity={0.45}
+            scale={50}
+            blur={2.2}
+            far={12}
+            color="#000000"
+          />
         </Canvas>
       </div>
     </section>

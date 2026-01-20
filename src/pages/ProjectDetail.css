@@ -29,6 +29,7 @@
 /* Header */
 .detail-header { height: 120px; display: flex; justify-content: space-between; align-items: center; position: fixed; top: 0; left: 0; width: 100%; z-index: 1001; padding: 0 50px; box-sizing: border-box; pointer-events: none; transform: translateY(0); transition: transform 0.45s ease; will-change: transform; }
 .detail-logo-container, .detail-header-back-slot, .detail-header-right-actions { pointer-events: auto; }
+.detail-logo-container { display: flex; align-items: center; }
 .detail-header.is-hidden { transform: translateY(-120%); }
 
 .detail-brand-logo {
