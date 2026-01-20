@@ -197,61 +197,6 @@ const ProjectDetail = () => {
   const backSlidingVariants = { rest: { x: -4 }, hover: { x: -24 } };
   const hoverFill = project.hoverGradient || project.hoverColor || "#0047ff";
 
-  const RollingNumber = ({ value }) => {
-    const containerRef = useRef(null);
-    const [isActive, setIsActive] = useState(false);
-
-    useEffect(() => {
-      if (!containerRef.current) return undefined;
-      const observer = new IntersectionObserver(
-        (entries) => {
-          entries.forEach((entry) => {
-            setIsActive(entry.isIntersecting);
-          });
-        },
-        { threshold: 0.5 }
-      );
-      observer.observe(containerRef.current);
-      return () => observer.disconnect();
-    }, []);
-
-    const chars = String(value).split("");
-    let digitIndex = 0;
-
-    return (
-      <span ref={containerRef} className={`tb-roll-value ${isActive ? "is-animate" : ""}`}>
-        {chars.map((ch, idx) => {
-          if (/\d/.test(ch)) {
-            const digit = Number(ch);
-            const end = digit + 3;
-            const delay = digitIndex * 0.12;
-            digitIndex += 1;
-            return (
-              <span
-                key={`${idx}-${ch}`}
-                className={`tb-roll-digit ${isActive ? "is-animate" : ""}`}
-                style={{ "--start": digit, "--end": end, "--delay": `${delay}s` }}
-              >
-                <span className="tb-roll-track">
-                  {Array.from({ length: 30 }).map((_, rollIndex) => (
-                    <span key={rollIndex} className="tb-roll-num">
-                      {rollIndex % 10}
-                    </span>
-                  ))}
-                </span>
-              </span>
-            );
-          }
-          return (
-            <span key={`${idx}-${ch}`} className="tb-roll-char">
-              {ch}
-            </span>
-          );
-        })}
-      </span>
-    );
-  };
-
   const BellGsap = () => {
     const bellRef = useRef(null);
     const clapperRef = useRef(null);
@@ -804,178 +749,40 @@ const ProjectDetail = () => {
                           </div>
                         </div>
                       </div>
-                    ) : section.type === "tb-before-after" ? (
-                      <div className={`tb-section tb-${section.tone || "light"}`}>
+                    ) : section.type === "tb-layout" ? (
+                      <div className={`tb-section tb-${section.tone || "dark"} tb-layout-section`}>
                         <div className="tb-container">
-                          <div className="tb-before-after-block">
-                            <div className="tb-ba-item">
-                              <div className="tb-ba-header">
-                                {section.before?.headline && <h2 className="tb-ba-headline">{section.before.headline}</h2>}
-                                <span className="tb-rule-label">{section.ruleLabel || "Description"}</span>
-                              </div>
-                              <div className="tb-rule" aria-hidden="true" />
-                              {section.before?.badge && (
-                                <span className="tb-ba-badge tb-ba-badge--before">{section.before.badge}</span>
-                              )}
-                              {section.before?.title && <h3 className="tb-title">{section.before.title}</h3>}
-                              {section.before?.description && (
-                                <p
-                                  className="tb-subtitle"
-                                  style={section.before?.descriptionWidth ? { maxWidth: section.before.descriptionWidth } : undefined}
-                                >
-                                  {section.before.description}
-                                </p>
-                              )}
-                              {section.beforeTiles?.length ? (
-                                <div className="tb-before-tiles">
-                                  {section.beforeTiles.map((tile, tileIndex) => (
-                                    <div key={tileIndex} className="tb-before-tile">
-                                      <div className="tb-before-image">
-                                        <img src={tile.image} alt={tile.title} />
-                                      </div>
-                                      <h4 className="tb-title tb-before-title">{tile.title}</h4>
-                                      <p className="tb-subtitle tb-before-text">{tile.text}</p>
-                                    </div>
-                                  ))}
-                                </div>
-                              ) : null}
-                              {section.before?.image ? (
-                                <div className={`tb-media-block tb-media-wide ${section.before?.mediaTall ? "is-tall" : ""}`}>
-                                  <img src={section.before.image} alt={section.before?.title || "Before"} />
-                                </div>
-                              ) : null}
-                            </div>
-                            {section.after && (
-                              <div className="tb-ba-item">
-                                {section.after?.badge && (
-                                  <span className="tb-ba-badge tb-ba-badge--after">{section.after.badge}</span>
-                                )}
-                                {section.after?.title && <h3 className="tb-title">{section.after.title}</h3>}
-                                {section.after?.description && <p className="tb-subtitle">{section.after.description}</p>}
-                                {section.after?.image ? (
-                                  <div className="tb-media-block tb-media-wide">
-                                    <img src={section.after.image} alt={section.after?.title || "After"} />
+                          <div className="tb-layout-header">
+                            <h3 className="tb-title">{section.title}</h3>
+                            <div className="tb-layout-rule" aria-hidden="true" />
+                          </div>
+                          <div className="tb-layout-block">
+                            <h4 className="tb-layout-subtitle">{section.first?.subtitle}</h4>
+                            <p className="tb-layout-desc">{section.first?.description}</p>
+                            <div className="tb-layout-grid">
+                              {(section.first?.cards || []).map((card, cardIndex) => (
+                                <div key={cardIndex} className="tb-layout-card">
+                                  <div className="tb-layout-image">
+                                    <img src={card.image} alt={card.label || `layout-${cardIndex + 1}`} />
                                   </div>
-                                ) : null}
-                              </div>
-                            )}
-                          </div>
-                        <div className="tb-stats-grid">
-                          {(section.stats || []).map((stat, statIndex) => (
-                            <div key={statIndex} className="tb-stat-card">
-                              <div className="tb-stat-value">
-                                <RollingNumber value={stat.value} />
-                                <span className="tb-stat-arrow" aria-hidden="true">↑</span>
-                              </div>
-                              <div className="tb-stat-label">{stat.label}</div>
-                            </div>
-                          ))}
-                        </div>
-                        {section.statsFooter && (
-                          <div className="tb-stats-footer">{section.statsFooter}</div>
-                        )}
-                      </div>
-                    </div>
-                  ) : section.type === "tb-stats" ? (
-                      <div className={`tb-section tb-${section.tone || "light"}`}>
-                        <div className="tb-container">
-                        <div className="tb-stats-grid">
-                          {(section.stats || []).map((stat, statIndex) => (
-                            <div key={statIndex} className="tb-stat-card">
-                              <div className="tb-stat-value">
-                                <RollingNumber value={stat.value} />
-                                <span className="tb-stat-arrow" aria-hidden="true">↑</span>
-                              </div>
-                              <div className="tb-stat-label">{stat.label}</div>
-                            </div>
-                          ))}
-                        </div>
-                        {section.statsFooter && (
-                          <div className="tb-stats-footer">{section.statsFooter}</div>
-                        )}
-                      </div>
-                    </div>
-                  ) : section.type === "tb-paragraph" ? (
-                      <div className={`tb-section tb-${section.tone || "light"}`}>
-                        <div className="tb-container">
-                          <div className="tb-header">
-                            <div className="tb-title-group">
-                              <h3 className="tb-title">{section.title}</h3>
-                              <p className="tb-body">{section.body}</p>
-                            </div>
-                          </div>
-                          <div className="tb-media-block">
-                            <img src={section.image} alt={section.title} />
-                          </div>
-                        </div>
-                      </div>
-                    ) : section.type === "tb-split" ? (
-                      <div
-                        className={`tb-section tb-${section.tone || "dark"} ${section.nightLayout ? "tb-night" : ""}`}
-                        style={
-                          section.nightLayout && section.nightBackgroundImage
-                            ? {
-                                "--tb-night-bg": `url(${section.nightBackgroundImage})`,
-                                "--tb-night-bg-opacity": section.nightBackgroundOpacity || 0.2,
-                              }
-                            : undefined
-                        }
-                      >
-                        <div className="tb-container">
-                          {section.nightLayout ? (
-                            <div className={`tb-night-grid ${section.hideNightMedia ? "is-single" : ""}`}>
-                              <div className="tb-night-copy">
-                                {section.topLeftLabel && <span className="tb-night-topline">{section.topLeftLabel}</span>}
-                                {(section.titleLines || [section.title]).map((line, lineIndex) => (
-                                  <h3
-                                    key={lineIndex}
-                                    className={`tb-night-title ${lineIndex === 1 ? "is-gradient" : ""}`}
-                                  >
-                                    {line}
-                                  </h3>
-                                ))}
-                                <div className="tb-night-chip-row">
-                                  <span className="tb-night-chip-icon">{section.chipIcon || "C"}</span>
-                                  <span className="tb-night-chip">{section.chipLabel || "Operation Guide"}</span>
-                                </div>
-                              </div>
-                              {!section.hideNightMedia && (
-                                <div className="tb-night-media">
-                                  {section.topRightLabel && <span className="tb-night-topline">{section.topRightLabel}</span>}
-                                  <div className="tb-night-frame">
-                                    <img src={section.image} alt={section.title} />
+                                  <div className="tb-layout-caption">
+                                    <span
+                                      className={`tb-layout-icon ${card.status === "check" ? "is-check" : "is-x"}`}
+                                      aria-hidden="true"
+                                    >
+                                      {card.status === "check" ? "✓" : "×"}
+                                    </span>
+                                    <span className="tb-layout-label">{card.label}</span>
                                   </div>
                                 </div>
-                              )}
-                            </div>
-                          ) : (
-                            <div className="tb-split-grid">
-                              <div className="tb-split-copy">
-                                <h3 className="tb-title">{section.title}</h3>
-                                <p className="tb-subtitle">{section.description}</p>
-                              </div>
-                              <div className="tb-split-media">
-                                <img src={section.image} alt={section.title} />
-                              </div>
-                            </div>
-                          )}
-                        </div>
-                      </div>
-                    ) : section.type === "tb-grid" ? (
-                      <div className={`tb-section tb-${section.tone || "dark"}`}>
-                        <div className="tb-container">
-                          <div className="tb-grid-header">
-                            <div>
-                              <h3 className="tb-title">{section.title}</h3>
-                              <p className="tb-subtitle">{section.subtitle}</p>
+                              ))}
                             </div>
                           </div>
-                          <div className="tb-grid" style={{ gridTemplateColumns: `repeat(${section.columns || 3}, minmax(0, 1fr))` }}>
-                            {(section.images || []).map((image, imageIndex) => (
-                              <div key={imageIndex} className="tb-grid-card">
-                                <img src={image} alt={`${section.title}-${imageIndex + 1}`} />
-                              </div>
-                            ))}
+                          <div className="tb-layout-block tb-layout-block--spaced">
+                            <h4 className="tb-layout-subtitle">{section.second?.subtitle}</h4>
+                            <div className="tb-layout-large">
+                              <img src={section.second?.image} alt={section.second?.subtitle || "layout"} />
+                            </div>
                           </div>
                         </div>
                       </div>

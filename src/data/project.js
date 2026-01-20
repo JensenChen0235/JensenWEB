@@ -98,102 +98,35 @@ export const projectsData = {
         }
       },
       {
-        type: "tb-before-after",
+        type: "tb-layout",
         tone: "dark",
-        ruleLabel: "Flow",
-        before: {
-          headline: "Designing for a New Business Goal",
-          badge: "Before",
-          title: "Longer plan setup.",
-          description: "Key information was presented before users had the context to interpret it, increasing cognitive load at the earliest stage of use.",
-          image: "https://images.unsplash.com/photo-1496307042754-b4aa456c4a2d?auto=format&fit=crop&w=1600&q=80"
+        title: "Layout Design",
+        first: {
+          subtitle: "Big Screen, Small content",
+          description:
+            "Dear TeraBox User, welcome to the Webmaster Center. Here, you can check the history of your share links and the rewards you have earned.",
+          cards: [
+            {
+              image: "/Terabox/OLayout1.png",
+              label: "check the history",
+              status: "x"
+            },
+            {
+              image: "/Terabox/OLayout2.png",
+              label: "check the history",
+              status: "x"
+            },
+            {
+              image: "/Terabox/OLayout3.png",
+              label: "check the history",
+              status: "check"
+            }
+          ]
         },
-        after: {
-          badge: "After",
-          title: "Streamlined action path.",
-          description: "A single, consistent flow keeps plan setup within reach and reduces context switching.",
-          image: "https://images.unsplash.com/photo-1497366216548-37526070297c?auto=format&fit=crop&w=1600&q=80"
-        },
-        stats: [
-          { value: "+15%", label: "Plan completion rate" },
-          { value: "-20%", label: "Time-to-first-action" },
-          { value: "+11%", label: "Return visits" }
-        ]
-      },
-      {
-        type: "tb-before-after",
-        tone: "dark",
-        ruleLabel: "Layout",
-        before: {
-          headline: "Designing for First-Time Use",
-          mediaTall: true,
-          descriptionWidth: "50%"
-        },
-        beforeTiles: [
-          {
-            title: "Scenario",
-            text: "Webmasters enter the dashboard to review earnings and growth tasks.",
-            image: "/Terabox/Scenario.png"
-          },
-          {
-            title: "User",
-            text: "The experience shifts from serving experienced users to supporting first-time webmasters.",
-            image: "/Terabox/Users.png"
-          },
-          {
-            title: "Goal",
-            text: "Reduce early learning cost and guide users toward a clear first action.",
-            image: "/Terabox/Goals.png"
-          }
-        ],
-        stats: []
-      },
-      {
-        type: "tb-split",
-        tone: "dark",
-        index: "06",
-        title: "Night-mode storytelling.",
-        description: "Dark sections introduce contrast, elevate imagery, and focus the eye on the product silhouette.",
-        nightLayout: true,
-        hideNightMedia: true,
-        nightBackgroundImage: "https://images.unsplash.com/photo-1444703686981-a3abbc4d4fe3?auto=format&fit=crop&w=1600&q=80",
-        nightBackgroundOpacity: 0.2,
-        topLeftLabel: "Sorting Type",
-        topRightLabel: "Restore Remote Control",
-        titleLines: ["Multiple remote models", "Accurate user guidance"],
-        chipIcon: "C",
-        chipLabel: "Operation Guide"
-      },
-      {
-        type: "tb-grid",
-        tone: "dark",
-        index: "07",
-        title: "Filmstrip moments.",
-        subtitle: "Key frames arranged as a quiet storyboard.",
-        columns: 3,
-        images: [
-          "https://picsum.photos/seed/tbgrid1/600/420",
-          "https://picsum.photos/seed/tbgrid2/600/420",
-          "https://picsum.photos/seed/tbgrid3/600/420"
-        ]
-      },
-      {
-        type: "tb-grid",
-        tone: "dark",
-        index: "08",
-        title: "System coverage.",
-        subtitle: "A denser grid that maps the supporting UI system.",
-        columns: 4,
-        images: [
-          "https://picsum.photos/seed/tbgrid4/420/420",
-          "https://picsum.photos/seed/tbgrid5/420/420",
-          "https://picsum.photos/seed/tbgrid6/420/420",
-          "https://picsum.photos/seed/tbgrid7/420/420",
-          "https://picsum.photos/seed/tbgrid8/420/420",
-          "https://picsum.photos/seed/tbgrid9/420/420",
-          "https://picsum.photos/seed/tbgrid10/420/420",
-          "https://picsum.photos/seed/tbgrid11/420/420"
-        ]
+        second: {
+          subtitle: "Simplified ways of layout",
+          image: "/Terabox/OLayout4.png"
+        }
       }
     ]
   },

@@ -55,6 +55,9 @@
 }
 
 @media (max-width: 1024px) {
+  .featured-work {
+    padding: 80px 30px;
+  }
   .featured-header {
     flex-direction: column;
     align-items: flex-start;
@@ -67,3 +70,16 @@
     grid-template-columns: 1fr;
   }
 }
+
+@media (max-width: 640px) {
+  .featured-work {
+    padding: 60px 20px;
+  }
+  .featured-header {
+    margin-bottom: 40px;
+  }
+  .projects-grid {
+    gap: 30px;
+  }
+}
+

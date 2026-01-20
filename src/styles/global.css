@@ -12,6 +12,9 @@
   --color-purple: #7B3FF2;
   --color-blue: #4169E1;
   --font-primary: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Helvetica Neue', sans-serif;
+  --breakpoint-desktop: 1025px;
+  --breakpoint-tablet: 1024px;
+  --breakpoint-mobile: 640px;
 }
 
 html {

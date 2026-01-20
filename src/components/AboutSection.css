@@ -155,15 +155,57 @@
 @media (max-width: 1024px) {
   .about-container { padding: 100px 0; }
   
-  .about-hero-title { padding: 0 20px; }
+  .about-hero-title { padding: 0 30px; }
 
   .about-footer-grid { display: flex; flex-direction: column; gap: 50px; }
 
   /* 文字在上 */
-  .footer-text-side { order: 2; max-width: 100%; padding: 0 20px; margin-top: 0; }
+  .footer-text-side { order: 2; max-width: 100%; padding: 0 30px; margin-top: 0; }
+  
+  .description {
+    margin-right: 0;
+  }
 
   /* 视频在下 */
-  .about-photo-stack { order: 1; padding: 0 20px; min-height: clamp(240px, 62vw, 340px); }
+  .about-photo-stack { order: 1; padding: 0 30px; min-height: clamp(240px, 62vw, 340px); }
   .about-portrait-image { width: min(420px, 90%); }
 
+}
+
+@media (max-width: 640px) {
+  .about-container {
+    padding: 80px 0;
+  }
+
+  .about-hero-title {
+    padding: 0 20px;
+    margin-bottom: 4vh;
+  }
+
+  .about-footer-grid {
+    gap: 40px;
+  }
+
+  .footer-text-side {
+    padding: 0 20px;
+  }
+
+  .description {
+    font-size: 1rem;
+  }
+
+  .skills-strip {
+    gap: 12px;
+  }
+  
+  .skill-tile {
+    width: 60px;
+    height: 60px;
+    border-radius: 16px;
+  }
+
+  .skill-tile img {
+    width: 28px;
+    height: 28px;
+  }
 }

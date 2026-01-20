@@ -105,6 +105,21 @@
 
 @media (max-width: 1024px) {
   .menu-overlay {
-    padding: 110px 20px 0 0;
+    padding: 110px 30px 0 30px;
+  }
+}
+
+@media (max-width: 640px) {
+  .menu-overlay {
+    padding: 90px 20px 0 20px;
+  }
+  .menu-inner {
+    width: 100%;
+  }
+  .item-text-main, .item-text-sub {
+    font-size: 22px;
+  }
+  .labs-text-mask span {
+    font-size: 16px;
   }
 }
