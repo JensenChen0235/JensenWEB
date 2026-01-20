@@ -69,7 +69,7 @@ function Home() {
 
   return (
     <div className="home-root">
-      <Canvas3D />
+      {/* <Canvas3D /> */}
       <Header />
 
       <main ref={mainRef} className="home-content">

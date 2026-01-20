@@ -1,0 +1,1 @@
+This directory contains the Node.js backend server for the Gemini API integration.

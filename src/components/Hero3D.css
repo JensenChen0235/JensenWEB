@@ -39,6 +39,8 @@
   background-color: #0A0A0D;
   border-radius: 24px;
   overflow: hidden;
+  transform: translateZ(0);
+  -webkit-mask-image: -webkit-radial-gradient(white, black);
   cursor: grab;
   position: relative;
   display: flex;
@@ -53,6 +55,7 @@
   height: 100% !important;
   display: block;
   outline: none;
+  border-radius: inherit;
 }
 
 /* --- 响应式断点 --- */
@@ -64,7 +67,7 @@
   }
 }
 
-@media (max-width: 1200px) {
+@media (max-width: 1024px) {
   .hero-text-container {
     /* 彻底折行到下一行 */
     padding: 120px 30px 20px 30px; 
@@ -73,7 +76,7 @@
   
   .hero-3d-section {
     padding: 0 20px 40px;
-    height: clamp(500px, 55vh, 700px);
+    height: clamp(460px, 52vh, 620px);
   }
 
   .header-tagline {
@@ -84,16 +87,17 @@
   }
 
   .hero-3d-box {
-    height: clamp(500px, 55vh, 700px);
+    height: clamp(460px, 52vh, 620px);
     border-radius: 20px;
   }
 }
 
-@media (max-width: 480px) {
+@media (max-width: 640px) {
   .header-tagline {
     font-size: 28px;
   }
   .hero-3d-box {
-    height: 700px;
+    height: clamp(300px, 52vh, 460px);
+    border-radius: 16px;
   }
 }

@@ -222,11 +222,141 @@
 }
 
 
-@media (max-width: 768px) {
+@media (max-width: 1024px) {
+  .footer-white-zone {
+    padding: 100px 40px 32px;
+  }
+
+  .footer-grid {
+    grid-template-columns: 1fr 1fr;
+    gap: 32px;
+    margin-bottom: 120px;
+  }
+
+  .newsletter-col {
+    grid-column: 1 / -1;
+  }
+
+  .newsletter-heading {
+    font-size: clamp(40px, 6vw, 56px);
+  }
+
+  .newsletter-pill {
+    max-width: 100%;
+  }
+
+  .footer-legal-bar {
+    flex-wrap: wrap;
+    gap: 16px 32px;
+    align-items: center;
+    padding-top: 32px;
+  }
+
+  .back-to-top-wrap {
+    position: static;
+    margin-left: auto;
+  }
+
+  .home-next-footer {
+    padding: 100px 60px;
+    min-height: 420px;
+  }
+
+  .next-main-row {
+    margin-top: 32px;
+  }
+
+  .next-title-display {
+    font-size: clamp(48px, 8vw, 96px);
+  }
+
+  .next-progress-group {
+    gap: 20px;
+    margin-bottom: 8px;
+  }
+
+  .next-bar-base {
+    width: 180px;
+  }
+}
+
+@media (max-width: 640px) {
+  .footer-safe-mask {
+    padding: 0.2em 24px;
+    margin: -0.2em -24px;
+  }
+
+  .footer-white-zone {
+    padding: 72px 20px 28px;
+  }
+
+  .footer-grid {
+    grid-template-columns: 1fr;
+    gap: 28px;
+    margin-bottom: 80px;
+  }
+
+  .mid-links-col {
+    gap: 40px;
+  }
+
+  .address-col p,
+  .social-interactive-link,
+  .email-interactive-link {
+    font-size: 16px;
+  }
+
+  .newsletter-heading {
+    font-size: clamp(32px, 9vw, 44px);
+    margin-bottom: 28px;
+  }
+
+  .newsletter-pill {
+    padding: 8px 8px 8px 18px;
+    border-radius: 999px;
+  }
+
+  .newsletter-input {
+    font-size: 15px;
+  }
+
+  .footer-legal-bar {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 12px;
+  }
+
+  .back-to-top-wrap {
+    width: 100%;
+    display: flex;
+    justify-content: flex-end;
+  }
+
+  .back-to-top-circle {
+    width: 46px;
+    height: 46px;
+  }
+
+  .home-next-footer {
+    padding: 72px 24px;
+    min-height: 360px;
+  }
+
   .next-main-row {
     flex-direction: column;
     align-items: flex-start;
-    gap: 40px;
+    gap: 24px;
   }
-  .next-bar-base { width: 120px; }
+
+  .next-progress-group {
+    gap: 16px;
+  }
+
+  .next-bar-base {
+    width: 140px;
+  }
+
+  .next-arrow {
+    font-size: 20px;
+  }
 }
