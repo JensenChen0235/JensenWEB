@@ -89,6 +89,10 @@
 }
 
 @media (max-width: 640px) {
+  .hero-3d-section {
+    display: none;
+  }
+
   .header-tagline {
     font-size: 28px;
   }
