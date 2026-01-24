@@ -49,10 +49,15 @@ const makeDarkPlaceholder = () =>
       <circle cx="1200" cy="280" r="2" fill="rgba(255,255,255,0.3)"/>
     </svg>`
   )}`;
+const GRAY_CARD_PLACEHOLDER =
+  "data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='800' height='600'><rect width='800' height='600' fill='%2326282C'/></svg>";
+const GRAY_LAYOUT_PLACEHOLDER =
+  "data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='1440' height='832'><rect width='1440' height='832' fill='%2326282C'/></svg>";
+
 export const projectsData = {
   "devin_ai": {
     id: "devin_ai",
-    title: "TeraBox",
+    title: "Terabox: Webmaster Center",
     color: "#000000",
     hoverColor: "#026DF9",
     hoverGradient: "#026DF9",
@@ -80,7 +85,7 @@ export const projectsData = {
         type: "tb-media",
         tone: "dark",
         index: "01",
-        title: "Designed for Growth",
+        title: "What Was Built",
         description: "",
         centerText: true,
         showLaunch: true,
@@ -98,7 +103,171 @@ export const projectsData = {
         }
       },
       {
-        type: "tb-layout",
+        type: "tb-layout-started",
+        tone: "dark",
+        title: "Where It Started",
+        first: {
+          subtitle: "A sparse baseline",
+          description:
+            "We inherited a layout that was heavy on empty space and light on hierarchy. The core task existed, but it was visually buried and slow to scan.",
+          cards: [
+            {
+              title: "Product Manager",
+              image: "/Terabox/01Product Manager.png",
+              video: "/Terabox/01.mp4",
+              description: "Set product goals for next version"
+            },
+            {
+              title: "User Researcher",
+              image: "/Terabox/02User Researcher.png",
+              video: "/Terabox/02.mp4",
+              description: "Set product goals for next version"
+            },
+            {
+              title: "UX Designer (My Role)",
+              image: "/Terabox/03UX Designer.png",
+              video: "/Terabox/03.mp4",
+              description: "Set product goals for next version"
+            },
+            {
+              title: "Software Engineer",
+              image: "/Terabox/04Software Engineer.png",
+              video: "/Terabox/04.mp4",
+              description: "Set product goals for next version"
+            }
+          ]
+        },
+        second: {
+          subtitle: "First-pass structure",
+          image: GRAY_LAYOUT_PLACEHOLDER
+        }
+      },
+      {
+        type: "tb-layout-audience",
+        tone: "dark",
+        title: "Who We Were Designing For",
+        first: {
+          subtitle: "Creators and operators",
+          description:
+            "The primary users needed quick access to rewards, link history, and performance. The layout had to reduce hunting and make the next action obvious.",
+          cards: [
+            {
+              image: GRAY_CARD_PLACEHOLDER,
+              label: "primary tasks",
+              status: "check"
+            },
+            {
+              image: GRAY_CARD_PLACEHOLDER,
+              label: "secondary tasks",
+              status: "x"
+            },
+            {
+              image: GRAY_CARD_PLACEHOLDER,
+              label: "edge cases",
+              status: "x"
+            }
+          ]
+        },
+        second: {
+          subtitle: "Audience-first layout",
+          image: GRAY_LAYOUT_PLACEHOLDER
+        }
+      },
+      {
+        type: "tb-layout-needs",
+        tone: "dark",
+        title: "What Users Needed Most",
+        first: {
+          subtitle: "Clarity over clutter",
+          description:
+            "Users prioritized status at a glance: totals, recent actions, and a single clear call-to-action. Everything else should support that flow, not compete with it.",
+          cards: [
+            {
+              image: GRAY_CARD_PLACEHOLDER,
+              label: "primary CTA",
+              status: "check"
+            },
+            {
+              image: GRAY_CARD_PLACEHOLDER,
+              label: "quick stats",
+              status: "check"
+            },
+            {
+              image: GRAY_CARD_PLACEHOLDER,
+              label: "low-priority",
+              status: "x"
+            }
+          ]
+        },
+        second: {
+          subtitle: "Priority-based layout",
+          image: GRAY_LAYOUT_PLACEHOLDER
+        }
+      },
+      {
+        type: "tb-layout-structure",
+        tone: "dark",
+        title: "Understanding the Existing Structure",
+        first: {
+          subtitle: "Mapping the system",
+          description:
+            "We audited the old page to find repeating patterns and dead ends. This surfaced which regions could compress and which needed more space.",
+          cards: [
+            {
+              image: GRAY_CARD_PLACEHOLDER,
+              label: "modules",
+              status: "check"
+            },
+            {
+              image: GRAY_CARD_PLACEHOLDER,
+              label: "unused space",
+              status: "x"
+            },
+            {
+              image: GRAY_CARD_PLACEHOLDER,
+              label: "flow gaps",
+              status: "x"
+            }
+          ]
+        },
+        second: {
+          subtitle: "Structural refactor",
+          image: GRAY_LAYOUT_PLACEHOLDER
+        }
+      },
+      {
+        type: "tb-layout-priorities",
+        tone: "dark",
+        title: "Prioritizing What Matters",
+        first: {
+          subtitle: "Clean focus lines",
+          description:
+            "We rebalanced the grid so the Program Overview anchors the left rail while the right side delivers action and data without visual noise.",
+          cards: [
+            {
+              image: GRAY_CARD_PLACEHOLDER,
+              label: "overview anchor",
+              status: "check"
+            },
+            {
+              image: GRAY_CARD_PLACEHOLDER,
+              label: "action panel",
+              status: "check"
+            },
+            {
+              image: GRAY_CARD_PLACEHOLDER,
+              label: "supporting data",
+              status: "x"
+            }
+          ]
+        },
+        second: {
+          subtitle: "Final hierarchy",
+          image: GRAY_LAYOUT_PLACEHOLDER
+        }
+      },
+      {
+        type: "tb-layout-final",
         tone: "dark",
         title: "Layout Design",
         first: {
@@ -125,7 +294,7 @@ export const projectsData = {
         },
         second: {
           subtitle: "Simplified ways of layout",
-          image: "/Terabox/OLayout4.png"
+          image: "/Terabox/OLayout4.svg"
         }
       }
     ]

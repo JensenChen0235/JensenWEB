@@ -1,14 +1,17 @@
 import { motion, AnimatePresence } from "framer-motion";
+import { useLocation, useNavigate } from "react-router-dom";
 import "./Menu.css";
 import Arrow from "../ui/Arrow";
 
 // 菜单项组件 - 保持原样
-const MenuItem = ({ name, isActive }) => {
+const MenuItem = ({ name, isActive, onClick }) => {
   return (
-    <motion.div
+    <motion.button
+      type="button"
       className={`menu-item ${isActive ? "active" : ""}`}
       whileHover={isActive ? "" : "hover"}
       initial="rest"
+      onClick={onClick}
     >
       {!isActive && (
         <motion.div
@@ -58,12 +61,24 @@ const MenuItem = ({ name, isActive }) => {
           )}
         </div>
       </div>
-    </motion.div>
+    </motion.button>
   );
 };
 
 const Menu = ({ isOpen, onClose }) => {
-  const menuItems = ["HOME", "ABOUT US", "PROJECTS", "CONTACT"];
+  const navigate = useNavigate();
+  const { pathname } = useLocation();
+  const menuItems = [
+    { label: "HOME", path: "/" },
+    { label: "ABOUT US", path: "/about" },
+    { label: "PROJECTS", path: "/projects" },
+    { label: "CONTACT", path: "/contact" },
+  ];
+
+  const handleNavigate = (path) => {
+    navigate(path);
+    onClose();
+  };
 
   const cardVariants = {
     hidden: { y: 150, opacity: 0, rotate: -10, transformOrigin: "bottom right" },
@@ -98,7 +113,12 @@ const Menu = ({ isOpen, onClose }) => {
               variants={cardVariants}
             >
               {menuItems.map((item) => (
-                <MenuItem key={item} name={item} isActive={item === "HOME"} />
+                <MenuItem
+                  key={item.label}
+                  name={item.label}
+                  isActive={pathname === item.path}
+                  onClick={() => handleNavigate(item.path)}
+                />
               ))}
             </motion.div>
 

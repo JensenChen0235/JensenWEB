@@ -57,7 +57,8 @@ const About = () => {
               trigger: el,
               start: "top 85%",
               once: true,
-              toggleActions: "play none none reverse"
+              toggleActions: "play none none none",
+              scroller: ".tab-panel"
             }
           }
         );

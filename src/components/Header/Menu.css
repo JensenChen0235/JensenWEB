@@ -36,6 +36,10 @@
   align-items: center;
   padding: 1em .3125em;
   cursor: pointer;
+  width: 100%;
+  border: none;
+  background: transparent;
+  text-align: left;
   /* 移除所有之前的 background-color: rgba(0,0,0,0.05) */
 }
 

@@ -1,4 +1,5 @@
 import { useRef, useEffect } from 'react';
+import { useNavigate } from "react-router-dom";
 import { motion } from 'framer-motion';
 import { gsap } from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
@@ -13,6 +14,7 @@ const AboutSection = ({ colorIndex, activeColor = "#0047ff" }) => {
   const beyondRef = useRef(null);
   const visionRef = useRef(null);
   const line2Ref = useRef(null);
+  const navigate = useNavigate();
 
   const lusionEase = [0.25, 1, 0.5, 1];
 
@@ -98,6 +100,7 @@ const AboutSection = ({ colorIndex, activeColor = "#0047ff" }) => {
               initial="rest"
               whileHover="hover"
               animate="rest"
+              onClick={() => navigate("/about")}
             >
                   <motion.div
                     className="about-us-btn-bg"

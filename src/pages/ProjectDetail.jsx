@@ -104,6 +104,17 @@ const ProjectDetail = () => {
     }
   };
 
+  const handleFlowHover = (key, shouldPlay) => {
+    const video = videoRefs.current[key];
+    if (!video) return;
+    if (shouldPlay) {
+      video.play().catch(() => {});
+    } else {
+      video.pause();
+      video.currentTime = 0;
+    }
+  };
+
   // --- 1. 物理层重置：在所有渲染前执行 ---
   useLayoutEffect(() => {
     setIsReady(false);
@@ -749,7 +760,7 @@ const ProjectDetail = () => {
                           </div>
                         </div>
                       </div>
-                    ) : section.type === "tb-layout" ? (
+                    ) : section.type?.startsWith("tb-layout") ? (
                       <div className={`tb-section tb-${section.tone || "dark"} tb-layout-section`}>
                         <div className="tb-container">
                           <div className="tb-layout-header">
@@ -759,29 +770,76 @@ const ProjectDetail = () => {
                           <div className="tb-layout-block">
                             <h4 className="tb-layout-subtitle">{section.first?.subtitle}</h4>
                             <p className="tb-layout-desc">{section.first?.description}</p>
-                            <div className="tb-layout-grid">
-                              {(section.first?.cards || []).map((card, cardIndex) => (
-                                <div key={cardIndex} className="tb-layout-card">
-                                  <div className="tb-layout-image">
-                                    <img src={card.image} alt={card.label || `layout-${cardIndex + 1}`} />
-                                  </div>
-                                  <div className="tb-layout-caption">
-                                    <span
-                                      className={`tb-layout-icon ${card.status === "check" ? "is-check" : "is-x"}`}
-                                      aria-hidden="true"
+                            {section.type === "tb-layout-started" ? (
+                              <div className="tb-layout-flow">
+                                {(section.first?.cards || []).map((card, cardIndex) => (
+                                  <div key={`flow-item-${cardIndex}`} className="tb-layout-flow-item">
+                                    <div
+                                      className={`tb-layout-flow-box ${card.video ? "tb-layout-flow-box--media" : ""}`}
+                                      onMouseEnter={() => card.video && handleFlowHover(`tb-flow-${cardIndex}`, true)}
+                                      onMouseLeave={() => card.video && handleFlowHover(`tb-flow-${cardIndex}`, false)}
                                     >
-                                      {card.status === "check" ? "✓" : "×"}
-                                    </span>
-                                    <span className="tb-layout-label">{card.label}</span>
+                                      {card.video ? (
+                                        <video
+                                          ref={(node) => {
+                                            if (node) videoRefs.current[`tb-flow-${cardIndex}`] = node;
+                                          }}
+                                          className="tb-layout-flow-video"
+                                          src={card.video}
+                                          muted
+                                          loop
+                                          playsInline
+                                          preload="metadata"
+                                        />
+                                      ) : null}
+                                      {!card.video && card.image ? (
+                                        <img src={card.image} alt={card.title} />
+                                      ) : null}
+                                    </div>
+                                    <div className="tb-layout-flow-title">{card.title}</div>
+                                    <div className="tb-layout-flow-desc">{card.description}</div>
                                   </div>
-                                </div>
-                              ))}
-                            </div>
+                                ))}
+                              </div>
+                            ) : (
+                              <div className="tb-layout-grid">
+                                {(section.first?.cards || []).map((card, cardIndex) => (
+                                  <div key={cardIndex} className="tb-layout-card">
+                                    <div className="tb-layout-image">
+                                      <img src={card.image} alt={card.label || `layout-${cardIndex + 1}`} />
+                                    </div>
+                                    <div className="tb-layout-caption">
+                                      <span
+                                        className={`tb-layout-icon ${card.status === "check" ? "is-check" : "is-x"}`}
+                                        aria-hidden="true"
+                                      >
+                                        {card.status === "check" ? "✓" : "×"}
+                                      </span>
+                                      <span className="tb-layout-label">{card.label}</span>
+                                    </div>
+                                  </div>
+                                ))}
+                              </div>
+                            )}
                           </div>
                           <div className="tb-layout-block tb-layout-block--spaced">
                             <h4 className="tb-layout-subtitle">{section.second?.subtitle}</h4>
                             <div className="tb-layout-large">
-                              <img src={section.second?.image} alt={section.second?.subtitle || "layout"} />
+                              {section.second?.image?.includes("OLayout4.svg") ? (
+                                <div className="tb-layout-wireframe" role="img" aria-label="Layout wireframe">
+                                  <div className="tb-layout-wireframe-header">Header</div>
+                                  <div className="tb-layout-wireframe-body">
+                                    <div className="tb-layout-wireframe-tab">Function Tab</div>
+                                    <div className="tb-layout-wireframe-program">Program Overview</div>
+                                    <div className="tb-layout-wireframe-right">
+                                      <div className="tb-layout-wireframe-cta">Call to Action</div>
+                                      <div className="tb-layout-wireframe-table">Scrollable Table</div>
+                                    </div>
+                                  </div>
+                                </div>
+                              ) : (
+                                <img src={section.second?.image} alt={section.second?.subtitle || "layout"} />
+                              )}
                             </div>
                           </div>
                         </div>

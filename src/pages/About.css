@@ -318,11 +318,80 @@
 }
 
 /* 响应式 */
-@media (max-width: 1000px) {
+@media (max-width: 1024px) {
   .atlas-content-wrapper { flex-direction: column; height: auto; }
   .atlas-left-col { width: 100%; position: relative; height: auto; top: 0; }
   .atlas-right-col { width: 100%; padding-left: 5%; height: auto; overflow: visible; }
   .tab-panel { max-height: none; overflow: visible; padding-bottom: 0; }
   .atlas-description { margin-top: 24px; }
   .atlas-tabs { position: static; top: auto; background: transparent; backdrop-filter: none; }
+}
+
+@media (max-width: 640px) {
+  .atlas-content-wrapper {
+    padding-top: 80px;
+  }
+
+  .atlas-left-col,
+  .atlas-right-col {
+    padding-left: 20px;
+    padding-right: 20px;
+  }
+
+  .atlas-right-col {
+    border-left: 0;
+  }
+
+  .atlas-photo-frame {
+    max-width: 100%;
+    border-radius: 14px;
+  }
+
+  .atlas-metadata {
+    gap: 12px;
+  }
+
+  .meta-row {
+    grid-template-columns: 1fr;
+    gap: 6px;
+  }
+
+  .meta-row .value {
+    letter-spacing: 0.08em;
+  }
+
+  .atlas-description {
+    font-size: 16px;
+    max-width: 100%;
+  }
+
+  .atlas-tabs {
+    flex-wrap: wrap;
+    gap: 12px;
+  }
+
+  .atlas-tab {
+    font-size: 12px;
+  }
+
+  .atlas-hero-media {
+    margin-bottom: 40px;
+  }
+
+  .media-placeholder {
+    border-radius: 10px;
+  }
+
+  .card-title {
+    font-size: 28px;
+  }
+
+  .card-company {
+    font-size: 16px;
+  }
+
+  .card-points li {
+    font-size: 16px;
+    max-width: 100%;
+  }
 }
