@@ -762,7 +762,7 @@
   gap: 16px;
 }
 .tb-layout-block--spaced {
-  margin-top: 120px;
+  margin-top: 20px;
 }
 .tb-layout-subtitle {
   margin: 0;
@@ -785,6 +785,10 @@
   display: grid;
   grid-template-columns: repeat(3, minmax(0, 1fr));
   gap: 26px;
+}
+.tb-layout-grid--persona {
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 32px;
 }
 .tb-layout-flow {
   margin-top: 30px;
@@ -810,9 +814,18 @@
   gap: 10px;
   position: relative;
 }
+.tb-layout-flow-item .tb-layout-flow-desc {
+  opacity: 0;
+  transform: translateX(-6px);
+  transition: opacity 0.25s ease 0.08s, transform 0.35s ease 0.08s;
+}
+.tb-layout-flow-item:has(.tb-layout-flow-box--media:hover) .tb-layout-flow-desc {
+  opacity: 1;
+  transform: translateX(0);
+}
 .tb-layout-flow-box {
   flex: 1;
-  max-width: 180px;
+  max-width: 160px;
   width: 100%;
   aspect-ratio: 1 / 1;
   background: #cfcfcf;
@@ -837,15 +850,6 @@
 .tb-layout-flow-box--media .tb-layout-flow-video {
   opacity: 1;
 }
-.tb-layout-flow-item:not(:last-child) .tb-layout-flow-box::after {
-  content: "→";
-  position: absolute;
-  right: -24px;
-  top: 50%;
-  transform: translate(50%, -50%);
-  font-size: 28px;
-  color: #ffffff;
-}
 .tb-layout-flow-box img {
   width: 100%;
   height: 100%;
@@ -862,12 +866,22 @@
   font-size: 18px;
   font-weight: 500;
   color: #ffffff;
-  text-align: center;
+  text-align: left;
 }
 .tb-layout-flow-desc {
-  font-size: 14px;
+  font-size: calc(var(--tb-title-size) * 0.2712);
+  line-height: 1.75;
   color: rgba(245, 245, 247, 0.6);
-  text-align: center;
+  text-align: left;
+}
+.tb-layout-flow-desc-list {
+  list-style: disc;
+  list-style-position: inside;
+  padding: 0;
+  margin: 0;
+}
+.tb-layout-flow-desc-list li {
+  margin-bottom: 6px;
 }
 .tb-layout-card {
   display: flex;
@@ -880,6 +894,10 @@
   border: 1px solid rgba(255, 255, 255, 0.12);
   background: #13151b;
   min-height: 160px;
+}
+.tb-layout-image--persona {
+  aspect-ratio: 3 / 5;
+  min-height: 320px;
 }
 .tb-layout-image img {
   width: 100%;
@@ -924,6 +942,9 @@
   overflow: hidden;
   border: 1.2px solid rgba(255, 255, 255, 0.12);
   background: #0d0f14;
+}
+.tb-layout-large--no-border {
+  border: none;
 }
 .tb-layout-large img {
   width: 100%;

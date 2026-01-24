@@ -107,39 +107,39 @@ export const projectsData = {
         tone: "dark",
         title: "Where It Started",
         first: {
-          subtitle: "A sparse baseline",
+          subtitle: "Aligned from the Start",
           description:
-            "We inherited a layout that was heavy on empty space and light on hierarchy. The core task existed, but it was visually buried and slow to scan.",
+            "This project began with cross-functional alignment across Product, Design, User Research, and Engineering teams. Under mentor guidance, I followed these discussions and contributed to a defined design scope, translating shared goals into actionable design work.",
           cards: [
             {
               title: "Product Manager",
               image: "/Terabox/01Product Manager.png",
               video: "/Terabox/01.mp4",
-              description: "Set product goals for next version"
+              description: "• Defined growth priorities • Aligned cross-functional teams • Set success metrics and goals"
             },
             {
               title: "User Researcher",
               image: "/Terabox/02User Researcher.png",
               video: "/Terabox/02.mp4",
-              description: "Set product goals for next version"
+              description: "• Provided user insights • Validated design decisions • Conducted usability testing"
             },
             {
               title: "UX Designer (My Role)",
               image: "/Terabox/03UX Designer.png",
               video: "/Terabox/03.mp4",
-              description: "Set product goals for next version"
+              description: "• Translated insights into design • Designed wireframes"
             },
             {
               title: "Software Engineer",
               image: "/Terabox/04Software Engineer.png",
               video: "/Terabox/04.mp4",
-              description: "Set product goals for next version"
+              description: "• Iterated during development • Ensured technical feasibility • Collaborated on iterations"
             }
           ]
         },
         second: {
-          subtitle: "First-pass structure",
-          image: GRAY_LAYOUT_PLACEHOLDER
+          subtitle: "Workflow Overview",
+          image: "/Terabox/Workflow Overview.png"
         }
       },
       {
@@ -147,24 +147,19 @@ export const projectsData = {
         tone: "dark",
         title: "Who We Were Designing For",
         first: {
-          subtitle: "Creators and operators",
+          subtitle: "Persona",
           description:
-            "The primary users needed quick access to rewards, link history, and performance. The layout had to reduce hunting and make the next action obvious.",
+            "As the business strategy evolved, the Plan tab needed to support two very different user types. Understanding their experience levels and motivations was key to reshaping the interface.",
           cards: [
             {
-              image: GRAY_CARD_PLACEHOLDER,
-              label: "primary tasks",
+              image: GRAY_LAYOUT_PLACEHOLDER,
+              label: "persona-1",
               status: "check"
             },
             {
-              image: GRAY_CARD_PLACEHOLDER,
-              label: "secondary tasks",
-              status: "x"
-            },
-            {
-              image: GRAY_CARD_PLACEHOLDER,
-              label: "edge cases",
-              status: "x"
+              image: GRAY_LAYOUT_PLACEHOLDER,
+              label: "persona-2",
+              status: "check"
             }
           ]
         },

@@ -796,8 +796,33 @@ const ProjectDetail = () => {
                                         <img src={card.image} alt={card.title} />
                                       ) : null}
                                     </div>
-                                    <div className="tb-layout-flow-title">{card.title}</div>
-                                    <div className="tb-layout-flow-desc">{card.description}</div>
+                                  <div className="tb-layout-flow-title">{card.title}</div>
+                                    {(() => {
+                                      const bulletLines = (card.description || "")
+                                        .split("•")
+                                        .map((line) => line.trim())
+                                        .filter(Boolean);
+                                      if (bulletLines.length > 1) {
+                                        return (
+                                          <ul className="tb-layout-flow-desc tb-layout-flow-desc-list">
+                                            {bulletLines.map((line, lineIndex) => (
+                                              <li key={lineIndex}>{line}</li>
+                                            ))}
+                                          </ul>
+                                        );
+                                      }
+                                      return <div className="tb-layout-flow-desc">{card.description}</div>;
+                                    })()}
+                                  </div>
+                                ))}
+                              </div>
+                            ) : section.first?.subtitle === "Persona" ? (
+                              <div className="tb-layout-grid tb-layout-grid--persona">
+                                {(section.first?.cards || []).map((card, cardIndex) => (
+                                  <div key={cardIndex} className="tb-layout-card">
+                                    <div className="tb-layout-image tb-layout-image--persona">
+                                      <img src={card.image} alt={`persona-${cardIndex + 1}`} />
+                                    </div>
                                   </div>
                                 ))}
                               </div>
@@ -824,7 +849,7 @@ const ProjectDetail = () => {
                           </div>
                           <div className="tb-layout-block tb-layout-block--spaced">
                             <h4 className="tb-layout-subtitle">{section.second?.subtitle}</h4>
-                            <div className="tb-layout-large">
+                            <div className={`tb-layout-large ${section.second?.image?.includes("Workflow Overview.png") ? "tb-layout-large--no-border" : ""}`}>
                               {section.second?.image?.includes("OLayout4.svg") ? (
                                 <div className="tb-layout-wireframe" role="img" aria-label="Layout wireframe">
                                   <div className="tb-layout-wireframe-header">Header</div>
