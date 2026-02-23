@@ -24,6 +24,7 @@ const ProjectDetail = () => {
   const [uiOverlay, setUiOverlay] = useState(null);
   const [copiedId, setCopiedId] = useState(null);
   const [videoPlaying, setVideoPlaying] = useState({});
+  const [audienceIndex, setAudienceIndex] = useState(0);
   const [isHeaderHidden, setIsHeaderHidden] = useState(false);
   const nextSectionRef = useRef(null);
   const transitionTimerRef = useRef(null);
@@ -113,6 +114,18 @@ const ProjectDetail = () => {
       video.pause();
       video.currentTime = 0;
     }
+  };
+
+  const renderParagraphs = (text, className) => {
+    if (!text) return null;
+    return String(text)
+      .split("\n\n")
+      .filter(Boolean)
+      .map((paragraph, index) => (
+        <p key={index} className={className}>
+          {paragraph.replace(/\n/g, " ")}
+        </p>
+      ));
   };
 
   // --- 1. 物理层重置：在所有渲染前执行 ---
@@ -617,13 +630,16 @@ const ProjectDetail = () => {
               </div>
             </section>
 
-            <section className={`detail-gallery-vertical ${isDribbbleLayout ? "is-dribbble" : ""} ${isTeraboxLayout ? "is-terabox" : ""}`}>
+            {(() => {
+              const hasFullBleed = sections.length > 0 && sections.every((section) => section.type === "full-bleed");
+              return (
+                <section className={`detail-gallery-vertical ${isDribbbleLayout ? "is-dribbble" : ""} ${isTeraboxLayout ? "is-terabox" : ""} ${hasFullBleed ? "has-full-bleed" : ""}`}>
               {sections.map((section, idx) => {
                 const isTbSection = section.type?.startsWith("tb-");
                 return (
                   <React.Fragment key={idx}>
                     <motion.div
-                      className={`detail-feature-row ${isTbSection ? "is-terabox" : ""} ${section.type === "prototype" ? "is-prototype" : ""} ${section.type === "dribbble" ? "is-dribbble" : ""} ${section.type === "accordion" ? "is-accordion" : ""} ${section.type === "showcase" ? "is-showcase" : ""} ${section.type === "ui-waterfall" ? "is-ui-waterfall" : ""} ${section.type === "dribbble" && idx % 2 === 1 ? "is-dribbble-alt" : ""}`}
+                      className={`detail-feature-row ${isTbSection ? "is-terabox" : ""} ${section.type === "prototype" ? "is-prototype" : ""} ${section.type === "dribbble" ? "is-dribbble" : ""} ${section.type === "accordion" ? "is-accordion" : ""} ${section.type === "showcase" ? "is-showcase" : ""} ${section.type === "ui-waterfall" ? "is-ui-waterfall" : ""} ${section.type === "full-bleed" ? "is-full-bleed" : ""} ${section.type === "dribbble" && idx % 2 === 1 ? "is-dribbble-alt" : ""}`}
                       initial={isTbSection ? false : { y: 50, opacity: 0 }}
                       whileInView={isTbSection ? undefined : { y: 0, opacity: 1 }}
                       viewport={isTbSection ? undefined : { once: true, margin: "-100px" }}
@@ -768,8 +784,14 @@ const ProjectDetail = () => {
                             <div className="tb-layout-rule" aria-hidden="true" />
                           </div>
                           <div className="tb-layout-block">
-                            <h4 className="tb-layout-subtitle">{section.first?.subtitle}</h4>
-                            <p className="tb-layout-desc">{section.first?.description}</p>
+                            {(section.first?.subtitle || section.first?.description) && (
+                              <>
+                                {section.first?.subtitle && (
+                                  <h4 className="tb-layout-subtitle">{section.first.subtitle}</h4>
+                                )}
+                                {renderParagraphs(section.first?.description, "tb-layout-desc")}
+                              </>
+                            )}
                             {section.type === "tb-layout-started" ? (
                               <div className="tb-layout-flow">
                                 {(section.first?.cards || []).map((card, cardIndex) => (
@@ -816,17 +838,74 @@ const ProjectDetail = () => {
                                   </div>
                                 ))}
                               </div>
-                            ) : section.first?.subtitle === "Persona" ? (
-                              <div className="tb-layout-grid tb-layout-grid--persona">
-                                {(section.first?.cards || []).map((card, cardIndex) => (
-                                  <div key={cardIndex} className="tb-layout-card">
-                                    <div className="tb-layout-image tb-layout-image--persona">
-                                      <img src={card.image} alt={`persona-${cardIndex + 1}`} />
+                            ) : section.type === "tb-layout-audience" ? (
+                              <div className="tb-layout-audience">
+                                <div className="tb-audience-panel">
+                                  {(() => {
+                                    const cards = section.first?.cards || [];
+                                    const activeCard = cards.length ? cards[audienceIndex % cards.length] : section.first;
+                                    return (
+                                      <AnimatePresence mode="wait">
+                                        <motion.div
+                                          key={`audience-${audienceIndex}`}
+                                          className="tb-audience-motion"
+                                          initial={{ opacity: 0, y: 18 }}
+                                          animate={{ opacity: 1, y: 0 }}
+                                          exit={{ opacity: 0, y: -12 }}
+                                          transition={{ duration: 0.45, ease: [0.22, 1, 0.36, 1] }}
+                                        >
+                                  <div className="tb-audience-left">
+                                    {activeCard?.cardLabel && (
+                                      <div className="tb-audience-kicker">{activeCard.cardLabel}</div>
+                                    )}
+                                    <div className="tb-audience-title">{activeCard?.infoHeading}</div>
+                                    <div className="tb-audience-rule" aria-hidden="true" />
+                                    {activeCard?.contextText && (
+                                      <p className="tb-audience-body">{activeCard.contextText}</p>
+                                    )}
+                                    {activeCard?.implicationText && (
+                                      <p className="tb-audience-body">{activeCard.implicationText}</p>
+                                    )}
+                                    {activeCard?.needsHeading && (
+                                      <div className="tb-audience-block">
+                                        <span className="tb-audience-subtitle">{activeCard.needsHeading}</span>
+                                        <div className="tb-audience-needs-grid">
+                                          {(activeCard.needs || []).map((item, idx) => (
+                                            <div key={idx} className="tb-audience-need">
+                                              {item}
+                                            </div>
+                                          ))}
+                                        </div>
+                                      </div>
+                                    )}
+                                  </div>
+                                  <div className="tb-audience-right">
+                                    <div className="tb-audience-portrait">
+                                      {activeCard?.portrait && (
+                                        <img src={activeCard.portrait} alt="Persona portrait" />
+                                      )}
                                     </div>
                                   </div>
-                                ))}
+                                        </motion.div>
+                                      </AnimatePresence>
+                                    );
+                                  })()}
+                                  <button
+                                    type="button"
+                                    className="tb-audience-next"
+                                    onClick={() => {
+                                      const cards = section.first?.cards || [];
+                                      if (cards.length) {
+                                        setAudienceIndex((prev) => (prev + 1) % cards.length);
+                                      }
+                                    }}
+                                    aria-label="Next persona"
+                                  >
+                                    →
+                                  </button>
+                                </div>
                               </div>
-                            ) : (
+                            ) : section.first?.cards?.length ? (
                               <div className="tb-layout-grid">
                                 {(section.first?.cards || []).map((card, cardIndex) => (
                                   <div key={cardIndex} className="tb-layout-card">
@@ -845,28 +924,54 @@ const ProjectDetail = () => {
                                   </div>
                                 ))}
                               </div>
-                            )}
+                            ) : null}
                           </div>
-                          <div className="tb-layout-block tb-layout-block--spaced">
-                            <h4 className="tb-layout-subtitle">{section.second?.subtitle}</h4>
-                            <div className={`tb-layout-large ${section.second?.image?.includes("Workflow Overview.png") ? "tb-layout-large--no-border" : ""}`}>
-                              {section.second?.image?.includes("OLayout4.svg") ? (
-                                <div className="tb-layout-wireframe" role="img" aria-label="Layout wireframe">
-                                  <div className="tb-layout-wireframe-header">Header</div>
-                                  <div className="tb-layout-wireframe-body">
-                                    <div className="tb-layout-wireframe-tab">Function Tab</div>
-                                    <div className="tb-layout-wireframe-program">Program Overview</div>
-                                    <div className="tb-layout-wireframe-right">
-                                      <div className="tb-layout-wireframe-cta">Call to Action</div>
-                                      <div className="tb-layout-wireframe-table">Scrollable Table</div>
+                          {section.second && (
+                            <div className="tb-layout-block tb-layout-block--spaced">
+                              <h4 className="tb-layout-subtitle">{section.second?.subtitle}</h4>
+                              {renderParagraphs(section.second?.description, "tb-layout-desc")}
+                              {section.second?.image && (
+                                <div className={`tb-layout-large ${section.second?.image?.includes("Workflow Overview.png") ? "tb-layout-large--no-border" : ""}`}>
+                                  {section.second?.image?.includes("OLayout4.svg") ? (
+                                    <div className="tb-layout-wireframe" role="img" aria-label="Layout wireframe">
+                                      <div className="tb-layout-wireframe-header">
+                                        <span className="tb-layout-wireframe-text is-default">Header</span>
+                                        <span className="tb-layout-wireframe-text is-hover">This is Header</span>
+                                      </div>
+                                      <div className="tb-layout-wireframe-body">
+                                        <div className="tb-layout-wireframe-tab">
+                                          <span className="tb-layout-wireframe-text is-default">Function Tab</span>
+                                          <span className="tb-layout-wireframe-text is-hover">This is Function Tab</span>
+                                        </div>
+                                        <div className="tb-layout-wireframe-program">
+                                          <span className="tb-layout-wireframe-text is-default">Program Overview</span>
+                                          <span className="tb-layout-wireframe-text is-hover">This is Program Overview</span>
+                                        </div>
+                                        <div className="tb-layout-wireframe-right">
+                                          <div className="tb-layout-wireframe-cta">
+                                            <span className="tb-layout-wireframe-text is-default">Call to Action</span>
+                                            <span className="tb-layout-wireframe-text is-hover">This is Call to Action</span>
+                                          </div>
+                                          <div className="tb-layout-wireframe-table">
+                                            <span className="tb-layout-wireframe-text is-default">Scrollable Table</span>
+                                            <span className="tb-layout-wireframe-text is-hover">This is Scrollable Table</span>
+                                          </div>
+                                        </div>
+                                      </div>
                                     </div>
-                                  </div>
+                                  ) : (
+                                    <img src={section.second?.image} alt={section.second?.subtitle || "layout"} />
+                                  )}
                                 </div>
-                              ) : (
-                                <img src={section.second?.image} alt={section.second?.subtitle || "layout"} />
                               )}
                             </div>
-                          </div>
+                          )}
+                          {section.third && (
+                            <div className="tb-layout-block tb-layout-block--spaced">
+                              <h4 className="tb-layout-subtitle">{section.third?.subtitle}</h4>
+                              {renderParagraphs(section.third?.description, "tb-layout-desc")}
+                            </div>
+                          )}
                         </div>
                       </div>
                     ) : section.type === "ui-waterfall" ? (
@@ -1056,6 +1161,10 @@ const ProjectDetail = () => {
                           </div>
 
                         </div>
+                      </div>
+                    ) : section.type === "full-bleed" ? (
+                      <div className="detail-full-bleed">
+                        <img src={section.image} alt="Project scene" />
                       </div>
                     ) : section.type === "dribbble" ? (
                       <div className="detail-dribbble-grid">
@@ -1253,10 +1362,12 @@ const ProjectDetail = () => {
                       </>
                     )}
                   </motion.div>
-                </React.Fragment>
-              );
-            })}
+                  </React.Fragment>
+                );
+              })}
             </section>
+              );
+            })()}
 
             <AnimatePresence>
               {uiOverlay && (

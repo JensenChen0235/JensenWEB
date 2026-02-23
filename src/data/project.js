@@ -53,6 +53,8 @@ const GRAY_CARD_PLACEHOLDER =
   "data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='800' height='600'><rect width='800' height='600' fill='%2326282C'/></svg>";
 const GRAY_LAYOUT_PLACEHOLDER =
   "data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='1440' height='832'><rect width='1440' height='832' fill='%2326282C'/></svg>";
+const GRAY_SQUARE_PLACEHOLDER =
+  "data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='800' height='800'><rect width='800' height='800' fill='%2326282C'/></svg>";
 
 export const projectsData = {
   "devin_ai": {
@@ -147,118 +149,60 @@ export const projectsData = {
         tone: "dark",
         title: "Who We Were Designing For",
         first: {
-          subtitle: "Persona",
-          description:
-            "As the business strategy evolved, the Plan tab needed to support two very different user types. Understanding their experience levels and motivations was key to reshaping the interface.",
           cards: [
             {
-              image: GRAY_LAYOUT_PLACEHOLDER,
-              label: "persona-1",
-              status: "check"
+              cardLabel: "Persona 01",
+              infoHeading: "New User",
+              portrait: "/Terabox/Persona1.png",
+              contextText:
+                "This group represents growth potential driven by referrals from experienced webmasters.\nTheir success depends on how quickly they can understand what to do next.",
+              implicationText:
+                "The redesigned interface shifts toward action-driven guidance, prioritizing clear tasks and next steps to reduce early learning cost and encourage participation.",
+              needsHeading: "NEEDS",
+              needs: [
+                "Clear guidance on first actions",
+                "Immediate feedback to reinforce engagement",
+                "Action-oriented cues over dense data"
+              ]
             },
             {
-              image: GRAY_LAYOUT_PLACEHOLDER,
-              label: "persona-2",
-              status: "check"
+              cardLabel: "Persona 02",
+              infoHeading: "Experienced User",
+              portrait: "/Terabox/Persona2.png",
+              contextText:
+                "This group consists of early adopters who helped establish market presence.\nThey are already familiar with sharing workflows and monetization logic.",
+              implicationText:
+                "The previous interface emphasized earnings visibility and performance data, supporting efficient monitoring with minimal behavioral guidance.",
+              needsHeading: "NEEDS",
+              needs: [
+                "Quick access to earnings and performance metrics",
+                "Clear revenue breakdown and historical data",
+                "Efficient overview without interruption"
+              ]
             }
           ]
         },
-        second: {
-          subtitle: "Audience-first layout",
-          image: GRAY_LAYOUT_PLACEHOLDER
-        }
+        second: null
       },
       {
         type: "tb-layout-needs",
         tone: "dark",
-        title: "What Users Needed Most",
+        title: "Redefining What Matters",
         first: {
-          subtitle: "Clarity over clutter",
+          subtitle: "What We Observed",
           description:
-            "Users prioritized status at a glance: totals, recent actions, and a single clear call-to-action. Everything else should support that flow, not compete with it.",
-          cards: [
-            {
-              image: GRAY_CARD_PLACEHOLDER,
-              label: "primary CTA",
-              status: "check"
-            },
-            {
-              image: GRAY_CARD_PLACEHOLDER,
-              label: "quick stats",
-              status: "check"
-            },
-            {
-              image: GRAY_CARD_PLACEHOLDER,
-              label: "low-priority",
-              status: "x"
-            }
-          ]
+            "The analysis revealed a mismatch between user needs and the existing information structure.\nWhile experienced users valued quick access to performance data, first-time users struggled to identify meaningful actions within a data-heavy layout.\n\nThe interface communicated what happened, but not what to do next.",
+          cards: []
         },
         second: {
-          subtitle: "Priority-based layout",
-          image: GRAY_LAYOUT_PLACEHOLDER
-        }
-      },
-      {
-        type: "tb-layout-structure",
-        tone: "dark",
-        title: "Understanding the Existing Structure",
-        first: {
-          subtitle: "Mapping the system",
+          subtitle: "The Trade-Off",
           description:
-            "We audited the old page to find repeating patterns and dead ends. This surfaced which regions could compress and which needed more space.",
-          cards: [
-            {
-              image: GRAY_CARD_PLACEHOLDER,
-              label: "modules",
-              status: "check"
-            },
-            {
-              image: GRAY_CARD_PLACEHOLDER,
-              label: "unused space",
-              status: "x"
-            },
-            {
-              image: GRAY_CARD_PLACEHOLDER,
-              label: "flow gaps",
-              status: "x"
-            }
-          ]
+            "Not all information carries equal value at every stage of the user journey.\nPrioritising data visibility came at the cost of behavioural clarity for new users."
         },
-        second: {
-          subtitle: "Structural refactor",
-          image: GRAY_LAYOUT_PLACEHOLDER
-        }
-      },
-      {
-        type: "tb-layout-priorities",
-        tone: "dark",
-        title: "Prioritizing What Matters",
-        first: {
-          subtitle: "Clean focus lines",
+        third: {
+          subtitle: "What We Prioritised",
           description:
-            "We rebalanced the grid so the Program Overview anchors the left rail while the right side delivers action and data without visual noise.",
-          cards: [
-            {
-              image: GRAY_CARD_PLACEHOLDER,
-              label: "overview anchor",
-              status: "check"
-            },
-            {
-              image: GRAY_CARD_PLACEHOLDER,
-              label: "action panel",
-              status: "check"
-            },
-            {
-              image: GRAY_CARD_PLACEHOLDER,
-              label: "supporting data",
-              status: "x"
-            }
-          ]
-        },
-        second: {
-          subtitle: "Final hierarchy",
-          image: GRAY_LAYOUT_PLACEHOLDER
+            "To support growth goals, the experience was restructured to prioritise actions that lead to engagement.\nKey actions were surfaced earlier, while supporting data was progressively revealed as users became more familiar with the system."
         }
       },
       {
@@ -291,6 +235,22 @@ export const projectsData = {
           subtitle: "Simplified ways of layout",
           image: "/Terabox/OLayout4.svg"
         }
+      },
+      {
+        type: "tb-layout-final",
+        tone: "dark",
+        title: "Iterating Through Development",
+        first: {
+          subtitle: "",
+          cards: [
+            {
+              image: GRAY_SQUARE_PLACEHOLDER,
+              label: "",
+              status: "check"
+            }
+          ]
+        },
+        second: null
       }
     ]
   },
@@ -304,36 +264,17 @@ export const projectsData = {
     image: "/2.png",
     launchUrl: "#",
     sections: [
-      {
-        type: "app",
-        title: "A Personal Drive",
-        description: "Mobile-first flows designed for fast configuration and effortless personalization on the go.",
-        image: "https://images.unsplash.com/photo-1511707171634-5f897ff02aa9?auto=format&fit=crop&w=1200&q=80"
-      },
-      {
-        type: "app",
-        title: "Gesture-Led Control",
-        description: "Natural touch gestures replace UI weight, turning complex decisions into simple, guided steps.",
-        image: "https://images.unsplash.com/photo-1522202176988-66273c2fd55f?auto=format&fit=crop&w=1200&q=80"
-      },
-      {
-        type: "app",
-        title: "Focused Detail Views",
-        description: "Product details are layered with restraint, revealing depth without overwhelming the user.",
-        image: "https://images.unsplash.com/photo-1545239351-ef35f43d514b?auto=format&fit=crop&w=1200&q=80"
-      },
-      {
-        type: "app",
-        title: "Handoff Across Devices",
-        description: "Seamless continuity ensures the experience feels consistent from phone to larger screens.",
-        image: "https://images.unsplash.com/photo-1509395176047-4a66953fd231?auto=format&fit=crop&w=1200&q=80"
-      },
-      {
-        type: "app",
-        title: "Designed for the Moment",
-        description: "Contextual surfaces adapt to user intent, keeping every action within reach.",
-        image: "https://images.unsplash.com/photo-1512499617640-c2f999fe7f5a?auto=format&fit=crop&w=1200&q=80"
-      }
+      { type: "full-bleed", image: "/Netease/1.png" },
+      { type: "full-bleed", image: "/Netease/2.png" },
+      { type: "full-bleed", image: "/Netease/3.png" },
+      { type: "full-bleed", image: "/Netease/4.png" },
+      { type: "full-bleed", image: "/Netease/5.png" },
+      { type: "full-bleed", image: "/Netease/6.png" },
+      { type: "full-bleed", image: "/Netease/7.png" },
+      { type: "full-bleed", image: "/Netease/8.png" },
+      { type: "full-bleed", image: "/Netease/9.png" },
+      { type: "full-bleed", image: "/Netease/10.png" },
+      { type: "full-bleed", image: "/Netease/11.png" }
     ]
   },
   "synthetic_human": {
