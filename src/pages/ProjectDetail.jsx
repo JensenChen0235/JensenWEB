@@ -784,15 +784,92 @@ const ProjectDetail = () => {
                             <div className="tb-layout-rule" aria-hidden="true" />
                           </div>
                           <div className="tb-layout-block">
-                            {(section.first?.subtitle || section.first?.description) && (
-                              <>
-                                {section.first?.subtitle && (
-                                  <h4 className="tb-layout-subtitle">{section.first.subtitle}</h4>
+                            {section.type !== "tb-layout-needs" &&
+                              section.type !== "tb-layout-iterate" &&
+                              (section.first?.subtitle || section.first?.description) && (
+                                <>
+                                  {section.first?.subtitle && (
+                                    <h4 className="tb-layout-subtitle">{section.first.subtitle}</h4>
+                                  )}
+                                  {renderParagraphs(section.first?.description, "tb-layout-desc")}
+                                </>
+                              )}
+                            {section.type === "tb-layout-iterate" ? (
+                              <div className="tb-iterate">
+                                {(section.steps || []).map((step, stepIndex) => (
+                                  <div key={stepIndex} className="tb-iterate-row">
+                                    <div className="tb-iterate-left">
+                                      <h4 className="tb-iterate-title">{step.title}</h4>
+                                      {renderParagraphs(step.description, "tb-iterate-desc")}
+                                      <div className="tb-iterate-media">
+                                        {step.mediaType === "phones" ? (
+                                          <div className="tb-iterate-phones">
+                                            {[0, 1, 2].map((idx) => (
+                                              <img
+                                                key={idx}
+                                                src={section.placeholders?.phone || section.placeholders?.square}
+                                                alt="phone placeholder"
+                                              />
+                                            ))}
+                                          </div>
+                                        ) : step.mediaType === "web-mobile" ? (
+                                          <div className="tb-iterate-split">
+                                            <img src={section.placeholders?.wide || section.placeholders?.square} alt="web placeholder" />
+                                            <img src={section.placeholders?.phone || section.placeholders?.square} alt="mobile placeholder" />
+                                          </div>
+                                        ) : (
+                                          <img src={section.placeholders?.wide || section.placeholders?.square} alt="placeholder" />
+                                        )}
+                                      </div>
+                                    </div>
+                                  </div>
+                                ))}
+                                {section.quote && (
+                                  <div className="tb-iterate-quote">
+                                    <div className="tb-iterate-quote-mark">“</div>
+                                    <p>{section.quote}</p>
+                                    <span className="tb-iterate-quote-note">Internal feedback</span>
+                                  </div>
                                 )}
-                                {renderParagraphs(section.first?.description, "tb-layout-desc")}
-                              </>
-                            )}
-                            {section.type === "tb-layout-started" ? (
+                              </div>
+                            ) : section.type === "tb-layout-needs" ? (
+                              <div className="tb-layout-needs-grid">
+                                <div className="tb-layout-needs-left">
+                                  {(section.first?.subtitle || section.first?.description) && (
+                                    <>
+                                      {section.first?.subtitle && (
+                                        <h4 className="tb-layout-subtitle">{section.first.subtitle}</h4>
+                                      )}
+                                      {renderParagraphs(section.first?.description, "tb-layout-desc")}
+                                    </>
+                                  )}
+                                  {section.second && (
+                                    <div className="tb-layout-block tb-layout-block--spaced">
+                                      <h4 className="tb-layout-subtitle">{section.second?.subtitle}</h4>
+                                      {renderParagraphs(section.second?.description, "tb-layout-desc")}
+                                    </div>
+                                  )}
+                                  {section.third && (
+                                    <div className="tb-layout-block tb-layout-block--spaced">
+                                      <h4 className="tb-layout-subtitle">{section.third?.subtitle}</h4>
+                                      {renderParagraphs(section.third?.description, "tb-layout-desc")}
+                                    </div>
+                                  )}
+                                </div>
+                                <div className="tb-layout-needs-right">
+                                  <div className="tb-layout-priority">
+                                  <div className="tb-layout-priority-title">Priority Ranking</div>
+                                  <div className="tb-layout-priority-rows">
+                                    {Array.from({ length: 6 }).map((_, rowIndex) => (
+                                      <div key={rowIndex} className="tb-layout-priority-row">
+                                        Task {String(rowIndex + 1).padStart(2, "0")}
+                                      </div>
+                                    ))}
+                                  </div>
+                                  </div>
+                                </div>
+                              </div>
+                            ) : section.type === "tb-layout-started" ? (
                               <div className="tb-layout-flow">
                                 {(section.first?.cards || []).map((card, cardIndex) => (
                                   <div key={`flow-item-${cardIndex}`} className="tb-layout-flow-item">
@@ -841,6 +918,21 @@ const ProjectDetail = () => {
                             ) : section.type === "tb-layout-audience" ? (
                               <div className="tb-layout-audience">
                                 <div className="tb-audience-panel">
+                                  <div className="tb-audience-nav">
+                                    <button
+                                      type="button"
+                                      className="tb-audience-next"
+                                      onClick={() => {
+                                        const cards = section.first?.cards || [];
+                                        if (cards.length) {
+                                          setAudienceIndex((prev) => (prev + 1) % cards.length);
+                                        }
+                                      }}
+                                      aria-label="Next persona"
+                                    >
+                                      →
+                                    </button>
+                                  </div>
                                   {(() => {
                                     const cards = section.first?.cards || [];
                                     const activeCard = cards.length ? cards[audienceIndex % cards.length] : section.first;
@@ -855,9 +947,11 @@ const ProjectDetail = () => {
                                           transition={{ duration: 0.45, ease: [0.22, 1, 0.36, 1] }}
                                         >
                                   <div className="tb-audience-left">
-                                    {activeCard?.cardLabel && (
-                                      <div className="tb-audience-kicker">{activeCard.cardLabel}</div>
-                                    )}
+                                    <div className="tb-audience-kicker-row">
+                                      {activeCard?.cardLabel && (
+                                        <div className="tb-audience-kicker">{activeCard.cardLabel}</div>
+                                      )}
+                                    </div>
                                     <div className="tb-audience-title">{activeCard?.infoHeading}</div>
                                     <div className="tb-audience-rule" aria-hidden="true" />
                                     {activeCard?.contextText && (
@@ -890,19 +984,6 @@ const ProjectDetail = () => {
                                       </AnimatePresence>
                                     );
                                   })()}
-                                  <button
-                                    type="button"
-                                    className="tb-audience-next"
-                                    onClick={() => {
-                                      const cards = section.first?.cards || [];
-                                      if (cards.length) {
-                                        setAudienceIndex((prev) => (prev + 1) % cards.length);
-                                      }
-                                    }}
-                                    aria-label="Next persona"
-                                  >
-                                    →
-                                  </button>
                                 </div>
                               </div>
                             ) : section.first?.cards?.length ? (
@@ -926,7 +1007,7 @@ const ProjectDetail = () => {
                               </div>
                             ) : null}
                           </div>
-                          {section.second && (
+                          {section.type !== "tb-layout-needs" && section.type !== "tb-layout-iterate" && section.second && (
                             <div className="tb-layout-block tb-layout-block--spaced">
                               <h4 className="tb-layout-subtitle">{section.second?.subtitle}</h4>
                               {renderParagraphs(section.second?.description, "tb-layout-desc")}
@@ -966,7 +1047,7 @@ const ProjectDetail = () => {
                               )}
                             </div>
                           )}
-                          {section.third && (
+                          {section.type !== "tb-layout-needs" && section.type !== "tb-layout-iterate" && section.third && (
                             <div className="tb-layout-block tb-layout-block--spaced">
                               <h4 className="tb-layout-subtitle">{section.third?.subtitle}</h4>
                               {renderParagraphs(section.third?.description, "tb-layout-desc")}

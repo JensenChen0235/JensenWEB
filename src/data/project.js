@@ -55,6 +55,8 @@ const GRAY_LAYOUT_PLACEHOLDER =
   "data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='1440' height='832'><rect width='1440' height='832' fill='%2326282C'/></svg>";
 const GRAY_SQUARE_PLACEHOLDER =
   "data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='800' height='800'><rect width='800' height='800' fill='%2326282C'/></svg>";
+const GRAY_PHONE_PLACEHOLDER =
+  "data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='900' height='1600'><rect width='900' height='1600' fill='%2326282C'/></svg>";
 
 export const projectsData = {
   "devin_ai": {
@@ -191,7 +193,7 @@ export const projectsData = {
         first: {
           subtitle: "What We Observed",
           description:
-            "The analysis revealed a mismatch between user needs and the existing information structure.\nWhile experienced users valued quick access to performance data, first-time users struggled to identify meaningful actions within a data-heavy layout.\n\nThe interface communicated what happened, but not what to do next.",
+            "The analysis revealed a mismatch between user needs and the existing information structure.\nWhile experienced users valued quick access to performance data, first-time users struggled to identify meaningful actions within a data-heavy layout.",
           cards: []
         },
         second: {
@@ -237,20 +239,53 @@ export const projectsData = {
         }
       },
       {
-        type: "tb-layout-final",
+        type: "tb-layout-iterate",
         tone: "dark",
         title: "Iterating Through Development",
+        steps: [
+          {
+            title: "Early Validation",
+            description:
+              "Low-fidelity wireframes were delivered early to support feasibility checks and accelerate development alignment.",
+            placeholder: "Wireframe snapshot or flow map"
+          },
+          {
+            title: "Iteration with Engineering",
+            description:
+              "During implementation, design decisions were refined based on technical constraints and feedback.",
+            placeholder: "Dev handoff notes or interaction refinements",
+            mediaType: "web-mobile"
+          },
+          {
+            title: "Refinement in Hi-Fi",
+            description:
+              "High-fidelity UI was developed alongside engineering progress, enhancing clarity, hierarchy, and consistency.",
+            placeholder: "Hi-fi screens or UI detail crop",
+            mediaType: "phones"
+          }
+        ],
+        quote:
+          "The early wireframes helped clarify implementation scope and reduced rework during development.",
+        placeholders: {
+          wide: GRAY_LAYOUT_PLACEHOLDER,
+          square: GRAY_SQUARE_PLACEHOLDER,
+          phone: GRAY_PHONE_PLACEHOLDER
+        }
+      },
+      {
+        type: "tb-layout-final",
+        tone: "dark",
+        title: "Reflection & Impact",
         first: {
-          subtitle: "",
-          cards: [
-            {
-              image: GRAY_SQUARE_PLACEHOLDER,
-              label: "",
-              status: "check"
-            }
-          ]
+          subtitle: "Impact",
+          description:
+            "The interface evolved from a data-first structure to an action-first experience, better aligned with acquisition goals and first-time user needs."
         },
-        second: null
+        second: {
+          subtitle: "Reflection",
+          description:
+            "This project highlighted how strategy directly shapes information hierarchy.\nDesign decisions are rarely about removing elements, but about reframing what takes priority."
+        }
       }
     ]
   },
