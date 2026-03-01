@@ -59,8 +59,8 @@ const GRAY_PHONE_PLACEHOLDER =
   "data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='900' height='1600'><rect width='900' height='1600' fill='%2326282C'/></svg>";
 
 export const projectsData = {
-  "devin_ai": {
-    id: "devin_ai",
+  "terabox-webmaster-center": {
+    id: "terabox-webmaster-center",
     title: "Terabox: Webmaster Center",
     color: "#000000",
     hoverColor: "#026DF9",
@@ -289,9 +289,9 @@ export const projectsData = {
       }
     ]
   },
-  "porsche_dream_machine": {
-    id: "porsche_dream_machine",
-    title: "Porsche: Dream Machine",
+  "netease-game-onmyoji": {
+    id: "netease-game-onmyoji",
+    title: "Netease Game: Onmyoji",
     color: "#E07B6C",
     hoverColor: "rgb(98, 20, 34)", // 浅紫色
     description: "An immersive digital journey for Porsche, allowing users to interact with their dream configurations in a beautifully rendered 3D environment.",
@@ -312,9 +312,9 @@ export const projectsData = {
       { type: "full-bleed", image: "/Netease/11.png" }
     ]
   },
-  "synthetic_human": {
-    id: "synthetic_human",
-    title: "Synthetic Human",
+  "bilibili-live": {
+    id: "bilibili-live",
+    title: "Bilibili: Live",
     color: "#9B8CFF",
     hoverColor: "rgb(202, 221, 255)", // 浅紫色
     description: "We developed a system in Houdini FX to optimize the high quality 3D assets and built the interactive front-end layer for this AI product launch.",
@@ -322,9 +322,9 @@ export const projectsData = {
     image: "/3.png",
     launchUrl: "#"
   },
-  "meta_spatial_audio": {
-    id: "meta_spatial_audio",
-    title: "Meta: Spatial Fusion",
+  "ai-graphic-design": {
+    id: "ai-graphic-design",
+    title: "AI+Graphic Design",
     color: "#6FCFA6",
     hoverColor: "rgb(119, 49, 233)", // 浅紫色
     description: "Exploring the future of sound with Meta. Interface and 3D integrations for an immersive spatial audio experiment.",
@@ -332,8 +332,8 @@ export const projectsData = {
     image: "/4.png",
     launchUrl: "#"
   },
-  "spaace_nft": {
-    id: "spaace_nft",
+  "motion-lab": {
+    id: "motion-lab",
     title: "Motion Lab",
     color: "#4F6AFF",
     hoverColor: "rgb(255, 114, 37)", // 浅紫色
@@ -519,9 +519,9 @@ export const projectsData = {
       }
     ]
   },
-  "ddd_2024": {
-    id: "ddd_2024",
-    title: "DDD 2024",
+  "sound-design": {
+    id: "sound-design",
+    title: "Sound Design",
     color: "#251C45",
     hoverColor: "#4FF0E1", // 浅紫色
     description: "Official digital experience for the Digital Design Days 2024, showcasing forward-thinking design trends.",
@@ -529,9 +529,9 @@ export const projectsData = {
     image: "/6.png",
     launchUrl: "#"
   },
-  "choo_choo_world": {
-    id: "choo_choo_world",
-    title: "Choo Choo World",
+  "mima-multi-arts-pavilion": {
+    id: "mima-multi-arts-pavilion",
+    title: "Mima: Multi-Arts Pavilion",
     color: "#FF9A85",
     hoverColor: "rgb(5, 145, 246)", // 浅紫色
     description: "A whimsical 3D game environment designed to showcase the power of real-time web-based rendering.",
@@ -539,9 +539,9 @@ export const projectsData = {
     image: "/7.png",
     launchUrl: "#"
   },
-  "soda_experience": {
-    id: "soda_experience",
-    title: "Soda Experience",
+  "academic-poster": {
+    id: "academic-poster",
+    title: "Academic Poster",
     color: "#E8D9A8",
     hoverColor: "#rgb(244, 0, 9)", // 浅紫色
     description: "An AR-powered campaign for a premium beverage brand, focusing on interactive product visualization.",

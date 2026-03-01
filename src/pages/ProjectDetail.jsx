@@ -813,9 +813,19 @@ const ProjectDetail = () => {
                                             ))}
                                           </div>
                                         ) : step.mediaType === "web-mobile" ? (
-                                          <div className="tb-iterate-split">
-                                            <img src={section.placeholders?.wide || section.placeholders?.square} alt="web placeholder" />
-                                            <img src={section.placeholders?.phone || section.placeholders?.square} alt="mobile placeholder" />
+                                          <div className="tb-iterate-stack">
+                                            <div className="tb-iterate-web">
+                                              <img src={section.placeholders?.wide || section.placeholders?.square} alt="web placeholder" />
+                                            </div>
+                                            <div className="tb-iterate-mobile">
+                                              {[0, 1, 2].map((idx) => (
+                                                <img
+                                                  key={idx}
+                                                  src={section.placeholders?.phone || section.placeholders?.square}
+                                                  alt="mobile placeholder"
+                                                />
+                                              ))}
+                                            </div>
                                           </div>
                                         ) : (
                                           <img src={section.placeholders?.wide || section.placeholders?.square} alt="placeholder" />
