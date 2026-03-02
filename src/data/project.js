@@ -81,7 +81,7 @@ export const projectsData = {
     noShadow: true,
     description: "Terabox is a cloud storage and content distribution platform.The Webmaster Center supports webmasters in growth-related activities. This project focuses on the Plan tab, a key entry point for earning and growth actions.",
     services: ["UX", "WEB Design", "Mobile Design"],
-    image: "/Terabox1.png",
+    image: "/1.png",
     launchUrl: "https://www.terabox.com/webmaster/new/plan-overview",
     layout: "terabox",
     sections: [

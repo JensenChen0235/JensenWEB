@@ -4,6 +4,8 @@
   width: 100%;
   cursor: pointer;
   -webkit-tap-highlight-color: transparent;
+  content-visibility: auto;
+  contain-intrinsic-size: 1px 520px;
 }
 
 /* 图片容器：固定 16:11 比例 */
@@ -121,7 +123,8 @@
   margin: 0;
   letter-spacing: -0.02em;
   white-space: nowrap;
-  line-height: 1; /* 锁定行高为 1 方便对齐图标 */
+  line-height: 1.15;
+  display: inline-block;
 }
 
 /* 响应式微调 */

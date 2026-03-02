@@ -43,26 +43,7 @@ const About = () => {
         );
       }
 
-      // 右侧图片和卡片滚动进入效果
-      const fadeElements = gsap.utils.toArray(".reveal-item");
-      fadeElements.forEach((el) => {
-        gsap.fromTo(el, 
-          { opacity: 0, y: 100 },
-          { 
-            opacity: 1, 
-            y: 0, 
-            duration: 1.2,
-            ease: "power3.out",
-            scrollTrigger: {
-              trigger: el,
-              start: "top 85%",
-              once: true,
-              toggleActions: "play none none none",
-              scroller: ".tab-panel"
-            }
-          }
-        );
-      });
+      // 右侧图片和卡片滚动进入效果已移除（避免滚动动效）
     });
 
     return () => {

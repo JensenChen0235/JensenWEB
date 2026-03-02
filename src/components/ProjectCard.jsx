@@ -24,6 +24,8 @@ const ProjectCard = ({ title, tags, image }) => {
           src={image} 
           alt={title}
           className="project-image"
+          loading="lazy"
+          decoding="async"
           variants={{
             initial: { scale: 1, filter: "blur(0px)" },
             // 关键逻辑：数组形式实现“模糊一下立即变清晰”
