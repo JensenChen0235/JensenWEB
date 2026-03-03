@@ -43,25 +43,5 @@ export const experiences = [
       "Reached 6,200+ total users with 2,100+ DAU, securing CNY 121K in seed funding from the university innovation program.",
       "Recognized with the 'Outstanding Project' award in the Guangdong Student Innovation Competition."
     ]
-  },
-  {
-    type: "EDUCATION",
-    title: "Master of Interaction Design & Electronic Arts",
-    company: "The University of Sydney",
-    period: "2024.07 - 2026.06 (Expected)",
-    points: [
-      "Specialization in Audio and Acoustic Design | WAM: 80",
-      "Coursework: Design Thinking, Strategy Design, Audio Design, Designing for the Digital Revolution, Interface Design."
-    ]
-  },
-  {
-    type: "EDUCATION",
-    title: "Bachelor of Industrial Design",
-    company: "Shenzhen University",
-    period: "2019.06 - 2023.06",
-    points: [
-      "Major in Interaction Design | WAM: 87 (Academic Top 1%)",
-      "Coursework: User Research, UX Design, 3D Modeling, Ergonomics, Front-end Development, Data Visualization."
-    ]
   }
 ];

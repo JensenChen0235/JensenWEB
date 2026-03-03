@@ -197,6 +197,8 @@
   flex: 1;
   overflow: auto;
   padding-top: 0;
+  padding-right: 18px;
+  scrollbar-gutter: stable;
   animation: apple-fade 0.5s ease;
 }
 

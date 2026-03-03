@@ -517,13 +517,13 @@ const Hero3D = () => {
 
   useEffect(() => {
     clickSoundRef.current = new Audio("/bricks.mp3");
-    clickSoundRef.current.volume = 0.03;
+    clickSoundRef.current.volume = 0.4;
     clickSoundRef.current.preload = "auto";
     bubbleSoundRef.current = new Audio("/bubble.mp3");
-    bubbleSoundRef.current.volume = 0.1;
+    bubbleSoundRef.current.volume = 0.5;
     bubbleSoundRef.current.preload = "auto";
     bubble2SoundRef.current = new Audio("/bubble2.mp3");
-    bubble2SoundRef.current.volume = 0.1;
+    bubble2SoundRef.current.volume = 0.5;
     bubble2SoundRef.current.preload = "auto";
 
     return () => {
@@ -592,12 +592,16 @@ const Hero3D = () => {
   const handleInteraction = () => {
     if (!window.soundEnabled) {
       window.soundEnabled = true;
-      if (!window.bgmAudio) {
-        window.bgmAudio = new Audio('/bgm.mp3');
-        window.bgmAudio.loop = true;
-        window.bgmAudio.volume = 0.8;
+      if (window.bgmController?.play) {
+        window.bgmController.play();
+      } else {
+        if (!window.bgmAudio) {
+          window.bgmAudio = new Audio('/bgm.mp3');
+          window.bgmAudio.loop = true;
+          window.bgmAudio.volume = 0.8;
+        }
+        window.bgmAudio.play().catch(() => {});
       }
-      window.bgmAudio.play().catch(() => {});
       window.dispatchEvent(new Event("sound-enable"));
     }
 

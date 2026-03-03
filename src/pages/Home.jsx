@@ -24,7 +24,7 @@ function Home() {
 
   useEffect(() => {
     hoverSoundRef.current = new Audio("/bubble.mp3");
-    hoverSoundRef.current.volume = 0.1;
+    hoverSoundRef.current.volume = 0.5;
     hoverSoundRef.current.preload = "auto";
 
     const handleOver = (event) => {
@@ -79,8 +79,7 @@ function Home() {
           {/* Hero 文本区域 */}
           <div className="hero-text-container">
             <div className="header-tagline">
-              We help brands create digital experiences that connect with their
-              audience
+              Exploring the intersection of interaction, intelligence and imagination
             </div>
           </div>
 

@@ -324,7 +324,7 @@ export const projectsData = {
   },
   "ai-graphic-design": {
     id: "ai-graphic-design",
-    title: "AI+Graphic Design",
+    title: "AI + Design",
     color: "#6FCFA6",
     hoverColor: "rgb(119, 49, 233)", // 浅紫色
     description: "Exploring the future of sound with Meta. Interface and 3D integrations for an immersive spatial audio experiment.",

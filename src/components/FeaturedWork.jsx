@@ -18,7 +18,7 @@ const FeaturedWork = () => {
 
   useEffect(() => {
     hoverSoundRef.current = new Audio("/focus.mp3");
-    hoverSoundRef.current.volume = 0.1;
+    hoverSoundRef.current.volume = 0.9;
 
     const ctx = gsap.context(() => {
       const tl = gsap.timeline({
@@ -60,7 +60,6 @@ const FeaturedWork = () => {
   };
 
   const handleCardHover = () => {
-    if (!window.soundEnabled) return;
     const now = performance.now();
     if (now - lastHoverRef.current < 300) return;
     lastHoverRef.current = now;

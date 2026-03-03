@@ -5,21 +5,57 @@ import './SoundButton.css';
 const WAVE_PATH = "M-24 12 C-18 6, -12 6, -12 12 C-12 18, -6 18, 0 12 C6 6, 12 6, 12 12 C12 18, 18 18, 24 12 C30 6, 36 6, 36 12 C36 18, 42 18, 48 12";
 const FLAT_PATH = "M-24 12 C-18 12, -12 12, -12 12 C-12 12, -6 12, 0 12 C6 12, 12 12, 12 12 C12 12, 18 12, 24 12 C30 12, 36 12, 36 12 C36 12, 42 12, 48 12";
 
+const createBgmController = () => {
+  let ctx = null;
+  let gain = null;
+  let source = null;
+  let initPromise = null;
+
+  const init = async () => {
+    if (initPromise) return initPromise;
+    initPromise = (async () => {
+      ctx = new (window.AudioContext || window.webkitAudioContext)();
+      const res = await fetch("/bgm.mp3");
+      const buffer = await res.arrayBuffer();
+      const audioBuffer = await ctx.decodeAudioData(buffer);
+      source = ctx.createBufferSource();
+      source.buffer = audioBuffer;
+      source.loop = true;
+      gain = ctx.createGain();
+      gain.gain.value = 0.8;
+      source.connect(gain).connect(ctx.destination);
+      source.start(0);
+      await ctx.suspend();
+    })();
+    return initPromise;
+  };
+
+  return {
+    async play() {
+      await init();
+      if (ctx && ctx.state === "suspended") {
+        await ctx.resume();
+      }
+    },
+    async pause() {
+      if (ctx && ctx.state === "running") {
+        await ctx.suspend();
+      }
+    },
+  };
+};
+
 // 接收 activeColor 参数，默认为 Lusion 蓝
 const SoundButton = ({ isMenuOpen, activeColor = "#0047ff" }) => {
   const [isPlaying, setIsPlaying] = useState(() => window.soundEnabled === true);
   const [isHovered, setIsHovered] = useState(false);
   const buttonRef = useRef(null);
   const bgControls = useAnimation();
-  const audioRef = useRef(null);
 
   useEffect(() => {
-    if (!window.bgmAudio) {
-      window.bgmAudio = new Audio('/bgm.mp3');
-      window.bgmAudio.loop = true;
-      window.bgmAudio.volume = 0.8;
+    if (!window.bgmController) {
+      window.bgmController = createBgmController();
     }
-    audioRef.current = window.bgmAudio;
     if (typeof window.soundEnabled !== "boolean") {
       window.soundEnabled = false;
     }
@@ -28,7 +64,6 @@ const SoundButton = ({ isMenuOpen, activeColor = "#0047ff" }) => {
     }
 
     return () => {
-      audioRef.current = null;
     };
   }, []);
 
@@ -41,12 +76,11 @@ const SoundButton = ({ isMenuOpen, activeColor = "#0047ff" }) => {
   }, []);
 
   useEffect(() => {
-    if (!audioRef.current) return;
     window.soundEnabled = isPlaying;
     if (isPlaying) {
-      audioRef.current.play().catch(() => {});
+      window.bgmController?.play?.();
     } else {
-      audioRef.current.pause();
+      window.bgmController?.pause?.();
     }
   }, [isPlaying]);
 

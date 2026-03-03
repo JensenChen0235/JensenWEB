@@ -41,13 +41,11 @@ const Hero = () => {
     <section ref={heroRef} className="hero">
       <div className="hero-content">
         <h1 ref={titleRef} className="hero-title">
-          We help brands create
+          Exploring the intersection  
+
+          of interaction, intelligence and imagination
             
 
-          digital experiences that
-            
-
-          connect with their audience
         </h1>
         <p ref={subtitleRef} className="hero-subtitle">
           scroll to explore
