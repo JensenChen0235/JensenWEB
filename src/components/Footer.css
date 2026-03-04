@@ -19,6 +19,10 @@
   width: 100%;
   max-width: 600px;
 }
+.footer-safe-mask.full-w.job-funnel-mask {
+  max-width: 100%;
+  overflow: visible;
+}
 
 .reveal-content {
   will-change: transform, opacity;
@@ -79,18 +83,23 @@
 .contact-item { margin-bottom: 40px; }
 .col-label { display: block; font-size: 14px; color: #999; margin-bottom: 8px; }
 
-.newsletter-heading { 
-  font-size: 72px; 
+.job-funnel-heading { 
+  font-size: clamp(42px, 6vw, 72px); 
   font-weight: 500; 
-  line-height: 1.1; 
+  line-height: 1.2; 
   letter-spacing: -0.04em; 
   margin-bottom: 50px; 
   color: #000;
 }
+.job-funnel-line {
+  display: block;
+  white-space: nowrap;
+  padding-right: 0.08em;
+}
 
-.newsletter-pill { 
+.job-funnel-pill { 
   width: 100%; 
-  max-width: 500px;
+  max-width: 658px;
   background: #f4f6fb; 
   border-radius: 100px; 
   padding: 10px 10px 10px 35px; 
@@ -98,8 +107,32 @@
   align-items: center; 
 }
 
-.newsletter-input { flex: 1; border: none; background: transparent; outline: none; font-size: 16px; }
-.newsletter-arrow-btn { width: 44px; height: 44px; background: transparent; border: none; cursor: pointer; display: flex; align-items: center; justify-content: center; }
+.job-funnel-input { flex: 1; border: none; background: transparent; outline: none; font-size: 16px; }
+.job-funnel-arrow-btn { width: 44px; height: 44px; background: transparent; border: none; cursor: pointer; display: flex; align-items: center; justify-content: center; }
+.job-funnel-status {
+  margin-top: 10px;
+  margin-left: 32px;
+  font-size: 14px;
+  font-weight: 500;
+  color: #878787;
+  opacity: 1;
+  transition: opacity 0.6s ease;
+}
+.job-funnel-status.is-error {
+  margin-top: 10px;
+  margin-left: 32px;
+  font-size: 14px;
+  font-weight: 500;
+  color: #a92424;
+}
+.job-funnel-status.is-fade {
+  animation: job-funnel-fade 3s ease forwards;
+}
+@keyframes job-funnel-fade {
+  0% { opacity: 1; }
+  70% { opacity: 1; }
+  100% { opacity: 0; }
+}
 
 .footer-legal-bar { 
   display: flex; 
@@ -115,6 +148,11 @@
   width: 54px; height: 54px; background: #000; border-radius: 50%; color: #fff; 
   display: flex; align-items: center; justify-content: center; cursor: pointer;
   transition: transform 0.4s cubic-bezier(0.23, 1, 0.32, 1); 
+}
+.back-to-top-circle .bt-icon {
+  font-size: 20px;
+  font-weight: 700;
+  line-height: 1;
 }
 .back-to-top-circle:hover { transform: translateY(-8px); }
 
@@ -233,15 +271,15 @@
     margin-bottom: 120px;
   }
 
-  .newsletter-col {
+  .job-funnel-col {
     grid-column: 1 / -1;
   }
 
-  .newsletter-heading {
+  .job-funnel-heading {
     font-size: clamp(40px, 6vw, 56px);
   }
 
-  .newsletter-pill {
+  .job-funnel-pill {
     max-width: 100%;
   }
 
@@ -306,17 +344,17 @@
     font-size: 16px;
   }
 
-  .newsletter-heading {
+  .job-funnel-heading {
     font-size: clamp(32px, 9vw, 44px);
     margin-bottom: 28px;
   }
 
-  .newsletter-pill {
+  .job-funnel-pill {
     padding: 8px 8px 8px 18px;
     border-radius: 999px;
   }
 
-  .newsletter-input {
+  .job-funnel-input {
     font-size: 15px;
   }
 
@@ -335,6 +373,9 @@
   .back-to-top-circle {
     width: 46px;
     height: 46px;
+  }
+  .back-to-top-circle .bt-icon {
+    font-size: 18px;
   }
 
   .home-next-footer {

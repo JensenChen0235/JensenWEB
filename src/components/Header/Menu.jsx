@@ -1,5 +1,7 @@
 import { motion, AnimatePresence } from "framer-motion";
+import { useState } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
+import emailjs from "@emailjs/browser";
 import "./Menu.css";
 import Arrow from "../ui/Arrow";
 
@@ -68,6 +70,8 @@ const MenuItem = ({ name, isActive, onClick }) => {
 const Menu = ({ isOpen, onClose }) => {
   const navigate = useNavigate();
   const { pathname } = useLocation();
+  const [menuEmail, setMenuEmail] = useState("");
+  const [menuStatus, setMenuStatus] = useState("idle"); // idle | sending | success | error
   const menuItems = [
     { label: "HOME", path: "/" },
     { label: "ABOUT US", path: "/about" },
@@ -78,6 +82,28 @@ const Menu = ({ isOpen, onClose }) => {
   const handleNavigate = (path) => {
     navigate(path);
     onClose();
+  };
+
+  const handleMenuSubmit = async (e) => {
+    e.preventDefault();
+    if (!menuEmail.trim()) return;
+    setMenuStatus("sending");
+    try {
+      await emailjs.send(
+        "service_portfolio",
+        "template_zik85ks",
+        {
+          user_email: menuEmail.trim(),
+          message: "New job contact funnel submission.",
+        },
+        "_Ui4WcKEbFv3Hwyt9"
+      );
+      setMenuStatus("success");
+      setMenuEmail("");
+      setTimeout(() => setMenuStatus("idle"), 3000);
+    } catch (err) {
+      setMenuStatus("error");
+    }
   };
 
   const cardVariants = {
@@ -130,11 +156,25 @@ const Menu = ({ isOpen, onClose }) => {
               exit="exit"
               variants={cardVariants}
             >
-              <h3>Subscribe to our newsletter</h3>
-              <div className="email-bar">
-                <input type="email" placeholder="Your email" />
-                <div className="email-btn"> <Arrow direction="right" /></div>
-              </div>
+              <h3>Let's build something meaningful !</h3>
+              <form className="email-bar" onSubmit={handleMenuSubmit}>
+                <input
+                  type="email"
+                  placeholder="Please leave your email"
+                  value={menuEmail}
+                  onChange={(e) => setMenuEmail(e.target.value)}
+                  required
+                />
+                <button className="email-btn" type="submit" disabled={menuStatus === "sending"}>
+                  <Arrow direction="right" />
+                </button>
+              </form>
+              {menuStatus !== "idle" && (
+                <div className={`menu-email-status ${menuStatus === "error" ? "is-error" : ""} ${menuStatus === "success" ? "is-fade" : ""}`}>
+                  {menuStatus === "success" && "Got it. Thank you."}
+                  {menuStatus === "error" && "Something went wrong. Please try again."}
+                </div>
+              )}
             </motion.div>
 
             <motion.div

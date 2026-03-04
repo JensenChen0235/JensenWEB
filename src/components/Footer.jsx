@@ -1,7 +1,8 @@
-import React, { useEffect, useRef } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import { motion } from 'framer-motion';
 import { gsap } from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
+import emailjs from '@emailjs/browser';
 import Arrow from './ui/Arrow';
 import { useNavigate } from 'react-router-dom';
 import './Footer.css';
@@ -15,6 +16,8 @@ const Footer = ({ activeColor = "#0047ff" }) => {
   const whiteSectionRef = useRef(null);
   const hasTriggeredRef = useRef(false);
   const navigate = useNavigate();
+  const [jobEmail, setJobEmail] = useState('');
+  const [jobStatus, setJobStatus] = useState('idle'); // idle | sending | success | error
 
   const lusionEase = [0.25, 1, 0.5, 1];
   
@@ -173,6 +176,28 @@ const Footer = ({ activeColor = "#0047ff" }) => {
     navigate("/about");
   };
 
+  const handleJobSubmit = async (e) => {
+    e.preventDefault();
+    if (!jobEmail.trim()) return;
+    setJobStatus('sending');
+    try {
+      await emailjs.send(
+        'service_portfolio',
+        'template_zik85ks',
+        {
+          user_email: jobEmail.trim(),
+          message: 'New job contact funnel submission.',
+        },
+        '_Ui4WcKEbFv3Hwyt9'
+      );
+      setJobStatus('success');
+      setJobEmail('');
+      setTimeout(() => setJobStatus('idle'), 3000);
+    } catch (err) {
+      setJobStatus('error');
+    }
+  };
+
   const Mask = ({ children, className = "", isFullWidth = false }) => (
     <div className={`footer-safe-mask ${isFullWidth ? 'full-w' : ''} ${className}`}>
       <div className="reveal-content">{children}</div>
@@ -184,10 +209,10 @@ const Footer = ({ activeColor = "#0047ff" }) => {
       <div ref={whiteSectionRef} className="footer-white-zone">
         <div className="footer-grid">
           <div className="footer-col address-col">
-            <Mask><p>Suite 2</p></Mask>
-            <Mask><p>9 Marsh Street</p></Mask>
-            <Mask><p>Bristol, BS1 4AA</p></Mask>
-            <Mask><p>United Kingdom</p></Mask>
+            <Mask><p>Graduate, July 2026</p></Mask>
+            <Mask><p>Eligible for Post-Study Work Visa</p></Mask>
+            <Mask><p>Sydney</p></Mask>
+            <Mask><p>Open to relocation</p></Mask>
           </div>
 
           <div className="footer-col mid-links-col">
@@ -212,8 +237,8 @@ const Footer = ({ activeColor = "#0047ff" }) => {
             
             <div className="link-group contact-items">
               {[
-                { label: 'General enquires', email: 'hello@lusion.co' },
-                { label: 'New business', email: 'business@lusion.co' }
+                { label: 'Email', email: 'jensen0235@gmail.com' },
+                { label: 'Mobile', email: '+61 411515857' }
               ].map((item) => (
                 <div className="contact-item" key={item.label}>
                   <Mask><span className="col-label">{item.label}</span></Mask>
@@ -228,21 +253,39 @@ const Footer = ({ activeColor = "#0047ff" }) => {
             </div>
           </div>
 
-          <div className="footer-col newsletter-col">
-            <Mask isFullWidth><h2 className="newsletter-heading">Subscribe to our newsletter</h2></Mask>
-            <div className="newsletter-pill">
-              <input type="email" placeholder="Your email" className="newsletter-input" />
-              <button className="newsletter-arrow-btn">
+          <div className="footer-col job-funnel-col">
+            <Mask isFullWidth className="job-funnel-mask">
+              <h2 className="job-funnel-heading">
+                <span className="job-funnel-line">Let&apos;s build</span>
+                <span className="job-funnel-line">something meaningful</span>
+              </h2>
+            </Mask>
+            <form className="job-funnel-pill" onSubmit={handleJobSubmit}>
+              <input
+                type="email"
+                placeholder="Please leave your email"
+                className="job-funnel-input"
+                value={jobEmail}
+                onChange={(e) => setJobEmail(e.target.value)}
+                required
+              />
+              <button className="job-funnel-arrow-btn" type="submit" disabled={jobStatus === 'sending'}>
                 <Arrow direction="right" />
               </button>
-            </div>
+            </form>
+            {jobStatus !== 'idle' && (
+              <div className={`job-funnel-status ${jobStatus === 'error' ? 'is-error' : ''} ${jobStatus === 'success' ? 'is-fade' : ''}`}>
+                {jobStatus === 'success' && 'Got it. Thank you.'}
+                {jobStatus === 'error' && 'Something went wrong. Please try again.'}
+              </div>
+            )}
           </div>
         </div>
 
         <div className="footer-legal-bar">
-          <Mask><span>©2025 JENSEN Creative Studio</span></Mask>
-          <Mask><span>R&D: labs.lusion.co</span></Mask>
-          <Mask><span>Built by Lusion with ❤️</span></Mask>
+          <Mask><span>©2025 JENSEN CHEN</span></Mask>
+          <Mask><span>Vibe-coding Website</span></Mask>
+          <Mask><span>Built with React / GSAP / Three.js</span></Mask>
           <div className="back-to-top-wrap">
             <button className="back-to-top-circle" onClick={handleBackToTop}>
               <div className="bt-icon">↑</div>
