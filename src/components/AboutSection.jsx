@@ -64,14 +64,14 @@ const AboutSection = ({ colorIndex, activeColor = "#0047ff" }) => {
         <div className="about-hero-title">
           <div className="title-mask line-1">
             <div ref={line1Ref} className="line-inner">
-              <span ref={beyondRef} className="text-unit">BEYOND</span>
-              <span ref={visionRef} className="text-unit">VISION</span>
+              <span ref={beyondRef} className="text-unit">THINK</span>
+              <span ref={visionRef} className="text-unit">CLEARLY</span>
             </div>
           </div>
           <div className="title-mask line-2">
             <div ref={line2Ref} className="line-inner">
-              <span className="text-unit">WITHIN</span>
-              <span className="text-unit">REACH</span>
+              <span className="text-unit">DESIGN</span>
+              <span className="text-unit">BOLDLY</span>
             </div>
           </div>
         </div>

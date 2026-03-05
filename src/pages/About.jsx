@@ -66,8 +66,10 @@ const About = () => {
   }, []);
 
   const mediaSources = [
-    "https://images.unsplash.com/photo-1498050108023-c5249f4df085?auto=format&fit=crop&w=1600&q=80",
-    "https://images.unsplash.com/photo-1481277542470-605612bd2d61?auto=format&fit=crop&w=1600&q=80"
+    "/Experience 1.jpg",
+    "/Experience 2.jpg",
+    "/Experience 3.jpg",
+    null
   ];
 
   useEffect(() => {
@@ -77,28 +79,27 @@ const About = () => {
   const educationItems = [
     {
       title: "The University of Sydney | Master",
-      period: "2024.7 - 2026.6 (Expected)",
+      period: "07/2024 - 06/2026 (Expected)",
       detail: "Interaction Design and Electronic Arts (Audio and Acoustic) | WAM: 80",
       points: [
-        "Coursework: Design Thinking, Interface Design, Strategy Design, Audio Design, Designing for the Digital Revolution"
+        "Courses: Design Thinking, Interface Design, Strategy Design, Audio Design, Designing for the Digital Revolution"
       ]
     },
     {
-      title: "Shenzhen University | Bachelor",
-      period: "2019.6 - 2023.6",
+      title: "Shenzhen Technology University | Bachelor",
+      period: "09/2019 - 06/2023",
       detail: "Industrial Design (Interaction Design) | WAM: 87 (Top 1%)",
       points: [
-        "Coursework: User Research, UX Design, 3D Modeling, Ergonomics, Front-end Development, Data Visualization"
+        "Courses: User Research, UX Design, Visual Icons Design, 3D Modeling, Front-end Development, Data Visualization"
       ]
     }
   ];
 
   const skillsItems = [
-    "User Research: Competitive Analysis, Affinity Mapping, Journey Map, Persona, Maslow's Hierarchy of Needs",
-    "Design Process: UX Design (Figma), Motion Design (AE), Sound Design (Reaper + Wwise), 3D Modeling (Blender)",
-    "User Evaluation: Usability Testing, SUS / AQS / NPS Analysis",
-    "AI-Driven Design: AI Agent Flow (Coze), Sora Prompting",
-    "Languages: English (IELTS 7.0), Mandarin / Cantonese / Hakka (Native), German (Beginner)"
+    "Visual & Graphic Design: Layout Design, Typography, Brand Consistency, Marketing Visuals, Digital Advertising Assets",
+    "Design Tools: Figma, Photoshop, Illustrator, Premiere Pro, After Effects, Blender, Unity, Reaper, SolidWorks",
+    "AI-Driven Design: Vibe coding, AI video clip",
+    "Languages: English (Professional), Mandarin (Native), Cantonese (Native)"
   ];
 
   const honorsItems = [
@@ -109,6 +110,10 @@ const About = () => {
     {
       title: "Bronze Award, 6th International Environmental Protection Public Welfare Competition",
       period: "2022"
+    },
+    {
+      title: "Utility Model Patent, National Intellectual Property Administration of China",
+      period: "2021"
     }
   ];
 
@@ -127,21 +132,21 @@ const About = () => {
             
             <div className="atlas-metadata">
               <div className="meta-row about-entry-reveal">
-                <span className="label">YEAR</span>
-                <span className="value">2023 - 2025</span>
+                <span className="label">AVAILABLE</span>
+                <span className="value">Immediate / Open to Opportunities</span>
               </div>
               <div className="meta-row about-entry-reveal">
                 <span className="label">ROLE</span>
-                <span className="value">DESIGN &<br/>DEVELOPMENT</span>
+                <span className="value">UX &amp; Graphic Designer</span>
               </div>
               <div className="meta-row about-entry-reveal">
                 <span className="label">LOCATION</span>
-                <span className="value">SYDNEY / SZ</span>
+                <span className="value">Sydney</span>
               </div>
             </div>
 
             <div className="atlas-description about-entry-reveal">
-              <p>Designing digital experiences through the lens of creative technology and interaction arts.</p>
+              <p>Designing clear and engaging digital experiences through visual communication, collaborative thinking, and creative problem solving.</p>
             </div>
           </div>
         </aside>
@@ -170,7 +175,7 @@ const About = () => {
             {activeTab === "experience" && (
               <>
                 {experiences.map((exp, index) => {
-                  const mediaSrc = mediaSources[index % mediaSources.length];
+                  const mediaSrc = mediaSources[index] ?? null;
 
                   return (
                     <React.Fragment key={`${exp.title}-${index}`}>
@@ -193,11 +198,13 @@ const About = () => {
                         </div>
                       </section>
 
-                      <section className="atlas-hero-media reveal-item about-entry-float">
-                        <div className="media-placeholder">
-                          <img src={mediaSrc} alt={`Experience ${index + 1}`} />
-                        </div>
-                      </section>
+                      {mediaSrc && (
+                        <section className="atlas-hero-media reveal-item about-entry-float">
+                          <div className="media-placeholder">
+                            <img src={mediaSrc} alt={`Experience ${index + 1}`} />
+                          </div>
+                        </section>
+                      )}
                     </React.Fragment>
                   );
                 })}

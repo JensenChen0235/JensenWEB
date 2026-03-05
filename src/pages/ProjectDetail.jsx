@@ -22,6 +22,8 @@ const ProjectDetail = () => {
   const [showcaseSelected, setShowcaseSelected] = useState(0);
   const [colorSelected, setColorSelected] = useState(null);
   const [uiOverlay, setUiOverlay] = useState(null);
+  const [posterOverlay, setPosterOverlay] = useState(null);
+  const [posterIndex, setPosterIndex] = useState(0);
   const [copiedId, setCopiedId] = useState(null);
   const [videoPlaying, setVideoPlaying] = useState({});
   const [audienceIndex, setAudienceIndex] = useState(0);
@@ -81,7 +83,7 @@ const ProjectDetail = () => {
       description: "A purposeful module designed to showcase interaction, clarity, and restraint. Placeholder copy for future content.",
     };
 
-  const sections = project.sections?.length
+  const sections = Array.isArray(project.sections)
     ? project.sections
     : galleryImages.map((img, idx) => ({
         type: "web",
@@ -207,6 +209,10 @@ const ProjectDetail = () => {
     window.addEventListener("scroll", onScroll, { passive: true });
     return () => window.removeEventListener("scroll", onScroll);
   }, []);
+
+  useEffect(() => {
+    setPosterIndex(0);
+  }, [id]);
 
 
   const goNextProject = () => {
@@ -610,6 +616,16 @@ const ProjectDetail = () => {
             <section className="detail-hero-fold">
               <div className="detail-hero-layout">
                 <div className="detail-hero-info">
+                  {project.inProgressNotice && (
+                    <motion.div
+                      className="detail-hero-notice"
+                      initial={{ y: 30, opacity: 0 }}
+                      animate={{ y: 0, opacity: 1 }}
+                      transition={{ duration: 0.9, ease: lusionEase, delay: 0.1 }}
+                    >
+                      {project.inProgressNotice}
+                    </motion.div>
+                  )}
                   <motion.h1 className="detail-hero-big-title" initial={{ y: 40, opacity: 0 }} animate={{ y: 0, opacity: 1 }} transition={{ duration: 1, ease: lusionEase, delay: 0.2 }}>{project.title}</motion.h1>
                   <div className="detail-hero-meta-row">
                     <div className="detail-hero-desc-col">
@@ -630,20 +646,21 @@ const ProjectDetail = () => {
               </div>
             </section>
 
-            {(() => {
-              const hasFullBleed = sections.length > 0 && sections.every((section) => section.type === "full-bleed");
+            {sections.length > 0 && (() => {
+              const hasFullBleed = sections.every((section) => section.type === "full-bleed");
               return (
                 <section className={`detail-gallery-vertical ${isDribbbleLayout ? "is-dribbble" : ""} ${isTeraboxLayout ? "is-terabox" : ""} ${hasFullBleed ? "has-full-bleed" : ""}`}>
               {sections.map((section, idx) => {
                 const isTbSection = section.type?.startsWith("tb-");
+                const disableSectionMotion = project?.disableSectionMotion;
                 return (
                   <React.Fragment key={idx}>
                     <motion.div
-                      className={`detail-feature-row ${isTbSection ? "is-terabox" : ""} ${section.type === "prototype" ? "is-prototype" : ""} ${section.type === "dribbble" ? "is-dribbble" : ""} ${section.type === "accordion" ? "is-accordion" : ""} ${section.type === "showcase" ? "is-showcase" : ""} ${section.type === "ui-waterfall" ? "is-ui-waterfall" : ""} ${section.type === "full-bleed" ? "is-full-bleed" : ""} ${section.type === "dribbble" && idx % 2 === 1 ? "is-dribbble-alt" : ""}`}
-                      initial={isTbSection ? false : { y: 50, opacity: 0 }}
-                      whileInView={isTbSection ? undefined : { y: 0, opacity: 1 }}
-                      viewport={isTbSection ? undefined : { once: true, margin: "-100px" }}
-                      transition={isTbSection ? undefined : { duration: 1, ease: lusionEase }}
+                      className={`detail-feature-row ${isTbSection ? "is-terabox" : ""} ${section.type === "prototype" ? "is-prototype" : ""} ${section.type === "dribbble" ? "is-dribbble" : ""} ${section.type === "accordion" ? "is-accordion" : ""} ${section.type === "showcase" ? "is-showcase" : ""} ${section.type === "ui-waterfall" ? "is-ui-waterfall" : ""} ${section.type === "poster-wall" ? "is-poster-wall" : ""} ${section.type === "full-bleed" ? "is-full-bleed" : ""} ${section.type === "dribbble" && idx % 2 === 1 ? "is-dribbble-alt" : ""}`}
+                      initial={isTbSection || disableSectionMotion ? false : { y: 50, opacity: 0 }}
+                      whileInView={isTbSection || disableSectionMotion ? undefined : { y: 0, opacity: 1 }}
+                      viewport={isTbSection || disableSectionMotion ? undefined : { once: true, margin: "-100px" }}
+                      transition={isTbSection || disableSectionMotion ? undefined : { duration: 1, ease: lusionEase }}
                     >
                     {section.type === "tb-media" ? (
                       <div
@@ -1065,6 +1082,32 @@ const ProjectDetail = () => {
                           )}
                         </div>
                       </div>
+                    ) : section.type === "poster-wall" ? (
+                      <div className="poster-wall">
+                        <div className="poster-grid">
+                          {(section.items || []).map((item, itemIndex) => (
+                            <div key={itemIndex} className="poster-card">
+                              <button
+                                type="button"
+                                className="poster-card-button"
+                                onClick={() => setPosterOverlay(item)}
+                                aria-label={`Open poster ${item.title || itemIndex + 1}`}
+                              >
+                                <img src={item.image} alt={item.title || `Poster ${itemIndex + 1}`} />
+                              </button>
+                              <a
+                                className="poster-download-btn"
+                                href={item.image}
+                                download
+                                target="_blank"
+                                rel="noreferrer"
+                              >
+                                Download
+                              </a>
+                            </div>
+                          ))}
+                        </div>
+                      </div>
                     ) : section.type === "ui-waterfall" ? (
                       <div className="ui-waterfall">
                         <div className="ui-waterfall-header">
@@ -1456,7 +1499,7 @@ const ProjectDetail = () => {
                   </React.Fragment>
                 );
               })}
-            </section>
+                </section>
               );
             })()}
 
@@ -1543,6 +1586,35 @@ const ProjectDetail = () => {
                         ))}
                       </div>
                     </div>
+                  </motion.div>
+                </motion.div>
+              )}
+            </AnimatePresence>
+
+            <AnimatePresence>
+              {posterOverlay && (
+                <motion.div
+                  className="poster-overlay"
+                  initial={{ opacity: 0 }}
+                  animate={{ opacity: 1 }}
+                  exit={{ opacity: 0 }}
+                  onClick={() => setPosterOverlay(null)}
+                >
+                  <motion.div
+                    className="poster-modal"
+                    initial={{ opacity: 0, y: 20, scale: 0.96 }}
+                    animate={{ opacity: 1, y: 0, scale: 1 }}
+                    exit={{ opacity: 0, y: 16, scale: 0.97 }}
+                    transition={{ duration: 0.3, ease: appleEase }}
+                    onClick={(event) => event.stopPropagation()}
+                  >
+                    <button type="button" className="poster-close" onClick={() => setPosterOverlay(null)}>
+                      ×
+                    </button>
+                    <img className="poster-modal-image" src={posterOverlay.image} alt={posterOverlay.title || "Poster"} />
+                    <a className="poster-modal-download" href={posterOverlay.image} download target="_blank" rel="noreferrer">
+                      Download
+                    </a>
                   </motion.div>
                 </motion.div>
               )}

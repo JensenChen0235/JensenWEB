@@ -83,6 +83,7 @@ export const projectsData = {
     services: ["UX", "WEB Design", "Mobile Design"],
     image: "/1.png",
     launchUrl: "https://www.terabox.com/webmaster/new/plan-overview",
+    inProgressNotice: "This page is still in progress.",
     layout: "terabox",
     sections: [
       {
@@ -292,8 +293,9 @@ export const projectsData = {
   "netease-game-onmyoji": {
     id: "netease-game-onmyoji",
     title: "Netease Game: Onmyoji",
-    color: "#E07B6C",
-    hoverColor: "rgb(98, 20, 34)", // 浅紫色
+    color: "#000000",
+    hoverColor: "#1a1a1a",
+    disableSectionMotion: true,
     description: "An immersive digital journey for Porsche, allowing users to interact with their dream configurations in a beautifully rendered 3D environment.",
     services: ["CONCEPT", "3D ILLUSTRATION", "MOGRAPH", "VIDEO"],
     image: "/2.png",
@@ -315,12 +317,16 @@ export const projectsData = {
   "bilibili-live": {
     id: "bilibili-live",
     title: "Bilibili: Live",
-    color: "#9B8CFF",
-    hoverColor: "rgb(202, 221, 255)", // 浅紫色
+    color: "#000000",
+    hoverColor: "#074dff",
+    disableSectionMotion: true,
     description: "We developed a system in Houdini FX to optimize the high quality 3D assets and built the interactive front-end layer for this AI product launch.",
-    services: ["WEB", "DESIGN", "DEVELOPMENT", "3D"],
+    services: ["WEB", "DESIGN", "DEVELOPMENT", "LIVE STREAMING"],
     image: "/3.png",
-    launchUrl: "#"
+    launchUrl: "#",
+    sections: [
+      { type: "full-bleed", image: "/Bilibili/Bilibili_full.png" }
+    ]
   },
   "ai-graphic-design": {
     id: "ai-graphic-design",
@@ -330,7 +336,9 @@ export const projectsData = {
     description: "Exploring the future of sound with Meta. Interface and 3D integrations for an immersive spatial audio experiment.",
     services: ["WEB", "DESIGN", "DEVELOPMENT", "3D"],
     image: "/4.png",
-    launchUrl: "#"
+    launchUrl: "#",
+    inProgressNotice: "This page is still in progress.",
+    sections: []
   },
   "motion-lab": {
     id: "motion-lab",
@@ -341,6 +349,7 @@ export const projectsData = {
     services: ["WEB", "DESIGN", "DEVELOPMENT", "3D", "WEB3"],
     image: "/5.png",
     launchUrl: "#",
+    inProgressNotice: "This page is still in progress.",
     sections: [
       {
         type: "ui-waterfall",
@@ -527,7 +536,9 @@ export const projectsData = {
     description: "Official digital experience for the Digital Design Days 2024, showcasing forward-thinking design trends.",
     services: ["WEB", "DESIGN", "DEVELOPMENT", "3D"],
     image: "/6.png",
-    launchUrl: "#"
+    launchUrl: "#",
+    inProgressNotice: "This page is still in progress.",
+    sections: []
   },
   "mima-multi-arts-pavilion": {
     id: "mima-multi-arts-pavilion",
@@ -537,17 +548,30 @@ export const projectsData = {
     description: "A whimsical 3D game environment designed to showcase the power of real-time web-based rendering.",
     services: ["WEB", "DESIGN", "DEVELOPMENT", "3D"],
     image: "/7.png",
-    launchUrl: "#"
+    launchUrl: "#",
+    inProgressNotice: "This page is still in progress.",
+    sections: []
   },
   "academic-poster": {
     id: "academic-poster",
     title: "Academic Poster",
-    color: "#E8D9A8",
-    hoverColor: "#rgb(244, 0, 9)", // 浅紫色
+    color: "#2b2b2b",
+    hoverColor: "#3a3a3a",
     description: "An AR-powered campaign for a premium beverage brand, focusing on interactive product visualization.",
     services: ["AR", "DEVELOPMENT", "3D"],
     image: "/8.png",
-    launchUrl: "#"
+    launchUrl: "#",
+    sections: [
+      {
+        type: "poster-wall",
+        items: [
+          { image: "/Academic%20Poster/City2Surf.png", title: "City2Surf" },
+          { image: "/Academic%20Poster/City.png", title: "City" },
+          { image: "/Academic%20Poster/FNC.png", title: "FNC" },
+          { image: "/Academic%20Poster/Netflix.png", title: "Netflix" }
+        ]
+      }
+    ]
   }
 };
 

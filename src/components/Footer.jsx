@@ -18,6 +18,7 @@ const Footer = ({ activeColor = "#0047ff" }) => {
   const navigate = useNavigate();
   const [jobEmail, setJobEmail] = useState('');
   const [jobStatus, setJobStatus] = useState('idle'); // idle | sending | success | error
+  const [isWechatOpen, setIsWechatOpen] = useState(false);
 
   const lusionEase = [0.25, 1, 0.5, 1];
   
@@ -205,7 +206,7 @@ const Footer = ({ activeColor = "#0047ff" }) => {
   );
 
   return (
-    <footer className="lusion-footer">
+    <footer className="lusion-footer" id="contact-footer">
       <div ref={whiteSectionRef} className="footer-white-zone">
         <div className="footer-grid">
           <div className="footer-col address-col">
@@ -218,17 +219,36 @@ const Footer = ({ activeColor = "#0047ff" }) => {
           <div className="footer-col mid-links-col">
             <div className="link-group">
               <ul className="footer-link-list">
-                {['Twitter / X', 'Instagram', 'Linkedin'].map((item) => (
-                  <Mask key={item} className="social-mask">
+                {[
+                  { label: 'Wechat', type: 'wechat' },
+                  { label: 'Instagram', href: 'https://www.instagram.com/jensenchenwithu/' },
+                  { label: 'Linkedin', href: 'https://www.linkedin.com/in/jensen-chen-5794a3306/' }
+                ].map((item) => (
+                  <Mask key={item.label} className="social-mask">
                     <motion.li initial="rest" whileHover="hover" animate="rest">
-                      <a href={`#${item}`} className="social-interactive-link">
-                        <motion.span className="link-arrow-icon" variants={socialArrowVariants} transition={{ duration: 0.4, ease: lusionEase }}>
-                          <Arrow direction='up-right' />
-                        </motion.span>
-                        <motion.span className="link-text" variants={socialLinkVariants} transition={{ duration: 0.4, ease: lusionEase }}>
-                          {item}
-                        </motion.span>
-                      </a>
+                      {item.type === 'wechat' ? (
+                        <button
+                          type="button"
+                          className="social-interactive-link social-btn"
+                          onClick={() => setIsWechatOpen(true)}
+                        >
+                          <motion.span className="link-arrow-icon" variants={socialArrowVariants} transition={{ duration: 0.4, ease: lusionEase }}>
+                            <Arrow direction='up-right' />
+                          </motion.span>
+                          <motion.span className="link-text" variants={socialLinkVariants} transition={{ duration: 0.4, ease: lusionEase }}>
+                            {item.label}
+                          </motion.span>
+                        </button>
+                      ) : (
+                        <a href={item.href} className="social-interactive-link" target="_blank" rel="noreferrer">
+                          <motion.span className="link-arrow-icon" variants={socialArrowVariants} transition={{ duration: 0.4, ease: lusionEase }}>
+                            <Arrow direction='up-right' />
+                          </motion.span>
+                          <motion.span className="link-text" variants={socialLinkVariants} transition={{ duration: 0.4, ease: lusionEase }}>
+                            {item.label}
+                          </motion.span>
+                        </a>
+                      )}
                     </motion.li>
                   </Mask>
                 ))}
@@ -237,14 +257,14 @@ const Footer = ({ activeColor = "#0047ff" }) => {
             
             <div className="link-group contact-items">
               {[
-                { label: 'Email', email: 'jensen0235@gmail.com' },
-                { label: 'Mobile', email: '+61 411515857' }
+                { label: 'Email', value: 'jensen0235@gmail.com', href: 'mailto:jensen0235@gmail.com' },
+                { label: 'Mobile', value: '+61 411515857', href: 'tel:+61411515857' }
               ].map((item) => (
                 <div className="contact-item" key={item.label}>
                   <Mask><span className="col-label">{item.label}</span></Mask>
                   <Mask>
-                    <motion.a href={`mailto:${item.email}`} className="email-interactive-link" initial="rest" whileHover="hover" animate="rest">
-                      {item.email}
+                    <motion.a href={item.href} className="email-interactive-link" initial="rest" whileHover="hover" animate="rest">
+                      {item.value}
                       <motion.div className="email-underline" variants={underlineVariants} transition={{ duration: 0.5, ease: lusionEase }} />
                     </motion.a>
                   </Mask>
@@ -293,6 +313,16 @@ const Footer = ({ activeColor = "#0047ff" }) => {
           </div>
         </div>
       </div>
+
+      {isWechatOpen && (
+        <div className="wechat-modal-overlay" onClick={() => setIsWechatOpen(false)}>
+          <div className="wechat-modal" onClick={(e) => e.stopPropagation()}>
+            <button className="wechat-close" type="button" onClick={() => setIsWechatOpen(false)}>×</button>
+            <div className="wechat-title">Wechat QR</div>
+            <img className="wechat-qr" src="/wechat-qr.png" alt="Wechat QR code" />
+          </div>
+        </div>
+      )}
 
       {/* --- 核心修改：黑色背景区域布局还原 --- */}
       <section

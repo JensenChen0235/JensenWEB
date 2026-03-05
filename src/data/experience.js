@@ -4,44 +4,41 @@ export const experiences = [
     type: "WORK",
     title: "Product Designer",
     company: "Baidu, Inc.",
-    period: "07.2023 - 12.2023",
+    period: "07/2023 - 12/2023",
     points: [
-      "Designed cross-platform UX for TeraBox (AI-driven cloud storage), delivering 14+ design features across global versions 3.10-3.18.",
-      "Collaborated cross-functionally with PMs and engineers to refine user flows, improving feedback submission efficiency by 30%.",
-      "Conducted cross-cultural research based on Hofstede’s dimensions to inform a scalable design system for 64+ countries and 15 languages."
+      "Designed cross-platform user experience for TeraBox (AI-Driven cloud storage product), delivering 14 design features across global releases of version 3.10–3.18 under tight timelines.",
+      "Collaborated cross-functionally with PMs, engineers, and researchers during entire product development process to refine user flows through data-driven iteration, improving feedback submission efficiency by 30%.",
+      "Conducted cross-cultural user research based on Hofstede’s cultural dimensions to inform a globally scalable design system adopted in 64+ countries and 15 languages."
     ]
   },
   {
     type: "WORK",
     title: "UX Designer Intern",
     company: "Bilibili",
-    period: "08.2022 - 11.2022",
+    period: "08/2022 - 11/2022",
     points: [
-      "Developed the UI and icon system for 'Artery Gear: Fusion' (Global), ensuring visual consistency across CN, JP, and HK/MO markets.",
-      "Defined design specs and delivered interactive Figma prototypes, streamlining integration workflows using Unity engine.",
-      "Ensured pixel-perfect implementation through close collaboration with game planners and technical artists."
+      "Designed a bulk-send gifting flow of live watching (quantity presets + custom input), raising Revenue-per-Order (low-cost gifts) by 4.5% and Avg qty per order by 3.3%, with watch time, crash rate, and payment success stable.",
+      "Drove A/B testing with UXR/Data team; defined success metrics and instrumentation, lifting bulk-order share by 5.2% while holding guardrails steady."
     ]
   },
   {
     type: "WORK",
     title: "UX Designer Intern",
-    company: "NetEase Games",
-    period: "03.2022 - 06.2022",
+    company: "Netease Game",
+    period: "03/2022 - 06/2022",
     points: [
-      "Optimized interaction flows for high-traffic in-game events, introducing modular UI components built with Cocos Creator.",
-      "Partnered with the G37-UX team to establish a robust Figma-based design system and component library.",
-      "Awarded a final A+ performance rating during the internship assessment for exceptional design delivery."
+      "Designed and optimized interaction flows for multiple in-game events, introducing modular UI components using Cocos that enhanced user experience and reduced design iteration time.",
+      "Collaborated with the G37-UX team to establish a Figma-based design system and component library, improving design consistency received a final A+ performance rating in the internship assessment."
     ]
   },
   {
     type: "WORK",
     title: "Founder",
     company: "Meta Zero",
-    period: "07.2020 - 08.2021",
+    period: "07/2020 - 08/2021",
     points: [
-      "Spearheaded the design and launch of a campus social trading platform for university second-hand exchanges.",
-      "Reached 6,200+ total users with 2,100+ DAU, securing CNY 121K in seed funding from the university innovation program.",
-      "Recognized with the 'Outstanding Project' award in the Guangdong Student Innovation Competition."
+      "Designed and launched a campus social trading platform supporting online and offline second-hand exchanges for university students.",
+      "Achieved 6,200+ total users and 2,100+ DAU, securing CNY 121K seed funding from the university innovation program, and awarded Outstanding Project recognition in the Guangdong Student Innovation Competition."
     ]
   }
 ];

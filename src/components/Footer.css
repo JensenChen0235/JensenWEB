@@ -67,6 +67,20 @@
   margin-bottom: 12px;
   font-weight: 500;
 }
+.social-btn {
+  background: none;
+  border: none;
+  padding: 0;
+  cursor: pointer;
+  font: inherit;
+  color: inherit;
+  -webkit-appearance: none;
+  appearance: none;
+}
+.social-btn.social-interactive-link {
+  font-size: 18px;
+  font-weight: 500;
+}
 
 .link-arrow-icon {
   width: 20px; height: 20px; display: flex; align-items: center; justify-content: center; margin-right: 8px; flex-shrink: 0;
@@ -141,6 +155,49 @@
   padding-top: 40px; 
   border-top: 1px solid #eeeeee; 
   position: relative; 
+}
+
+.wechat-modal-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.45);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 9999;
+}
+.wechat-modal {
+  position: relative;
+  background: #ffffff;
+  padding: 32px 32px 36px;
+  border-radius: 20px;
+  width: min(440px, calc(100% - 40px));
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  box-shadow: 0 24px 80px rgba(0, 0, 0, 0.25);
+}
+
+.wechat-qr {
+  width: 100%;
+  aspect-ratio: 1 / 1;
+  object-fit: cover;
+  border-radius: 12px;
+  background: #f0f0f0;
+}
+.wechat-close {
+  position: absolute;
+  top: 10px;
+  right: 12px;
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  border: none;
+  background: #f1f1f1;
+  color: #111;
+  font-size: 20px;
+  line-height: 1;
+  cursor: pointer;
 }
 
 .back-to-top-wrap { position: absolute; right: 0; top: -27px; }

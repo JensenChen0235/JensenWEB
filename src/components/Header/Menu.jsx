@@ -74,7 +74,7 @@ const Menu = ({ isOpen, onClose }) => {
   const [menuStatus, setMenuStatus] = useState("idle"); // idle | sending | success | error
   const menuItems = [
     { label: "HOME", path: "/" },
-    { label: "ABOUT US", path: "/about" },
+    { label: "ABOUT ME", path: "/about" },
     { label: "PROJECTS", path: "/projects" },
     { label: "CONTACT", path: "/contact" },
   ];

@@ -25,6 +25,15 @@ const TalkButton = ({ activeColor = "#0047ff" }) => {
         initial="rest"
         whileHover="hover"
         animate="rest"
+        onClick={() => {
+          const target = document.getElementById("contact-footer");
+          if (!target) return;
+          if (window.lenis && typeof window.lenis.scrollTo === "function") {
+            window.lenis.scrollTo(target, { offset: 0 });
+          } else {
+            target.scrollIntoView({ behavior: "smooth", block: "start" });
+          }
+        }}
       >
         {/* 背景层 */}
         <motion.div

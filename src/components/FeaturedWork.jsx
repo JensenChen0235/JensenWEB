@@ -80,8 +80,7 @@ const FeaturedWork = () => {
           </div>
         </div>
         <p className="section-subtitle">
-          A SELECTION OF OUR MOST PASSIONATELY CRAFTED WORKS WITH FORWARD-THINKING
-          CLIENTS AND FRIENDS OVER THE YEARS.
+          A selection of projects crafted through curiosity, experimentation, and design thinking.
         </p>
       </div>
 
