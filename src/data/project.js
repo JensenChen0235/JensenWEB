@@ -369,51 +369,6 @@ export const projectsData = {
             meta: { type: "Navigation", system: "Motion Lab", spec: "8s orbit loop" }
           },
           {
-            id: "pulse-radar",
-            label: "STATUS",
-            title: "Pulse Radar",
-            description: "Breathing status pulses for real-time feedback moments.",
-            longDescription: "A soft, rhythmic pulse that communicates live system status without demanding attention.",
-            variant: "pulse",
-            accent: "#38BDF8",
-            accentSoft: "rgba(56, 189, 248, 0.25)",
-            meta: { type: "Status", system: "Motion Lab", spec: "2.8s pulse loop" }
-          },
-          {
-            id: "waveform-stream",
-            label: "GESTURE",
-            title: "Swipe Up",
-            description: "A minimal swipe cue for upward navigation.",
-            longDescription: "A hand-and-arrow gesture that rises in a smooth arc to signal an upward swipe.",
-            variant: "lottie",
-            lottieData: swipeUpLottie,
-            accent: "#34D399",
-            accentSoft: "rgba(52, 211, 153, 0.25)",
-            meta: { type: "Data", system: "Motion Lab", spec: "1.4s wave loop" }
-          },
-          {
-            id: "stacked-alerts",
-            label: "ALERT",
-            title: "Stacked Alerts",
-            description: "Layered alert cards create a calm cadence.",
-            longDescription: "A stacking pattern that adds depth to notification trays and supports quick prioritization.",
-            variant: "stack",
-            accent: "#F97316",
-            accentSoft: "rgba(249, 115, 22, 0.2)",
-            meta: { type: "Alert", system: "Motion Lab", spec: "3.6s stack loop" }
-          },
-          {
-            id: "scan-list",
-            label: "SCAN",
-            title: "Scan List",
-            description: "A scanning line sweeps rows to focus attention.",
-            longDescription: "A diagnostic scan motion for lists and logs, guiding the eye through structured content.",
-            variant: "scan",
-            accent: "#F43F5E",
-            accentSoft: "rgba(244, 63, 94, 0.2)",
-            meta: { type: "Utility", system: "Motion Lab", spec: "2.4s scan loop" }
-          },
-          {
             id: "ticker-strip",
             label: "FEED",
             title: "Emoji",
@@ -424,50 +379,6 @@ export const projectsData = {
             accent: "#8B5CF6",
             accentSoft: "rgba(139, 92, 246, 0.2)",
             meta: { type: "Feed", system: "Motion Lab", spec: "6s ticker loop" }
-          },
-          {
-            id: "focus-grid",
-            label: "GRID",
-            title: "Focus Grid",
-            description: "A highlight jumps across the grid to invite exploration.",
-            longDescription: "A roaming focus tile animates across a grid to signal active modules or recommendations.",
-            variant: "grid",
-            accent: "#14B8A6",
-            accentSoft: "rgba(20, 184, 166, 0.2)",
-            meta: { type: "Discovery", system: "Motion Lab", spec: "3s grid loop" }
-          },
-          {
-            id: "loop-progress",
-            label: "PROGRESS",
-            title: "Loop Progress",
-            description: "Rotating progress feedback for async moments.",
-            longDescription: "A kinetic progress ring that pairs with a pulsing bar for background tasks.",
-            variant: "progress",
-            accent: "#111827",
-            accentSoft: "rgba(17, 24, 39, 0.18)",
-            meta: { type: "Progress", system: "Motion Lab", spec: "6s spin loop" }
-          },
-          {
-            id: "hover-surface",
-            label: "HOVER",
-            title: "Hover Surface",
-            description: "Soft floating cards signal hover depth.",
-            longDescription: "A gentle card stack that lifts on focus, designed for editorial and content grids.",
-            variant: "stack",
-            accent: "#0EA5E9",
-            accentSoft: "rgba(14, 165, 233, 0.2)",
-            meta: { type: "Surface", system: "Motion Lab", spec: "3.6s float loop" }
-          },
-          {
-            id: "aurora-toggle",
-            label: "CONTROL",
-            title: "Aurora Toggle",
-            description: "A reactive pulse that hints at state change.",
-            longDescription: "An ambient glow that transitions between modes while staying calm and refined.",
-            variant: "pulse",
-            accent: "#22D3EE",
-            accentSoft: "rgba(34, 211, 238, 0.22)",
-            meta: { type: "Control", system: "Motion Lab", spec: "2.8s pulse loop" }
           },
           {
             id: "magnetic-tags",
@@ -481,48 +392,16 @@ export const projectsData = {
             meta: { type: "Depth", system: "Motion Lab", spec: "6s 3D loop" }
           },
           {
-            id: "depth-cards",
-            label: "DEPTH",
-            title: "Depth Cards",
-            description: "Stacked depth for layered content views.",
-            longDescription: "A depth-focused stack that brings editorial blocks forward in a soft rhythm.",
-            variant: "stack",
-            accent: "#FBBF24",
-            accentSoft: "rgba(251, 191, 36, 0.22)",
-            meta: { type: "Layout", system: "Motion Lab", spec: "3.6s stack loop" }
-          },
-          {
-            id: "signal-orbit",
-            label: "SIGNAL",
-            title: "Signal Orbit",
-            description: "Signals circle the core for system awareness.",
-            longDescription: "Orbiting signal points create a constant sense of uptime and availability.",
-            variant: "orbit",
-            accent: "#60A5FA",
-            accentSoft: "rgba(96, 165, 250, 0.2)",
-            meta: { type: "System", system: "Motion Lab", spec: "8s orbit loop" }
-          },
-          {
-            id: "rhythm-bars",
-            label: "MUSIC",
-            title: "Rhythm Bars",
-            description: "Audio-like bars keep beat and energy.",
-            longDescription: "A waveform-inspired bar set that reinforces tempo, ideal for media players.",
-            variant: "wave",
-            accent: "#A78BFA",
-            accentSoft: "rgba(167, 139, 250, 0.2)",
-            meta: { type: "Media", system: "Motion Lab", spec: "1.4s wave loop" }
-          },
-          {
-            id: "focus-sweep",
-            label: "FOCUS",
-            title: "Focus Sweep",
-            description: "Scanning light sweeps key rows.",
-            longDescription: "A scanning highlight that guides attention across structured lists and tables.",
-            variant: "scan",
-            accent: "#FB7185",
-            accentSoft: "rgba(251, 113, 133, 0.2)",
-            meta: { type: "Focus", system: "Motion Lab", spec: "2.4s scan loop" }
+            id: "waveform-stream",
+            label: "GESTURE",
+            title: "Swipe Up",
+            description: "A minimal swipe cue for upward navigation.",
+            longDescription: "A hand-and-arrow gesture that rises in a smooth arc to signal an upward swipe.",
+            variant: "lottie",
+            lottieData: swipeUpLottie,
+            accent: "#34D399",
+            accentSoft: "rgba(52, 211, 153, 0.25)",
+            meta: { type: "Data", system: "Motion Lab", spec: "1.4s wave loop" }
           }
         ]
       }

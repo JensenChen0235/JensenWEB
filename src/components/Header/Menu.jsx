@@ -76,11 +76,17 @@ const Menu = ({ isOpen, onClose }) => {
     { label: "HOME", path: "/" },
     { label: "ABOUT ME", path: "/about" },
     { label: "PROJECTS", path: "/projects" },
-    { label: "CONTACT", path: "/contact" },
+    { label: "CONTACT", path: "/#contact-footer" },
   ];
 
   const handleNavigate = (path) => {
     navigate(path);
+    if (path.includes("#contact-footer")) {
+      window.setTimeout(() => {
+        const target = document.getElementById("contact-footer");
+        if (target) target.scrollIntoView({ behavior: "smooth", block: "start" });
+      }, 0);
+    }
     onClose();
   };
 
