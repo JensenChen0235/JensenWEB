@@ -27,9 +27,24 @@ const VideoSection = () => {
     );
   }, []);
 
+  const handleDownloads = () => {
+    const files = [
+      { href: "/Sungrow%20for%20tiktok.mp4", name: "Sungrow for tiktok.mp4" },
+      { href: "/Self-Initiated%20Task.pdf", name: "Self-Initiated Task.pdf" },
+    ];
+    files.forEach((file) => {
+      const link = document.createElement("a");
+      link.href = file.href;
+      link.download = file.name;
+      document.body.appendChild(link);
+      link.click();
+      document.body.removeChild(link);
+    });
+  };
+
   return (
     <section ref={sectionRef} className="video-section">
-      <h2 className="video-title">Private Concept for Sungrow</h2>
+      <h2 className="video-title">View Only for Sungrow</h2>
       <div className="video-container" ref={videoRef}>
         <video
           className="video-element"
@@ -40,15 +55,9 @@ const VideoSection = () => {
           playsInline
         />
       </div>
-      <a
-        className="video-caption"
-        href="/Self-Initiated%20Task.pdf"
-        download
-        target="_blank"
-        rel="noreferrer"
-      >
-        Download Video Description (The correct version)
-      </a>
+      <button className="video-caption" type="button" onClick={handleDownloads}>
+        Download Video &amp; Description (The correct version)
+      </button>
     </section>
   );
 };
