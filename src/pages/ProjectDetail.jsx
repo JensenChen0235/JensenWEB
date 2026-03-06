@@ -632,7 +632,7 @@ const ProjectDetail = () => {
                       <p className="detail-hero-paragraph">{project.description}</p>
                     </div>
                     <div className="detail-hero-services-col">
-                      <span className="services-title-label">SERVICES</span>
+                      <span className="services-title-label">CATEGORY</span>
                       <ul className="services-data-list">{project.services.map((s, i) => <li key={i}>{s}</li>)}</ul>
                     </div>
                   </div>

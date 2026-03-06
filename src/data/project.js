@@ -296,8 +296,8 @@ export const projectsData = {
     color: "#000000",
     hoverColor: "#1a1a1a",
     disableSectionMotion: true,
-    description: "An immersive digital journey for Porsche, allowing users to interact with their dream configurations in a beautifully rendered 3D environment.",
-    services: ["CONCEPT", "3D ILLUSTRATION", "MOGRAPH", "VIDEO"],
+    description: "Netease Game.",
+    services: ["Game Design", "User Center design", "UI Design"],
     image: "/2.png",
     launchUrl: "#",
     sections: [
@@ -320,8 +320,8 @@ export const projectsData = {
     color: "#000000",
     hoverColor: "#074dff",
     disableSectionMotion: true,
-    description: "We developed a system in Houdini FX to optimize the high quality 3D assets and built the interactive front-end layer for this AI product launch.",
-    services: ["WEB", "DESIGN", "DEVELOPMENT", "LIVE STREAMING"],
+    description: "Bilibili.",
+    services: ["WEB", "DESIGN", "Commercial Design", "LIVE STREAMING"],
     image: "/3.png",
     launchUrl: "#",
     sections: [
@@ -333,8 +333,8 @@ export const projectsData = {
     title: "AI + Design",
     color: "#6FCFA6",
     hoverColor: "rgb(119, 49, 233)", // 浅紫色
-    description: "Exploring the future of sound with Meta. Interface and 3D integrations for an immersive spatial audio experiment.",
-    services: ["WEB", "DESIGN", "DEVELOPMENT", "3D"],
+    description: "Exploring the future of AI-generated design.",
+    services: ["Graphic Design", "AI-driven Design", "Concept", "Imagination"],
     image: "/4.png",
     launchUrl: "#",
     inProgressNotice: "This page is still in progress.",
@@ -346,7 +346,7 @@ export const projectsData = {
     color: "#4F6AFF",
     hoverColor: "rgb(255, 114, 37)", // 浅紫色
     description: "An experimental motion lab for UI systems, exploring kinetic patterns, interaction physics, and expressive component behaviors.",
-    services: ["WEB", "DESIGN", "DEVELOPMENT", "3D", "WEB3"],
+    services: ["Motion", "Micro-Interactions","Coding"],
     image: "/5.png",
     launchUrl: "#",
     inProgressNotice: "This page is still in progress.",
@@ -354,7 +354,7 @@ export const projectsData = {
       {
         type: "ui-waterfall",
         title: "Motion Components",
-        description: "A three-column motion library of reusable UI interactions, each card looping a focused animation study.",
+        description: "A personal library of reusable UI interactions, each card looping a focused animation study.",
         items: [
           {
             id: "motion-dock",
@@ -533,8 +533,8 @@ export const projectsData = {
     title: "Sound Design",
     color: "#251C45",
     hoverColor: "#4FF0E1", // 浅紫色
-    description: "Official digital experience for the Digital Design Days 2024, showcasing forward-thinking design trends.",
-    services: ["WEB", "DESIGN", "DEVELOPMENT", "3D"],
+    description: "Audio and Acoustic Design for Spatial Experiences. A collection of sound experiments exploring spatial audio, acoustic design, and sonic interaction for immersive environments.",
+    services: ["Audio", "Spatial Audio", "Acoustic Design"],
     image: "/6.png",
     launchUrl: "#",
     inProgressNotice: "This page is still in progress.",
@@ -545,8 +545,8 @@ export const projectsData = {
     title: "Mima: Multi-Arts Pavilion",
     color: "#FF9A85",
     hoverColor: "rgb(5, 145, 246)", // 浅紫色
-    description: "A whimsical 3D game environment designed to showcase the power of real-time web-based rendering.",
-    services: ["WEB", "DESIGN", "DEVELOPMENT", "3D"],
+    description: "Public installation and interactive experience design for Mima: Multi-Arts Pavilion, a cultural space dedicated to showcasing multidisciplinary art forms. The project focuses on creating an engaging digital layer that complements the physical exhibits, enhancing visitor interaction and immersion.",
+    services: ["HCI", "Public Art", "3D"],
     image: "/7.png",
     launchUrl: "#",
     inProgressNotice: "This page is still in progress.",
@@ -557,8 +557,8 @@ export const projectsData = {
     title: "Academic Poster",
     color: "#2b2b2b",
     hoverColor: "#3a3a3a",
-    description: "An AR-powered campaign for a premium beverage brand, focusing on interactive product visualization.",
-    services: ["AR", "DEVELOPMENT", "3D"],
+    description: "Daily Poster designed for Academic.",
+    services: ["Poster", "Layout design", "Academic"],
     image: "/8.png",
     launchUrl: "#",
     sections: [
