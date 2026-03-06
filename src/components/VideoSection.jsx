@@ -44,7 +44,7 @@ const VideoSection = () => {
 
   return (
     <section ref={sectionRef} className="video-section">
-      <h2 className="video-title">View Only for Sungrow</h2>
+      <h2 className="video-title">Private Concept for Sungrow</h2>
       <div className="video-container" ref={videoRef}>
         <video
           className="video-element"
