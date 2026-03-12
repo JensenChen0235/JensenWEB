@@ -535,9 +535,9 @@ const ProjectDetail = () => {
             style={{ backgroundColor: project.color }}
           />
         ) : (
-          <motion.div
+            <motion.div
             key="content"
-            className="project-detail-page"
+            className={`project-detail-page ${project.id === "sound-design" ? "is-sungrow" : ""}`}
             style={{
               "--project-theme": project.color,
               "--project-text": project.textColor || "#ffffff",
@@ -613,37 +613,70 @@ const ProjectDetail = () => {
 
             <Menu isOpen={isMenuOpen} onClose={() => setIsMenuOpen(false)} />
 
-            <section className="detail-hero-fold">
-              <div className="detail-hero-layout">
-                <div className="detail-hero-info">
-                  {project.inProgressNotice && (
-                    <motion.div
-                      className="detail-hero-notice"
-                      initial={{ y: 30, opacity: 0 }}
-                      animate={{ y: 0, opacity: 1 }}
-                      transition={{ duration: 0.9, ease: lusionEase, delay: 0.1 }}
-                    >
-                      {project.inProgressNotice}
-                    </motion.div>
-                  )}
-                  <motion.h1 className="detail-hero-big-title" initial={{ y: 40, opacity: 0 }} animate={{ y: 0, opacity: 1 }} transition={{ duration: 1, ease: lusionEase, delay: 0.2 }}>{project.title}</motion.h1>
-                  <div className="detail-hero-meta-row">
-                    <div className="detail-hero-desc-col">
-                      <p className="detail-hero-paragraph">{project.description}</p>
+            <section className={`detail-hero-fold ${project.id === "sound-design" ? "is-sungrow" : ""}`}>
+              {project.id === "sound-design" ? (
+                <div className="sungrow-hero">
+                  <div className="sungrow-hero-top">
+                    <div className="sungrow-hero-block">
+                      <span className="sungrow-hero-label">Design:</span>
+                      <span className="sungrow-hero-value">Jingcheng (Jensen) Chen</span>
                     </div>
-                    <div className="detail-hero-services-col">
-                      <span className="services-title-label">CATEGORY</span>
-                      <ul className="services-data-list">{project.services.map((s, i) => <li key={i}>{s}</li>)}</ul>
+                    <div className="sungrow-hero-block">
+                      <span className="sungrow-hero-label">Project:</span>
+                      <span className="sungrow-hero-value">Sungrow Marketing Visual Design</span>
+                    </div>
+                  </div>
+
+                  <div className="sungrow-hero-line" aria-hidden="true">
+                    <img src="/Sungrow/sungrowline.svg" alt="" />
+                  </div>
+
+                  <div className="sungrow-hero-bottom">
+                    <img className="sungrow-hero-logo" src="/Sungrow/Sungrowlogo.svg" alt="Sungrow logo" />
+                    <div className="sungrow-hero-meta">
+                      <div className="sungrow-hero-block">
+                        <span className="sungrow-hero-label">Deliverables:</span>
+                        <span className="sungrow-hero-value">Poster, Brochure, Video.</span>
+                      </div>
+                      <div className="sungrow-hero-block">
+                        <span className="sungrow-hero-label">Date:</span>
+                        <span className="sungrow-hero-value">March 2026</span>
+                      </div>
                     </div>
                   </div>
                 </div>
-                <div className="detail-hero-visual">
-                  <motion.div className="detail-hero-media-box" initial={{ scale: 0.9, opacity: 0 }} animate={{ scale: 1, opacity: 1 }} transition={{ duration: 1.2, ease: lusionEase, delay: 0.4 }}>
-                    <img src={project.image} alt={project.title} className="detail-hero-cover-img" />
-                    <div className="detail-hero-play-button"><div className="play-triangle-svg">▶</div></div>
-                  </motion.div>
+              ) : (
+                <div className="detail-hero-layout">
+                  <div className="detail-hero-info">
+                    {project.inProgressNotice && (
+                      <motion.div
+                        className="detail-hero-notice"
+                        initial={{ y: 30, opacity: 0 }}
+                        animate={{ y: 0, opacity: 1 }}
+                        transition={{ duration: 0.9, ease: lusionEase, delay: 0.1 }}
+                      >
+                        {project.inProgressNotice}
+                      </motion.div>
+                    )}
+                    <motion.h1 className="detail-hero-big-title" initial={{ y: 40, opacity: 0 }} animate={{ y: 0, opacity: 1 }} transition={{ duration: 1, ease: lusionEase, delay: 0.2 }}>{project.title}</motion.h1>
+                    <div className="detail-hero-meta-row">
+                      <div className="detail-hero-desc-col">
+                        <p className="detail-hero-paragraph">{project.description}</p>
+                      </div>
+                      <div className="detail-hero-services-col">
+                        <span className="services-title-label">CATEGORY</span>
+                        <ul className="services-data-list">{project.services.map((s, i) => <li key={i}>{s}</li>)}</ul>
+                      </div>
+                    </div>
+                  </div>
+                  <div className="detail-hero-visual">
+                    <motion.div className="detail-hero-media-box" initial={{ scale: 0.9, opacity: 0 }} animate={{ scale: 1, opacity: 1 }} transition={{ duration: 1.2, ease: lusionEase, delay: 0.4 }}>
+                      <img src={project.image} alt={project.title} className="detail-hero-cover-img" />
+                      <div className="detail-hero-play-button"><div className="play-triangle-svg">▶</div></div>
+                    </motion.div>
+                  </div>
                 </div>
-              </div>
+              )}
             </section>
 
             {sections.length > 0 && (() => {
@@ -656,13 +689,147 @@ const ProjectDetail = () => {
                 return (
                   <React.Fragment key={idx}>
                     <motion.div
-                      className={`detail-feature-row ${isTbSection ? "is-terabox" : ""} ${section.type === "prototype" ? "is-prototype" : ""} ${section.type === "dribbble" ? "is-dribbble" : ""} ${section.type === "accordion" ? "is-accordion" : ""} ${section.type === "showcase" ? "is-showcase" : ""} ${section.type === "ui-waterfall" ? "is-ui-waterfall" : ""} ${section.type === "poster-wall" ? "is-poster-wall" : ""} ${section.type === "full-bleed" ? "is-full-bleed" : ""} ${section.type === "dribbble" && idx % 2 === 1 ? "is-dribbble-alt" : ""}`}
+                      className={`detail-feature-row ${isTbSection ? "is-terabox" : ""} ${section.type === "prototype" ? "is-prototype" : ""} ${section.type === "dribbble" ? "is-dribbble" : ""} ${section.type === "accordion" ? "is-accordion" : ""} ${section.type === "showcase" ? "is-showcase" : ""} ${section.type === "ui-waterfall" ? "is-ui-waterfall" : ""} ${section.type === "poster-wall" ? "is-poster-wall" : ""} ${section.type === "full-bleed" ? "is-full-bleed" : ""} ${section.type === "sungrow-overview" ? "is-sungrow-overview" : ""} ${section.type === "sungrow-poster" ? "is-sungrow-poster" : ""} ${section.type === "sungrow-compositing" ? "is-sungrow-compositing" : ""} ${section.type === "sungrow-hero-image" ? "is-sungrow-hero-image" : ""} ${section.type === "sungrow-brochure" ? "is-sungrow-brochure" : ""} ${section.type === "sungrow-duo" ? "is-sungrow-duo" : ""} ${section.type === "sungrow-posters" ? "is-sungrow-posters" : ""} ${section.type === "sungrow-full" ? "is-sungrow-full" : ""} ${section.type === "sungrow-video" ? "is-sungrow-video" : ""} ${section.type === "dribbble" && idx % 2 === 1 ? "is-dribbble-alt" : ""}`}
                       initial={isTbSection || disableSectionMotion ? false : { y: 50, opacity: 0 }}
                       whileInView={isTbSection || disableSectionMotion ? undefined : { y: 0, opacity: 1 }}
                       viewport={isTbSection || disableSectionMotion ? undefined : { once: true, margin: "-100px" }}
                       transition={isTbSection || disableSectionMotion ? undefined : { duration: 1, ease: lusionEase }}
                     >
-                    {section.type === "tb-media" ? (
+                    {section.type === "sungrow-overview" ? (
+                      <div className="sungrow-overview">
+                        <h2 className="sungrow-overview-title">{section.title}</h2>
+                        <div className="sungrow-overview-divider" aria-hidden="true" />
+
+                        <div className="sungrow-overview-grid">
+                          <div className="sungrow-overview-kicker">{section.kicker}</div>
+                          <div className="sungrow-overview-body">
+                            <h3 className="sungrow-overview-heading">{section.heading}</h3>
+                            <div className="sungrow-overview-text">
+                              {(section.body || []).map((paragraph, pIndex) => (
+                                <p key={pIndex}>{paragraph}</p>
+                              ))}
+                            </div>
+                          </div>
+                        </div>
+
+                        <div className="sungrow-overview-divider" aria-hidden="true" />
+
+                        <div className="sungrow-overview-grid">
+                          <div className="sungrow-overview-kicker">Font: {section.fontFamily}</div>
+                          <div className="sungrow-overview-fonts">
+                            {(section.fontWeights || []).map((weight) => (
+                              <span key={weight} className={`sungrow-overview-font ${weight.toLowerCase()}`}>{weight}</span>
+                            ))}
+                          </div>
+                        </div>
+
+                        <div className="sungrow-overview-color">
+                          <div className="sungrow-overview-kicker">Color System</div>
+                          <div className="sungrow-overview-swatches">
+                            {(section.colorSystem || []).map((color, cIndex) => (
+                              <div key={cIndex} className="sungrow-overview-swatch">
+                                <span className="sungrow-overview-swatch-block" style={{ backgroundColor: color.value }} />
+                                <span className="sungrow-overview-swatch-label">{color.name}</span>
+                              </div>
+                            ))}
+                          </div>
+                        </div>
+                      </div>
+                    ) : section.type === "sungrow-poster" ? (
+                      <div className="sungrow-poster">
+                        <div className="sungrow-poster-media">
+                          <img src={section.image} alt={section.title || "Sungrow poster"} />
+                        </div>
+                        <div className="sungrow-poster-overlay">
+                          <h3 className="sungrow-poster-title">{section.title}</h3>
+                          <span className="sungrow-poster-location">{section.location}</span>
+                        </div>
+                        <div className="sungrow-poster-footer">
+                          <span>{section.footerLeft}</span>
+                          <span>{section.footerCenter}</span>
+                          <span>{section.footerRight}</span>
+                        </div>
+                      </div>
+                    ) : section.type === "sungrow-compositing" ? (
+                      <div className="sungrow-compositing">
+                        <h2 className="sungrow-compositing-title">{section.title}</h2>
+                        <div className="sungrow-compositing-divider" aria-hidden="true" />
+                        <div className="sungrow-compositing-grid">
+                          {(section.items || []).map((item, itemIndex) => (
+                            <div key={itemIndex} className="sungrow-compositing-item">
+                              <div className="sungrow-compositing-media">
+                                <img src={item.image} alt={item.label || `composite-${itemIndex + 1}`} />
+                              </div>
+                              <div className="sungrow-compositing-label">{item.label}</div>
+                              <div className="sungrow-compositing-arrow" aria-hidden="true">▾</div>
+                            </div>
+                          ))}
+                        </div>
+                      </div>
+                    ) : section.type === "sungrow-hero-image" ? (
+                      <div className="sungrow-hero-image">
+                        <img src={section.image} alt={section.title || "Sungrow visual"} />
+                        <div className="sungrow-hero-image-top">
+                          <span>{section.topLeft}</span>
+                          <span>{section.topCenter}</span>
+                          <span>{section.topRight}</span>
+                        </div>
+                        <div className="sungrow-hero-image-bottom">
+                          <h3>{section.title}</h3>
+                          <p>{section.description}</p>
+                        </div>
+                      </div>
+                    ) : section.type === "sungrow-brochure" ? (
+                      <div className="sungrow-brochure">
+                        <h2 className="sungrow-brochure-title">{section.title}</h2>
+                        <div className="sungrow-brochure-divider" aria-hidden="true" />
+                        <div className="sungrow-brochure-grid">
+                          {(section.items || []).map((item, itemIndex) => (
+                            <div key={itemIndex} className="sungrow-brochure-item">
+                              <img src={item.image} alt={item.label || `brochure-${itemIndex + 1}`} />
+                            </div>
+                          ))}
+                        </div>
+                        <div className="sungrow-brochure-caption">{section.caption}</div>
+                        <div className="sungrow-brochure-arrow" aria-hidden="true">▾</div>
+                      </div>
+                    ) : section.type === "sungrow-duo" ? (
+                      <div className="sungrow-duo">
+                        {(section.images || []).map((src, idx) => (
+                          <div key={src} className={`sungrow-duo-item ${idx === 0 ? "is-left" : "is-right"}`}>
+                            <img src={src} alt={`Sungrow spread ${idx + 1}`} />
+                          </div>
+                        ))}
+                      </div>
+                    ) : section.type === "sungrow-posters" ? (
+                      <div className="sungrow-posters">
+                        <div className="sungrow-posters-head">
+                          <h2 className="sungrow-posters-title">{section.title}</h2>
+                          <div className="sungrow-posters-divider" aria-hidden="true" />
+                        </div>
+                        <div className="sungrow-posters-media">
+                          <img src={section.image} alt={section.title || "Sungrow posters"} />
+                        </div>
+                      </div>
+                    ) : section.type === "sungrow-full" ? (
+                      <div className="sungrow-full">
+                        {(section.images || []).map((src, idx) => (
+                          <div key={src} className="sungrow-full-item">
+                            <img src={src} alt={`Sungrow full ${idx + 1}`} />
+                          </div>
+                        ))}
+                      </div>
+                    ) : section.type === "sungrow-video" ? (
+                      <div className="sungrow-video">
+                        <div className="sungrow-video-head">
+                          <h2 className="sungrow-video-title">{section.title}</h2>
+                          <div className="sungrow-video-divider" aria-hidden="true" />
+                        </div>
+                        <div className="sungrow-video-media">
+                          <video src={section.src} controls playsInline />
+                        </div>
+                      </div>
+                    ) : section.type === "tb-media" ? (
                       <div
                         className={`tb-section tb-${section.tone || "light"} ${section.splitBackground ? "tb-split" : ""}`}
                         style={section.splitPoint ? { "--tb-split": section.splitPoint } : undefined}

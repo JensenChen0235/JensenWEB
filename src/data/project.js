@@ -409,15 +409,91 @@ export const projectsData = {
   },
   "sound-design": {
     id: "sound-design",
-    title: "Sound Design",
-    color: "#251C45",
-    hoverColor: "#4FF0E1", // 浅紫色
-    description: "Audio and Acoustic Design for Spatial Experiences. A collection of sound experiments exploring spatial audio, acoustic design, and sonic interaction for immersive environments.",
-    services: ["Audio", "Spatial Audio", "Acoustic Design"],
+    title: "Sungrow: Marketing Visual Design",
+    color: "#000000",
+    hoverColor: "#000000", 
+    description: "Marketing visual system for Sungrow, covering campaign visuals, video direction, and brand-ready graphics.",
+    services: ["Marketing Visual", "Videos", "Graphic Design"],
     image: "/6.png",
     launchUrl: "#",
     inProgressNotice: "This page is still in progress.",
-    sections: []
+    sections: [
+      {
+        type: "sungrow-overview",
+        title: "Visual Design in Marketing",
+        kicker: "Hypothetical Strategic Direction",
+        heading: "Residential Energy Campaign Strategy",
+        body: [
+          "Australia presents a strong environment for residential renewable energy adoption. With abundant sunlight and a large proportion of standalone homes, homeowners are well positioned to benefit from integrated solar power, energy storage, and EV charging systems.",
+          "Based on this context, it is reasonable to assume that companies like Sungrow Power Supply Co., Ltd. will continue expanding their presence in the residential energy market through increased brand communication and user acquisition efforts.",
+          "To support this opportunity, a coordinated visual communication approach is essential across multiple marketing touchpoints. These may include event visuals, exhibition posters, brochures, and short-form marketing videos."
+        ],
+        fontFamily: "Montserrat",
+        fontWeights: ["Light", "Regular", "Medium", "Semibold", "Bold"],
+        colorSystem: [
+          { name: "#FF7900", value: "#FF7900" },
+          { name: "#FF970E", value: "#FF970E" },
+          { name: "#222222", value: "#222222" },
+          { name: "#949494", value: "#949494" }
+        ]
+      },
+      {
+        type: "sungrow-poster",
+        image: "/Sungrow/sungrow1.png",
+        title: "Sungrow flow into every house",
+        location: "SYDNEY",
+        footerLeft: "Innovation | reliability | efficiency | support",
+        footerCenter: "www.sungrowpower.com",
+        footerRight: "Level 7, 1 Elizabeth Plaza, NSW 2060"
+      },
+      {
+        type: "sungrow-compositing",
+        title: "IMAGE COMPOSITING",
+        items: [
+          { image: "/Sungrow/sungrow2.png", label: "Image from website" },
+          { image: "/Sungrow/sungrow3.png", label: "AIGC" },
+          { image: "/Sungrow/sungrow4.png", label: "Text" }
+        ]
+      },
+      {
+        type: "sungrow-hero-image",
+        image: "/Sungrow/sungrow1.png",
+        topLeft: "EV Charging Solution",
+        topCenter: "Efficient and Reliable\nClean Energy",
+        topRight: "Sungrow\nPower Supply Co., Ltd.",
+        title: "Your Key to True Energy Freedom",
+        description: "Larger capacity and faster charging allow your home to achieve true energy freedom. An intelligent system manages the energy of your entire home, ensuring that power stays on anytime, all the time."
+      },
+      {
+        type: "sungrow-brochure",
+        title: "BROCHURE",
+        caption: "Brochure Design",
+        items: [
+          { image: "/Sungrow/sungrow5.png", label: "Cover" },
+          { image: "/Sungrow/sungrow6.png", label: "Spread 1" },
+          { image: "/Sungrow/sungrow7.png", label: "Spread 2" },
+          { image: "/Sungrow/sungrow8.png", label: "Detail" }
+        ]
+      },
+      {
+        type: "sungrow-duo",
+        images: ["/Sungrow/sungrow9.png", "/Sungrow/sungrow10.png"]
+      },
+      {
+        type: "sungrow-posters",
+        title: "POSTERS",
+        image: "/Sungrow/sungrow11.png"
+      },
+      {
+        type: "sungrow-full",
+        images: ["/Sungrow/sungrow12.png", "/Sungrow/sungrow13.png"]
+      },
+      {
+        type: "sungrow-video",
+        title: "VIDEO EDITING",
+        src: "/Sungrow%20for%20tiktok.mp4"
+      }
+    ]
   },
   "mima-multi-arts-pavilion": {
     id: "mima-multi-arts-pavilion",
