@@ -1,4 +1,5 @@
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
+import { Analytics } from '@vercel/analytics/react';
 import Home from './pages/Home';
 import ProjectDetail from './pages/ProjectDetail';
 import About from './pages/About';
@@ -20,6 +21,7 @@ function App() {
         {/* 关于我们 */}
         <Route path="/about" element={<About />} />
       </Routes>
+      <Analytics />
     </Router>
   );
 }
